@@ -1,0 +1,7 @@
+.input {
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: $--large-border-radius;
+  background-color: $--main-background-color;
+  @include text_body();
+}

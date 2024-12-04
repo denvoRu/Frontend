@@ -1,0 +1,49 @@
+/*Grid*/
+$xxl: 1600px;
+$xxlc: 1552px;
+$xl: 1200px;
+$xlc: 1152px;
+$lg: 992px;
+$lgc: 864px;
+$md: 768px;
+$sm: 576px;
+$smc: 528px;
+$sml: 425px;
+$smm: 375px;
+$sms: 320px;
+$xs: 0px;
+$xsc: 100%;
+
+//colors
+$--main-background-color: #F6F6F6;
+$--secondary-color: #EF302B;
+$--main-color: #0B63C1;
+$--text-color-black: #111;
+$--text-color-grey: #666;
+
+//border-radius
+$--extra-small-border-radius: 4px;
+$--small-border-radius: 8px;
+$--medium-border-radius: 12px;
+$--large-border-radius: 16px;
+$--extra-large-border-radius: 28px;
+$--rounded-border-radius: 50%;
+
+//text
+@mixin text_h1 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 44px;
+}
+
+@mixin text_body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@mixin text_subhead{
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+}

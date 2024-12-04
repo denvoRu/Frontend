@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  @media (max-width: $sml) {
+    padding: 0 30px;
+  }
+  &__logo {
+    margin-bottom: 32px;
+  }
+
+  .content {
+    width: 400px;
+    background-color: #fff;
+    padding: 48px 24px 60px 24px;
+    border-radius: $--large-border-radius;
+    display: flex;
+    flex-direction: column;
+    row-gap: 28px;
+    @media (max-width: $sml) {
+      width: 100%;
+    }
+    &__title {
+      @include text_h1();
+      text-align: center;
+    }
+    &__tabs {
+      @include text_body();
+      display: flex;
+      width: 100%;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: $--medium-border-radius;
+      background-color: $--main-background-color;
+    }
+    &__tab {
+      flex: 50%;
+      display: flex;
+      padding: 8px 0;
+      justify-content: center;
+      border-radius: 6px;
+      color: $--text-color-grey;
+      &_active {
+        background-color: $--main-color;
+        color: #fff;
+      }
+    }
+    &__inputs {
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
+    }
+    &__submit {
+      padding: 12px 0;
+      @include text_subhead();
+      background-color: $--main-color;
+      border-radius: $--large-border-radius;
+      color: #fff;
+    }
+  }
+}
