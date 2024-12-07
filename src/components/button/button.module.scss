@@ -1,0 +1,52 @@
+.button {
+    @include text_subhead();
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border-radius: var(--large-border-radius);
+}
+
+.button_primary {
+    color: var(--body-color);
+    background: var(--primary-color);
+}
+
+.button_secondary {
+    color: var(--body-color);
+    background: var(--secondary-color);
+}
+
+.button_lightBlack {
+    color: var(--body-color);
+    background: var(--black-60-color);
+}
+
+.button_grey {
+    color: var(--body-color);
+    background: var(--black-50-color);
+}
+
+.button_whiteMain {
+    color: var(--primary-color);
+    background: var(--black-20-color);
+}
+
+.button_whiteDangerous {
+    color: var(--secondary-color);
+    background: var(--black-20-color);
+}
+
+.button_default {
+    padding: 12px 18px;
+}
+
+.button_max {
+    width: 100%;
+}
+
+.button_icon, .button_max {
+    padding: 12px;
+}

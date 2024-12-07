@@ -1,5 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
+:root {
+  /* Border radius */
+  --extra-small-border-radius: 4px;
+  --small-border-radius: 8px;
+  --medium-border-radius: 12px;
+  --large-border-radius: 16px;
+  --extra-large-border-radius: 28px;
+  --rounded-border-radius: 50%;
+  
+  /* Colors */
+  --primary-color: #0B63C1;
+  --secondary-color: #EF302B;
+  --body-color: #FFFFFF;
+
+  --black-70-color: #111111;
+  --black-60-color: #333333;
+  --black-50-color: #666666;
+  --black-40-color: #999999;
+  --black-30-color: #DDDDDD;
+  --black-20-color: #F6F6F6;
+
+  /* Fonts Sizes */
+  --h1-font-size: 36px;
+  --h2-font-size: 24px;
+  --h3-font-size: 22px;
+  --subhead-font-size: 18px;
+  --body-font-size: 16px;
+  --headline-font-size: 14px;
+  --caption-font-size: 12px;
+}
+
 * {
   padding: 0;
   margin: 0;

@@ -15,19 +15,20 @@ $xs: 0px;
 $xsc: 100%;
 
 //colors
-$--main-background-color: #F6F6F6;
-$--secondary-color: #EF302B;
-$--main-color: #0B63C1;
-$--text-color-black: #111;
-$--text-color-grey: #666;
+$--main-background-color: var(--body-color);
+$--secondary-color: var(--secondary-color);
+$--main-color: var(--primary-color);
+$--text-color-black: var(--black-70-color);
+$--text-color-grey: var(--black-50-color);
+$--text-color-grey: var(--black-50-color);
 
 //border-radius
-$--extra-small-border-radius: 4px;
-$--small-border-radius: 8px;
-$--medium-border-radius: 12px;
-$--large-border-radius: 16px;
-$--extra-large-border-radius: 28px;
-$--rounded-border-radius: 50%;
+$--extra-small-border-radius: var(--extra-small-border-radius);
+$--small-border-radius: var(--small-border-radius);
+$--medium-border-radius: var(--medium-border-radius);
+$--large-border-radius: var(--large-border-radius);
+$--extra-large-border-radius: var(--extra-large-border-radius);
+$--rounded-border-radius: var(--rounded-border-radius);
 
 //text
 @mixin text_h1 {
@@ -42,7 +43,7 @@ $--rounded-border-radius: 50%;
   line-height: 24px;
 }
 
-@mixin text_subhead{
+@mixin text_subhead {
   font-size: 18px;
   font-weight: 600;
   line-height: 26px;
