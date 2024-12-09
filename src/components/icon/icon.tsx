@@ -14,6 +14,17 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>(
       backgroundColor: Colors[glyphColor]
     };
 
+    if (props.containerStyle) {
+      return <div className={props.containerStyle}>
+        <i
+          className={`icon ${className}`}
+          style={iconStyle}
+          ref={ref}
+          {...props}
+        />
+      </div>
+    }
+
     return (
       <i 
         className={`icon ${className}`} 

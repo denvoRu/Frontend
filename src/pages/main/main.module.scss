@@ -1,0 +1,47 @@
+.container {
+  position: relative;
+  padding: 24px 40px;
+  padding-bottom: 76px;
+  height: calc(100vh - 27px);
+  overflow: hidden;
+  @media (max-width: $md) {
+    padding: 24px 13px;
+  }
+  &__firstLine {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    @media (max-width: $md) {
+      flex-direction: column;
+      row-gap: 24px;
+    }
+  }
+  &__titleBlock {
+    display: flex;
+    column-gap: 8px;
+  }
+  &__title {
+    @include text_h1();
+  }
+  .statistics {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    height: 70vh;
+    scrollbar-width: none;
+    overflow: auto;
+    @media (max-width: $md) {
+      height: 65vh;
+    }
+    &__point {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-radius: var(--large-border-radius);
+      background-color: var(--black-50-color);
+      color: var(--body-color);
+      @include text_subhead();
+    }
+  }
+}

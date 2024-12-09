@@ -1,0 +1,19 @@
+.popup {
+  width: 400px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 32px;
+  @media (max-width: $sml) {
+    width: 100%;
+  }
+  &__title {
+    @include text_h2();
+  }
+  &__buttons {
+    width: 100%;
+    display: flex;
+    column-gap: 8px;
+  }
+}

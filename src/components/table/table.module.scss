@@ -1,0 +1,48 @@
+.table {
+  width: 100%;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  &__line {
+    display: flex;
+    &_title {
+      margin-bottom: 16px;
+    }
+    &_content {
+      cursor: pointer;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--black-30-color);
+      &:hover {
+        background-color: var(--black-20-color);
+      }
+    }
+  }
+  &__title {
+    @include text_subhead();
+    color: var(--black-50-color);
+    flex: 50%;
+    padding: 0 8px;
+  }
+  &__content {
+    padding: 0 8px;
+    @include text_body();
+    color: var(--black-50-color);
+    flex: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  column-gap: 8px;
+  &__control {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px;
+    background-color: var(--black-20-color);
+    border-radius: var(--medium-border-radius);
+  }
+}

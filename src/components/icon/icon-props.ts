@@ -4,11 +4,13 @@ export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   glyph: glyphs;
   size?: number;
   glyphColor?: IconColor;
+  containerStyle?: string
 }
 
-type glyphs = 
+export type glyphs = 
   'add' | 
   'arrow-right' |
+  'arrow-left' |
   'arrow-down' |
   'download' |
   'edit' |
@@ -20,6 +22,7 @@ type glyphs =
   'search' |
   'sort' |
   'subject' |
+  'teacher' |
   'trash';
 
 type IconColor = keyof typeof Colors;

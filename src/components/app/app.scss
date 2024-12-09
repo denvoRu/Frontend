@@ -1,9 +1,9 @@
 #root {
   width: 100%;
   margin: 0 auto;
-  background: $--main-background-color;
+  background: var(--body-color);
   height: 100vh;
-  color: $--text-color-black;
+  color: var(--black-70-color);
 }
 
 .icon {

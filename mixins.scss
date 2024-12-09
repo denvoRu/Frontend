@@ -14,27 +14,23 @@ $sms: 320px;
 $xs: 0px;
 $xsc: 100%;
 
-//colors
-$--main-background-color: var(--body-color);
-$--secondary-color: var(--secondary-color);
-$--main-color: var(--primary-color);
-$--text-color-black: var(--black-70-color);
-$--text-color-grey: var(--black-50-color);
-$--text-color-grey: var(--black-50-color);
-
-//border-radius
-$--extra-small-border-radius: var(--extra-small-border-radius);
-$--small-border-radius: var(--small-border-radius);
-$--medium-border-radius: var(--medium-border-radius);
-$--large-border-radius: var(--large-border-radius);
-$--extra-large-border-radius: var(--extra-large-border-radius);
-$--rounded-border-radius: var(--rounded-border-radius);
-
 //text
 @mixin text_h1 {
   font-size: 36px;
   font-weight: 700;
   line-height: 44px;
+}
+
+@mixin text_h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+@mixin text_h3 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
 }
 
 @mixin text_body {

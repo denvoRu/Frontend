@@ -4,6 +4,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import Login from '../../pages/login/login';
 import Header from '../header/header';
 import Main from '../../pages/main/main';
+import Subjects from '../../pages/subjects/subjects';
+import Teachers from '../../pages/teachers/teachers';
 
 function App() {
 
@@ -22,7 +24,9 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path='/' element={<OutletWrapper />}>
-            <Route path="/main" element={<Main />} />
+            <Route path="/" element={<Main />} />
+            <Route path='/subjects' element={<Subjects/>} />
+            <Route path='/teachers' element={<Teachers/>} />
           </Route>
         </Routes>
       </HelmetProvider>

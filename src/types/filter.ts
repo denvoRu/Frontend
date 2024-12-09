@@ -1,0 +1,1 @@
+export type FilterType = {from: string, to: string, list: string[]}
