@@ -2,6 +2,9 @@
   width: 100%;
   margin-top: 32px;
   margin-bottom: 32px;
+  &_opacity {
+    opacity: var(--opacity-value);
+  }
   &__line {
     display: flex;
     &_title {
@@ -10,22 +13,22 @@
     &_content {
       cursor: pointer;
       padding: 16px 0;
-      border-bottom: 1px solid var(--black-30-color);
+      border-bottom: 1px solid var(--ultra-light-grey-color);
       &:hover {
-        background-color: var(--black-20-color);
+        background-color: var(--dark-white-color);
       }
     }
   }
   &__title {
     @include text_subhead();
-    color: var(--black-50-color);
+    color: var(--grey-color);
     flex: 50%;
     padding: 0 8px;
   }
   &__content {
     padding: 0 8px;
     @include text_body();
-    color: var(--black-50-color);
+    color: var(--grey-color);
     flex: 50%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -42,7 +45,7 @@
     justify-content: center;
     cursor: pointer;
     padding: 8px;
-    background-color: var(--black-20-color);
+    background-color: var(--dark-white-color);
     border-radius: var(--medium-border-radius);
   }
 }

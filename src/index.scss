@@ -10,16 +10,16 @@
   --rounded-border-radius: 50%;
   
   /* Colors */
-  --primary-color: #0B63C1;
-  --secondary-color: #EF302B;
-  --body-color: #FFFFFF;
-
-  --black-70-color: #111111;
-  --black-60-color: #333333;
-  --black-50-color: #666666;
-  --black-40-color: #999999;
-  --black-30-color: #DDDDDD;
-  --black-20-color: #F6F6F6;
+  --body-color: #FFF;
+  --main-color: #0B63C1;
+  --dangerous-color: #EF302B;
+  
+  --black-color: #111;
+  --light-black-color: #333;
+  --grey-color: #666;
+  --light-grey-color: #999;
+  --ultra-light-grey-color: #ddd;
+  --dark-white-color: #f6f6f6;
 
   --background-blur-color: #00000066;
 
@@ -31,6 +31,8 @@
   --body-font-size: 16px;
   --headline-font-size: 14px;
   --caption-font-size: 12px;
+
+  --opacity-value: 0.2;
 }
 
 * {

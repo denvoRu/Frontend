@@ -14,19 +14,21 @@ import Table from '../../components/table/table'
 import { SUBJECTS } from '../../mocks/subjects'
 import Filter from '../../components/filter/filter'
 
-export default function Subjects () {
+export default function Subjects() {
 
   const [searchValue, setSearchValue] = useState('')
   const [searchTeacherValue, setSearchSubjectValue] = useState('')
   const [sortList, setSortList] = useState(ALPHABET_LIST)
-  const [teachers, setTeachers] = useState(['1Фамилия Имя Отчество','2Фамилия Имя Отчество', '3Фамилия Имя Отчество'])
+  const [teachers, setTeachers] = useState(['1Фамилия Имя Отчество', '2Фамилия Имя Отчество', '3Фамилия Имя Отчество'])
 
   const [displayFilters, setDisplayFilters] = useState(false)
   const [displayPopup, setDisplayPopup] = useState(false)
 
+  const [isDisplaySortList, setIsDisplaySortList] = useState(false)
+
   const [newSubjectValue, setNewSubjectValue] = useState('')
 
-  const [filters, setFilters] = useState<{from: string, to: string, list: string[]}>({
+  const [filters, setFilters] = useState<{ from: string, to: string, list: string[] }>({
     from: '',
     to: '',
     list: []
@@ -50,43 +52,43 @@ export default function Subjects () {
           <h1 className={styles.container__title}>Предметы</h1>
           <div className={styles.controls}>
             <div className={styles.controls__input}>
-              <Input placeholder='Поиск...' value={searchValue} onChange={changeSearchValue}/>
+              <Input placeholder='Поиск...' value={searchValue} onChange={changeSearchValue} />
             </div>
-            <SortBlock title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList}/>
-            <div onClick={()=>{setDisplayFilters(true)}} className={styles.controls__filters}>
-              <Icon glyph='filter' glyphColor='grey'/>
+            <SortBlock isOpenList={isDisplaySortList} changeIsOpenList={() => { setIsDisplaySortList(!isDisplaySortList) }} title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList} />
+            <div onClick={() => { setDisplayFilters(true) }} className={styles.controls__filters}>
+              <Icon glyph='filter' glyphColor='grey' />
               <p className={styles.controls__text}>Фильтры</p>
             </div>
-            <div onClick={()=>[setDisplayPopup(true)]} className={styles.controls__filters}>
-              <Icon glyph='add' glyphColor='grey'/>
+            <div onClick={() => [setDisplayPopup(true)]} className={styles.controls__filters}>
+              <Icon glyph='add' glyphColor='grey' />
             </div>
           </div>
         </div>
-        <Table titles={['Предмет', 'Рейтинг']} data={SUBJECTS}/>
-        {displayFilters &&
-        <Filter 
-          filter={filters} listName='Преподаватели' 
+        <Table isOpacity={isDisplaySortList} titles={['Предмет', 'Рейтинг']} data={SUBJECTS} tableFrom='subjects' />
+        <BottomLinks />
+      </div>
+      {
+        displayPopup &&
+        <PopupContainer>
+          <div className={subjectStyles.popup}>
+            <h2 className={subjectStyles.popup__title}>Добавить предмет</h2>
+            <Input placeholder='Название предмета' value={newSubjectValue} onChange={setNewSubjectValue} />
+            <div className={subjectStyles.popup__buttons}>
+              <Button onClick={() => { setDisplayPopup(false); setNewSubjectValue('') }} variant='whiteMain' style={{ width: '100%' }}>Отмена</Button>
+              <Button variant='primary' style={{ width: '100%' }}>Добавить</Button>
+            </div>
+          </div>
+        </PopupContainer>
+      }
+      {displayFilters &&
+        <Filter
+          filter={filters} listName='Преподаватели'
           list={teachers}
-          searchValue={searchTeacherValue} 
+          searchValue={searchTeacherValue}
           changeSearchValue={setSearchSubjectValue}
           setDisplayFilters={setDisplayFilters}
-          changeFilter={setFilters}/>
-        }
-        {
-          displayPopup && 
-          <PopupContainer>
-            <div className={subjectStyles.popup}>
-              <h2 className={subjectStyles.popup__title}>Добавить предмет</h2>
-              <Input placeholder='Название предмета' value={newSubjectValue} onChange={setNewSubjectValue}/>
-              <div className={subjectStyles.popup__buttons}>
-                <Button onClick={()=>{setDisplayPopup(false);setNewSubjectValue('')}} variant='whiteMain' style={{width: '100%'}}>Отмена</Button>
-                <Button variant='primary' style={{width: '100%'}}>Добавить</Button>
-              </div>
-            </div>
-          </PopupContainer>
-        }
-        <BottomLinks/>
-      </div>
+          changeFilter={setFilters} />
+      }
     </>
   )
 }

@@ -1,9 +1,9 @@
 export enum Colors {
-  'primary' = 'var(--primary-color)',
-  'dangerous' = 'var(--secondary-color)',
-  'grey' = 'var(--black-50-color)',
-  'light-black' = 'var(--black-60-color)',
-  'black' = 'var(--black-70-color)',
+  'primary' = 'var(--main-color)',
+  'dangerous' = 'var(--dangerous-color)',
+  'grey' = 'var(--grey-color)',
+  'light-black' = 'var(--light-black-color)',
+  'black' = 'var(--black-color)',
   'white' = 'var(--body-color)',
-  'ultra-light-grey' = 'var(--black-30-color)',
+  'ultra-light-grey' = 'var(--ultra-light-grey-color)',
 }

@@ -36,7 +36,7 @@
   }
   &__subTitle {
     @include text_subhead();
-    color: var(--black-50-color);
+    color: var(--grey-color);
     margin-bottom: 12px;
   }
   &__inputs {
@@ -61,12 +61,12 @@
     align-items: center;
     column-gap: 8px;
     @include text_body();
-    color: var(--black-50-color);
+    color: var(--grey-color);
   }
   &__showMore {
     cursor: pointer;
     @include text_body();
-    color: var(--primary-color);
+    color: var(--main-color);
     margin-bottom: 24px;
   }
   &__button {
@@ -75,12 +75,12 @@
     border-radius: var(--medium-border-radius);
     @include text_subhead();
     &_blue {
-      background-color: var(--primary-color);
+      background-color: var(--main-color);
       color: var(--body-color);
     }
     &_grey {
-      background-color: var(--black-20-color);
-      color: var(--primary-color);
+      background-color: var(--dark-white-color);
+      color: var(--main-color);
     }
   }
 }

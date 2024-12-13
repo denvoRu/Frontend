@@ -34,8 +34,8 @@
       align-items: center;
       column-gap: 8px;
       border-radius: var(--small-border-radius);
-      background-color: var(--black-20-color);
-      color: var(--black-50-color);
+      background-color: var(--dark-white-color);
+      color: var(--grey-color);
     }
     &__text {
       @media (max-width: $smc) {

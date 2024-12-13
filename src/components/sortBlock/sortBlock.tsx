@@ -10,10 +10,11 @@ type SortBlockProps = {
   onChange: (value: string) => void
   type: 'radioButton' | 'checkbox'
   isOpenList?: boolean
+  titlePadding?:number
   changeIsOpenList?: () => void
 }
 
-export default function SortBlock ({title, icon, list, type, isOpenList, onChange, changeIsOpenList}:SortBlockProps) {
+export default function SortBlock ({title, icon, list, type, isOpenList, titlePadding, onChange, changeIsOpenList}:SortBlockProps) {
 
   const [isOpen, setIsOpen] = useState(isOpenList !== undefined ? isOpenList : false)
 
@@ -28,7 +29,7 @@ export default function SortBlock ({title, icon, list, type, isOpenList, onChang
 
   return (
     <div className={styles.container}>
-      <div onClick={changeOpenList} className={`${styles.container__titleBlock} ${isOpen ? styles.container__titleBlock_active : ''}`}>
+      <div style={titlePadding ? {padding: `12px ${titlePadding}px` } : {}} onClick={changeOpenList} className={`${styles.container__titleBlock} ${isOpen ? styles.container__titleBlock_active : ''}`}>
         <Icon glyph={icon} glyphColor={isOpen ? 'white' : 'grey'}/>
         <p className={`${styles.container__title} ${isOpen ? styles.container__title_active : ''}`}>{title}</p>
       </div>
@@ -39,7 +40,7 @@ export default function SortBlock ({title, icon, list, type, isOpenList, onChang
               {type === 'radioButton' ?
               <img src={`/icons/radioButton/${el.isActive ? 'active' : 'disable'}.svg`}/> : 
               <img src={`/icons/checkbox/${el.isActive ? 'active' : 'disable'}.svg`}/>}
-              <p>{el.value}</p>
+              <p className={styles.container__value}>{el.value}</p>
             </div>
           ))}
         </div>

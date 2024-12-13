@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  &__link {
+    @include text_body();
+    &:not(:last-child) {
+      color: var(--ultra-light-grey-color);
+    }
+  }
+}
