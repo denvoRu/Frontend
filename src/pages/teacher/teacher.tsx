@@ -8,7 +8,7 @@ import SortBlock from '../../components/sortBlock/sortBlock'
 import { useEffect, useState } from 'react'
 import { PRIVILEGES } from '../../consts/privileges'
 import PopupContainer from '../../components/popupContainer/popupContainer'
-import Input from '../../components/input/Input'
+import {Input} from '../../components/input/Input'
 
 export default function Teacher() {
 

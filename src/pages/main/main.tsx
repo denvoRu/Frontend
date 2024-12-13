@@ -4,16 +4,17 @@ import { Icon } from '../../components/icon'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { useState } from 'react'
 import { RAITING_LIST } from '../../consts/raitingList'
-import { SUBJECT_STATISTICS } from '../../mocks/subjectsStatistics'
 import BottomLinks from '../../components/bottomLinks/bottomLinks'
 import { updateRadioButtonList } from '../../utils/list'
+import { INSTITUTES_LIST } from '../../mocks/institutes'
+import { Link } from 'react-router-dom'
 
 export default function Main() {
 
   const [sortList, setSortList] = useState(RAITING_LIST)
   const [isOpenList, setIsOpenList] = useState(false)
 
-  const [statistics, _] = useState(SUBJECT_STATISTICS)
+  const [statistics, _] = useState(INSTITUTES_LIST)
 
   const onChangeSortList = (value: string) => {
     setSortList(updateRadioButtonList(value, sortList))
@@ -29,7 +30,7 @@ export default function Main() {
         <div className={styles.container__firstLine}>
           <div className={styles.container__titleBlock}>
             <Icon glyph='rating' size={42} />
-            <h1 className={styles.container__title}>Рейтинг института</h1>
+            <h1 className={styles.container__title}>Рейтинг Университета</h1>
           </div>
           <SortBlock 
             title='По рейтингу' icon='sort' list={sortList} type='radioButton' 
@@ -38,15 +39,16 @@ export default function Main() {
             changeIsOpenList={()=>setIsOpenList(!isOpenList)}
           />
         </div>
-        <div className={styles.statistics}>
-          {statistics.map((statistic)=>(
-            <div className={styles.statistics__point} key={statistic.name} style={{width: `${statistic.percent}%`}}>
-              <p>{statistic.name}</p>
-              <p>{statistic.percent}</p>
-            </div>
-          ))}
+        <div className={styles.statisticsBlock}>
+          <div className={styles.statistics}>
+            {statistics.map((statistic) => (
+              <Link to='/institutes/2' className={`${styles.statistics__point} ${styles.statistics__point_blue} ${isOpenList ? 'opacity' : ''}`} key={statistic.name} style={{ width: `${statistic.percent}%` }}>
+                <p>{statistic.name}</p>
+                <p>{statistic.percent}</p>
+              </Link>
+            ))}
+          </div>
         </div>
-        <BottomLinks/>
       </div>
     </>
   )

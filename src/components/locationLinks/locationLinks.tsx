@@ -8,7 +8,8 @@ type LocationLinksProps = {
 
 const translations:Record<string, string> = {
   subjects: 'Предметы',
-  teachers: 'Преподаватели'
+  teachers: 'Преподаватели',
+  institutes: 'Институты'
 };
 
 

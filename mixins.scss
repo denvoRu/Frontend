@@ -44,3 +44,9 @@ $xsc: 100%;
   font-weight: 600;
   line-height: 26px;
 }
+
+@mixin text_caption {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}

@@ -1,7 +1,7 @@
 import { FilterType } from '../../types/filter'
 import { removeElementAtIndex } from '../../utils'
 import { Button } from '../button/button'
-import Input from '../input/Input'
+import {Input} from '../input/Input'
 import styles from './filter.module.scss'
 
 type FilterProps = {

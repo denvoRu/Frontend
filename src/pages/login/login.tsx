@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 import styles from './login.module.scss'
 import { useState } from 'react'
-import Input from '../../components/input/Input'
+import {Input} from '../../components/input/Input'
+import { Button } from '../../components/button/button'
 
 export default function Login() {
 
@@ -31,7 +32,11 @@ export default function Login() {
               <Input type='email' required placeholder='Почта' onChange={setLogin} value={login}/>
               <Input type='password' required placeholder='Пароль' onChange={setPassword} value={password}/>
             </div>
-            <button className={styles.content__submit} type='submit'>Войти</button>
+            <div className={styles.content__buttons}>
+              <Button onClick={()=>{}} className={styles.content__forget} size={'max'} variant={'whiteMain'}>Забыли пароль?</Button>
+              <Button className={styles.content__submit} size={'max'}>Войти</Button>
+            </div>
+            <p className={styles.content__support}>По всем вопросам можете обращаться: adminexanple@gmail.com</p>
         </form>
       </div>
     </>

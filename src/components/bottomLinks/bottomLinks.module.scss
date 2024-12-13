@@ -1,12 +1,10 @@
-.linksBlock {
-  position: absolute;
-  width: 100%;
-  left: 0;
-  bottom: 24px;
-  display: flex;
-  justify-content: center;
-}
 .links {
+  position: fixed;
+  left: 50%;
+  right: 50%;
+
+  transform: translate(-50%, -50%);
+  bottom: 0;
   width: fit-content;
   display: flex;
   height: 48px;

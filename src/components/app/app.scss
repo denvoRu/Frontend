@@ -14,3 +14,7 @@
   background: currentColor;
   mask-position: center center;
 }
+
+.opacity {
+  opacity: var(--opacity-value);
+}

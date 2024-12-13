@@ -4,6 +4,7 @@
   justify-content: center;
   flex-direction: column;
   height: 100vh;
+  background-color: var(--dark-white-color);
   @media (max-width: $sml) {
     padding: 0 30px;
   }
@@ -15,7 +16,7 @@
     width: 400px;
     background-color: #fff;
     padding: 48px 24px 60px 24px;
-    border-radius: var(--large-border-radius);
+    border-radius: 48px;
     display: flex;
     flex-direction: column;
     row-gap: 28px;
@@ -32,32 +33,37 @@
       width: 100%;
       cursor: pointer;
       padding: 4px;
-      border-radius: var(--medium-border-radius);
-      background-color: var(--main-background-color);
+      border-radius: var(--large-border-radius);
+      background-color: var(--dark-white-color);
     }
     &__tab {
       flex: 50%;
       display: flex;
       padding: 8px 0;
       justify-content: center;
-      border-radius: 6px;
-      color: var(--text-color-grey50);
+      border-radius: var(--medium-border-radius);
+      color: var(--grey-color);
       &_active {
         background-color: var(--main-color);
         color: #fff;
       }
+    }
+    &__buttons {
+      display: flex;
+      column-gap: 8px;
     }
     &__inputs {
       display: flex;
       flex-direction: column;
       row-gap: 8px;
     }
-    &__submit {
-      padding: 12px 0;
-      @include text_subhead();
-      background-color: var(--main-color);
-      border-radius: var(--large-border-radius);
-      color: #fff;
+    &__forget{
+      color: var( --light-main-color);
+    }
+    &__support {
+      @include text_caption();
+      color: var(--light-grey-color);
+      text-align: center;
     }
   }
 }

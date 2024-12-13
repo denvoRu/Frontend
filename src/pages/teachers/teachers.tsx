@@ -3,7 +3,7 @@ import styles from '../list.module.scss'
 import teacherStyles from './teachers.module.scss'
 import { useState } from 'react'
 import { updateRadioButtonList } from '../../utils/list'
-import Input from '../../components/input/Input'
+import {AddInput, Input} from '../../components/input/Input'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { Icon } from '../../components/icon'
 import Table from '../../components/table/table'
@@ -12,7 +12,6 @@ import Filter from '../../components/filter/filter'
 import BottomLinks from '../../components/bottomLinks/bottomLinks'
 import { ALPHABET_LIST } from '../../consts/alphabetList'
 import { Button } from '../../components/button/button'
-import { removeElementAtIndex } from '../../utils'
 
 export default function Teachers() {
 
@@ -76,7 +75,7 @@ export default function Teachers() {
             <Input placeholder='Фамилия Имя Отчество' value={newTeacherValue.name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, name: value }) }} />
             <Input placeholder='Почта' value={newTeacherValue.email} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, email: value }) }} />
             <Input placeholder='Разовый пароль...' value={newTeacherValue.password} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, password: value }) }} />
-            <AddSubjectInput selectedList={newTeacherValue.subjects} changeSubjectList={(newList) => { setNewTeacherValue({ ...newTeacherValue, subjects: newList }) }} />
+            <AddInput title='Добавить предметы' placeholder='Введите название предмета' allList={['Предмет1', 'Предмет2', 'Предмет3']} selectedList={newTeacherValue.subjects} changeInputList={(newList) => { setNewTeacherValue({ ...newTeacherValue, subjects: newList }) }} />
             <Button variant='primary' style={{ width: '100%' }}>Отправить пригласительное письмо</Button>
             <Button
               onClick={() => { setDisplayPopup(false); setNewTeacherValue({ name: '', email: '', password: '', subjects: [] }) }}
@@ -96,57 +95,5 @@ export default function Teachers() {
           changeFilter={setFilters} />
       }
     </>
-  )
-}
-
-type AddSubjectInputProps = {
-  changeSubjectList: (newList: string[]) => void
-  selectedList: string[]
-}
-
-function AddSubjectInput({ selectedList, changeSubjectList }: AddSubjectInputProps) {
-
-  const [searchValue, setSearchValue] = useState('')
-  const [displayList, setDisplayList] = useState(false)
-
-  const changeSearchValue = (newvalue: string) => {
-    setSearchValue(newvalue)
-  }
-
-
-  const changeList = (value: string) => {
-    let newList = selectedList.slice()
-    if (selectedList.includes(value)) {
-      newList = removeElementAtIndex(newList, newList.indexOf(value))
-      changeSubjectList(newList)
-      return
-    }
-    newList.push(value)
-    changeSubjectList(newList)
-  }
-
-  return (
-    <div className={teacherStyles.subjectList}>
-      <div onClick={() => { setDisplayList(!displayList) }} className={`${teacherStyles.subjectList__title} ${displayList ? teacherStyles.subjectList__title_active : ''}`}>
-        <p>Добавить предметы...</p>
-        <Icon glyph='arrow-down' glyphColor={displayList ? 'white' : 'grey'} />
-      </div>
-      {displayList && <div className={teacherStyles.subjectList__list}>
-        <div className={teacherStyles.subjectList__line}>
-          <Icon glyph='search' glyphColor='grey' />
-          <input value={searchValue} onChange={(e) => { changeSearchValue(e.target.value) }} placeholder='Введите название предмета....' className={teacherStyles.subjectList__search} />
-        </div>
-        <div onClick={() => { changeList('Предмет1') }} className={teacherStyles.subjectList__line}>
-          <p>Предмет1</p>
-        </div>
-        <div onClick={() => { changeList('Предмет2') }} className={teacherStyles.subjectList__line}>
-          <p>Предмет2</p>
-        </div>
-        <div onClick={() => { changeList('Предмет3') }} className={teacherStyles.subjectList__line}>
-          <p>Предмет3</p>
-        </div>
-        <p className={teacherStyles.subjectList__showMore}>Показать еще...</p>
-      </div>}
-    </div>
   )
 }

@@ -2,10 +2,12 @@
   position: relative;
   padding: 24px 40px;
   padding-bottom: 76px;
-  height: calc(100vh - 27px);
-  overflow: hidden;
   @media (max-width: $md) {
     padding: 24px 13px;
+  }
+  &__sort {
+    margin-top: 24px;
+    margin-bottom: 24px;
   }
   &__firstLine {
     display: flex;
@@ -23,13 +25,16 @@
   &__title {
     @include text_h1();
   }
+  .statisticsBlock {
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+  }
   .statistics {
     display: flex;
     flex-direction: column;
     row-gap: 12px;
-    height: 70vh;
     scrollbar-width: none;
-    overflow: auto;
     @media (max-width: $md) {
       height: 65vh;
     }
@@ -42,6 +47,33 @@
       background-color: var(--grey-color);
       color: var(--body-color);
       @include text_subhead();
+      background-color: var(--light-main-color);
+      cursor: pointer;
+    }
+  }
+  .info {
+    display: flex;
+    justify-content: space-between;
+    &__content {
+      width: fit-content;
+    }
+    &__titleBlock {
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
+      width: fit-content;
+    }
+    &__title {
+      @include text_h3();
+    }
+    &__text {
+      @include text_subhead();
+      color: var(--light-grey-color);
+      margin-left: 32px;
+    }
+    &__raiting {
+      text-wrap: nowrap;
+      @include text_h3();
     }
   }
 }

@@ -23,6 +23,7 @@ export type glyphs =
   'sort' |
   'subject' |
   'teacher' |
+  'institute' |
   'trash';
 
 type IconColor = keyof typeof Colors;
