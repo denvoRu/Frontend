@@ -7,6 +7,7 @@
   }
   &__line {
     display: flex;
+    padding-right: 35px;
     &_title {
       margin-bottom: 16px;
     }
@@ -14,9 +15,13 @@
       cursor: pointer;
       padding: 16px 0;
       border-bottom: 1px solid var(--ultra-light-grey-color);
+      padding-right: 35px;
       &:hover {
         background-color: var(--dark-white-color);
       }
+    }
+    &_margin {
+      padding-left: 48px !important;
     }
   }
   &__title {
@@ -33,6 +38,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
     text-wrap: nowrap;
+  }
+  &__block {
+    cursor: pointer;
+    position: relative;
+  }
+  &__icon {
+    position: absolute;
+    right: 8px;
+    &_open {
+      transform: rotate(90deg);
+    }
   }
 }
 

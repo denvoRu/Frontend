@@ -6,8 +6,8 @@ import Header from '../header/header';
 import Main from '../../pages/main/main';
 import Subjects from '../../pages/subjects/subjects';
 import Teachers from '../../pages/teachers/teachers';
-import Subject from '../../pages/subject/subject';
-import Teacher from '../../pages/teacher/teacher';
+import Subject from '../../pages/entities/subject';
+import Teacher from '../../pages/entities/teacher';
 import Institute from '../../pages/main/institute';
 
 function App() {

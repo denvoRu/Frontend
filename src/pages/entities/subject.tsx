@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async'
-import styles from './subject.module.scss'
+import styles from './entities.module.scss'
 import { Link, useParams } from 'react-router-dom'
 import LocationLinks from '../../components/locationLinks/locationLinks'
 import { Button } from '../../components/button/button'

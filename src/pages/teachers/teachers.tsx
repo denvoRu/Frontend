@@ -18,7 +18,7 @@ export default function Teachers() {
   const [searchValue, setSearchValue] = useState('')
   const [searchTeacherValue, setSearchTeacherValue] = useState('')
   const [sortList, setSortList] = useState(ALPHABET_LIST)
-  const [subjects, setSubjects] = useState(['1Предмет', '2Предмет', '3Предмет'])
+  const [subjects,] = useState(['1Предмет', '2Предмет', '3Предмет'])
 
   const [isDisplaySortList, setIsDisplaySortList] = useState(false)
 
@@ -65,7 +65,7 @@ export default function Teachers() {
             </div>
           </div>
         </div>
-        <Table isOpacity={isDisplaySortList} titles={['Фамилия Имя Отчество', 'Рейтинг']} data={TEACHERS} tableFrom='teachers' />
+        <Table isOpacity={isDisplaySortList} titles={['Фамилия Имя Отчество', 'Рейтинг']} data={TEACHERS}/>
         <BottomLinks />
       </div>
       {displayPopup &&

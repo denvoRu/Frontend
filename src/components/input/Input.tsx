@@ -23,10 +23,11 @@ type AddInputProps = {
   allList: string[]
   title: string
   placeholder: string
+  singleMode?:boolean
 }
 
 
-export function AddInput({ selectedList, changeInputList, allList, title, placeholder }: AddInputProps) {
+export function AddInput({ selectedList, changeInputList, allList, title, placeholder, singleMode }: AddInputProps) {
 
   const [searchValue, setSearchValue] = useState('')
   const [displayList, setDisplayList] = useState(false)
@@ -43,7 +44,11 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
       changeInputList(newList)
       return
     }
-    newList.push(value)
+    if (singleMode) {
+      newList = [value]
+    } else {
+      newList.push(value)
+    }
     changeInputList(newList)
   }
 
@@ -60,7 +65,7 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
         </div>
         {allList.map((el) => (
           <div key={el} onClick={() => { changeList(el) }} className={styles.list__line}>
-            <img src={`/icons/checkbox/${selectedList.includes(el) ? 'active' : 'disable'}.svg`} />
+            <img src={`/icons/${singleMode ? 'radioButton': 'checkbox'}/${selectedList.includes(el) ? 'active' : 'disable'}.svg`} />
             <p>{el}</p>
           </div>
         ))}

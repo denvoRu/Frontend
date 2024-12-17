@@ -1,0 +1,1 @@
+export type TableEntity = { name: string, raiting: number, id: string }

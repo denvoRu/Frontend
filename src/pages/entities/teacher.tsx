@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async'
-import styles from './teacher.module.scss'
-import { useParams } from 'react-router-dom'
+import styles from './entities.module.scss'
 import LocationLinks from '../../components/locationLinks/locationLinks'
 import { Button } from '../../components/button/button'
 import { Icon } from '../../components/icon'
@@ -12,7 +11,6 @@ import {Input} from '../../components/input/Input'
 
 export default function Teacher() {
 
-  const params = useParams()
 
   const [privileges, setPrivileges] = useState<{value: string, isActive: boolean}[]>([])
   const [isOpenPrivileges, setIsOpenPrivileges] = useState(false)

@@ -8,8 +8,19 @@
   @media (max-width: $sml) {
     width: 100%;
   }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 32px;
+  }
   &__title {
     @include text_h2();
+    text-align: center;
+  }
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
   }
   &__buttons {
     width: 100%;

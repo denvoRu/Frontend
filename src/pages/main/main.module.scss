@@ -8,6 +8,8 @@
   &__sort {
     margin-top: 24px;
     margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
   }
   &__firstLine {
     display: flex;
@@ -18,12 +20,31 @@
       row-gap: 24px;
     }
   }
+  &__button {
+    @include text_body();
+    color: var(--grey-color);
+  }
   &__titleBlock {
     display: flex;
     column-gap: 8px;
   }
   &__title {
     @include text_h1();
+  }
+  &__settings {
+    @include text_body();
+    color: var(--grey-color);
+    @media (max-width: $sm) {
+      display: none;
+    }
+    &_red {
+      @include text_body();
+      color: var(--dangerous-color);
+    }
+    &_white {
+      color: var(--body-color)
+    }
+
   }
   .statisticsBlock {
     height: 100%;
@@ -38,6 +59,31 @@
     @media (max-width: $md) {
       height: 65vh;
     }
+    &__titleBlock {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      row-gap: 24px;
+      margin-bottom: 12px;
+    }
+    &__titleMobile {
+      flex-basis: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @media (max-width: $sm) {
+        flex-basis: 100%;
+      }
+    }
+    &__raiting {
+      display: none;
+      @include text_h2();
+      color: var(--light-black-color);
+      @media (max-width: $sm) {
+        display: block;
+      }
+    }
     &__point {
       display: flex;
       align-items: center;
@@ -49,6 +95,16 @@
       @include text_subhead();
       background-color: var(--light-main-color);
       cursor: pointer;
+      &:hover {
+        background-color: var(--main-color);
+      }
+    }
+    &__block {
+      display: flex;
+      column-gap: 8px;
+    }
+    &__title {
+      @include text_h3();
     }
   }
   .info {
@@ -74,6 +130,62 @@
     &__raiting {
       text-wrap: nowrap;
       @include text_h3();
+      @media (max-width: $sm) {
+        display: none;
+      }
     }
+    &__titleIcon {
+      flex-basis: 24px;
+    }
+  }
+  .settings {
+    position: relative;
+    &__list {
+      width: 380px;
+      left: 158px;
+      top: 0;
+      position: absolute;
+      padding: 0 18px;
+      border-radius: var(--medium-border-radius);
+      background-color: var(--dark-white-color);
+      z-index: 2;
+      @media (max-width: $sm) {
+        top: 56px;
+        left: auto;
+      }
+    }
+    &__point {
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      @include text_body();
+      color: var(--grey-color);
+      cursor: pointer;
+    }
+  }
+}
+
+.popup {
+  width: 420px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  @media (max-width: $sml) {
+    width: 100%;
+  }
+  &__title {
+    @include text_h2();
+    text-align: center;
+  }
+  &__text {
+    @include text_body();
+    color: var(--light-black-color);
+    text-align: center;
+  }
+  &__buttons {
+    display: flex;
+    column-gap: 8px;
   }
 }

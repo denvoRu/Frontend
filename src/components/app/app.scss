@@ -18,3 +18,16 @@
 .opacity {
   opacity: var(--opacity-value);
 }
+
+h1 {
+  @include text_h1();
+}
+h2 {
+  @include text_h2();
+}
+h3 {
+  @include text_h3();
+}
+p {
+  @include text_body();
+}

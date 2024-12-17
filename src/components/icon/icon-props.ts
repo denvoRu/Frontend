@@ -24,6 +24,7 @@ export type glyphs =
   'subject' |
   'teacher' |
   'institute' |
+  'dropdown' |
   'trash';
 
 type IconColor = keyof typeof Colors;
