@@ -1,4 +1,4 @@
-import './App.scss'
+import './app.scss'
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Login from '../../pages/login/login';
