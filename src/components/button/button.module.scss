@@ -5,48 +5,60 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-
-    border-radius: var(--large-border-radius);
-}
-
-.button_primary {
-    color: var(--body-color);
-    background: var(--main-color);
-}
-
-.button_secondary {
-    color: var(--body-color);
-    background: var(--dangerous-color);
-}
-
-.button_lightBlack {
-    color: var(--body-color);
-    background: var(--light-black-color);
-}
-
-.button_grey {
-    color: var(--body-color);
-    background: var(--grey-color);
-}
-
-.button_whiteMain {
-    color: var(--main-color);
-    background: var(--dark-white-color);
-}
-
-.button_whiteDangerous {
-    color: var(--dangerous-color);
-    background: var(--dark-white-color);
-}
-
-.button_default {
-    padding: 12px 18px;
-}
-
-.button_max {
-    width: 100%;
-}
-
-.button_icon, .button_max {
-    padding: 12px;
+    border-radius: var(--medium-border-radius);
+    &_primary {
+        color: var(--body-color);
+        background: var(--main-color);
+    }
+    &_secondary {
+        color: var(--body-color);
+        background: var(--dangerous-color);
+    }
+    &_lightBlack {
+        color: var(--body-color);
+        background: var(--light-black-color);
+    }
+    &_grey {
+        color: var(--body-color);
+        background: var(--grey-color);
+    }
+    &_whiteMain {
+        color: var(--main-color);
+        background: var(--dark-white-color);
+    }
+    &_whiteDangerous {
+        color: var(--dangerous-color);
+        background: var(--dark-white-color);
+    }
+    &_default {
+        padding: 12px 18px;
+    }
+    &_max {
+        width: 100%;
+        padding: 12px;
+    }
+    &_icon {
+        padding: 12px;
+    }
+    &_small {
+        padding: 0;
+    }
+    &_textGrey {
+        color: var(--grey-color);
+    }
+    &_textLightGrey {
+        color: var(--light-grey-color);
+    }
+    &_textBlack {
+        color: var(--black-color);
+    }
+    &_textPrimary {
+        color: var(--main-color);
+    }
+    &_textLightMain {
+        color: var(--light-main-color);
+    }
+    &_textDangerous {
+        color: var(--dangerous-color);
+    }
 }

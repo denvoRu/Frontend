@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './input.module.scss'
 import { removeElementAtIndex } from '../../utils'
 import { Icon } from '../icon'
@@ -12,8 +12,33 @@ type InputProps = {
 }
 
 export function Input ({placeholder, value, required, type, onChange}:InputProps) {
+
+
+  const textarea = useRef<HTMLTextAreaElement>(null)
+  const [rows, setRows] = useState(1);
+
+  const changeTextarea = (value: string) => {
+    onChange(value)
+    if (textarea.current) {
+      const lineHeight = parseInt(window.getComputedStyle(textarea.current).lineHeight, 10);
+      const newRows = Math.ceil(textarea.current.scrollHeight / lineHeight) - 1;
+      setRows(newRows);
+    }
+  }
+
+  useEffect(() => { 
+    if (textarea.current) {
+      if (textarea.current) {
+        const lineHeight = parseInt(window.getComputedStyle(textarea.current).lineHeight, 10);
+        const newRows = Math.ceil(textarea.current.scrollHeight / lineHeight) - 1;
+        setRows(newRows);
+      }
+    }
+}, [textarea]);
+
   return (
-    <input type={type} required={required} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{onChange(e.target.value)}}/>
+    type ? <input type={type} required={required} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{onChange(e.target.value)}}/> :
+    <textarea ref={textarea} rows={rows} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{changeTextarea(e.target.value)}}/>
   )
 }
 

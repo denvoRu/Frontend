@@ -18,6 +18,12 @@
 .opacity {
   opacity: var(--opacity-value);
 }
+.pointer {
+  cursor: pointer;
+}
+.body {
+  @include body_margin();
+}
 
 h1 {
   @include text_h1();

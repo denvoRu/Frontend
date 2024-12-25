@@ -4,6 +4,9 @@
   border-radius: var(--large-border-radius);
   background-color: var(--dark-white-color);
   @include text_body();
+  overflow: hidden;
+  resize: none;
+  height: fit-content;
 }
 
 

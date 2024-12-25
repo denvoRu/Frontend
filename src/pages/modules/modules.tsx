@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet-async'
 import styles from '../list.module.scss'
-import subjectStyles from './subjects.module.scss'
+import subjectStyles from './modules.module.scss'
 import BottomLinks from '../../components/bottomLinks/bottomLinks'
 import { AddInput, Input } from '../../components/input/Input'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { ALPHABET_LIST } from '../../consts/alphabetList'
 import { updateRadioButtonList } from '../../utils/list'
@@ -11,9 +11,12 @@ import { Icon } from '../../components/icon'
 import { Button } from '../../components/button/button'
 import PopupContainer from '../../components/popupContainer/popupContainer'
 import Table from '../../components/table/table'
-import { SUBJECTS } from '../../mocks/subjects'
 import Filter from '../../components/filter/filter'
 import RightPopupContainer from '../../components/rightPopupContainer/rightPopupContainer'
+import { FilterParams } from '../../types/filter'
+import axios, { PagesURl } from '../../services/api';
+import { ModulesWithSubjects } from '../../types/module'
+import { getInstituteId } from '../../services/institute'
 
 export default function Subjects() {
 
@@ -21,7 +24,7 @@ export default function Subjects() {
   const [searchTeacherValue, setSearchSubjectValue] = useState('')
   const [sortList, setSortList] = useState(ALPHABET_LIST)
   const [teachers,] = useState(['1Фамилия Имя Отчество', '2Фамилия Имя Отчество', '3Фамилия Имя Отчество'])
-  const [modules,] = useState(SUBJECTS.map(item => item.name))
+  const [modules, setModules] = useState<ModulesWithSubjects>()
 
   const [displaySettings, setDisplaySettings] = useState(false)
   const [addModulePopup, setAddModulePopup] = useState(false)
@@ -41,18 +44,71 @@ export default function Subjects() {
     list: []
   })
 
+  const getModules = useCallback (async (params?:FilterParams) => {
+    try {
+      const response = await axios.get<ModulesWithSubjects>(PagesURl.MODULE + '/subjects',{
+        params: {
+          institute_ids: getInstituteId(),
+          ...params
+        }
+      })
+      console.log(response)
+      setModules(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  },[])
+
+  const createModule = async () => {
+    try {
+      await axios.post(PagesURl.MODULE, {
+        institute_id: getInstituteId(),
+        name: newModuleValue
+      })
+      getModules()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const createSubject = async () => {
+    try {
+      await axios.post(PagesURl.SUBJECT, {
+        name: addSubjectValues.name,
+        module_id: modules?.content.filter((el)=>(el.name === addSubjectValues.module))[0].id
+      })
+      onResetAdd(setAddSubjectPopup)
+      getModules()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const changeSearchValue = (newValue: string) => {
     setSearchValue(newValue)
   }
 
   const changeSortValue = (value: string) => {
     setSortList(updateRadioButtonList(value, sortList))
+    setIsDisplaySortList(false)
+    const activeValue = sortList.filter((point)=>(point.value === value))[0]
+    getModules({
+      sort: activeValue.backName,
+      desc: activeValue.desc
+    })
   }
 
   const onResetAdd = (func: (bool: boolean) => void) => {
     func(false)
     setNewModuleValue('')
     setAddSubjectValues({name: '', module: '', teachers: []})
+  }
+
+  useEffect(()=>{
+    getModules()
+  },[getModules])
+
+  if (!modules) {
+    return <></>
   }
 
   return (
@@ -65,12 +121,12 @@ export default function Subjects() {
           <h1 className={styles.container__title}>Модули</h1>
           <div className={styles.controls}>
             <div className={styles.controls__input}>
-              <Input placeholder='Поиск...' value={searchValue} onChange={changeSearchValue} />
+              <Input placeholder='Поиск...Не работает' value={searchValue} onChange={changeSearchValue} />
             </div>
             <SortBlock isOpenList={isDisplaySortList} changeIsOpenList={() => { setIsDisplaySortList(!isDisplaySortList) }} title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList} />
             <div onClick={() => { setDisplayFilters(true) }} className={styles.controls__filters}>
               <Icon glyph='filter' glyphColor='grey' />
-              <p className={styles.controls__text}>Фильтры</p>
+              <p className={styles.controls__text}>Фильтры Не работает</p>
             </div>
             <div className={styles.controls__block}>
               <div onClick={() => { setDisplaySettings(!displaySettings) }} className={`${styles.controls__filters} ${displaySettings ? styles.controls__filters_active : ''}`}>
@@ -89,7 +145,7 @@ export default function Subjects() {
             </div>
           </div>
         </div>
-        <Table isOpacity={isDisplaySortList || displaySettings} titles={['Предмет', 'Рейтинг']} data={SUBJECTS} />
+        <Table isOpacity={isDisplaySortList || displaySettings} titles={['Модуль', 'Рейтинг']} data={modules.content} />
         <BottomLinks />
       </div>
       {displayFilters &&
@@ -108,7 +164,7 @@ export default function Subjects() {
             <Input placeholder='Название модуля' value={newModuleValue} onChange={setNewModuleValue} />
             <div className={subjectStyles.popup__buttons}>
               <Button onClick={() => { onResetAdd(setAddModulePopup)}} variant='whiteMain' size={'max'} >Отмена</Button>
-              <Button variant='primary' size={'max'} >Добавить</Button>
+              <Button onClick={()=>{createModule(); onResetAdd(setAddModulePopup)}} variant='primary' size={'max'} >Добавить</Button>
             </div>
           </div>
         </PopupContainer>
@@ -119,12 +175,12 @@ export default function Subjects() {
             <h2 className={subjectStyles.popup__title}>Добавить предмет</h2>
             <div className={subjectStyles.popup__inputs}>
               <Input placeholder='Название предмета' value={addSubjectValues.name} onChange={(value)=>{setAddSubjectValues({...addSubjectValues, name: value})}} />
-              <AddInput singleMode title='Выбрать модуль из списка' placeholder='Введите название модуля' selectedList={[addSubjectValues.module]} allList={modules} changeInputList={(list)=>{setAddSubjectValues({...addSubjectValues, module: list[0]})}}/>
-              <AddInput title='Выбрать преподавателя из списка' placeholder='Введите ФИО преподавателя...' selectedList={addSubjectValues.teachers} allList={teachers} changeInputList={(list)=>{setAddSubjectValues({...addSubjectValues, teachers: list})}}/>
+              <AddInput singleMode title='Выбрать модуль из списка' placeholder='Введите название модуля(не работает)' selectedList={[addSubjectValues.module]} allList={modules.content.map((module)=>module.name)} changeInputList={(list)=>{setAddSubjectValues({...addSubjectValues, module: list[0]})}}/>
+              <AddInput title='Выбрать преподавателя из списка(не заполнять)' placeholder='Введите ФИО преподавателя...' selectedList={addSubjectValues.teachers} allList={teachers} changeInputList={(list)=>{setAddSubjectValues({...addSubjectValues, teachers: list})}}/>
             </div>
             <div className={subjectStyles.popup__buttons}>
               <Button size={'max'} onClick={() => { onResetAdd(setAddSubjectPopup)}} variant='whiteMain' >Отмена</Button>
-              <Button size={'max'}  variant='primary' >Добавить</Button>
+              <Button size={'max'} onClick={createSubject}  variant='primary' >Добавить</Button>
             </div>
           </div>
         </RightPopupContainer>

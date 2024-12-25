@@ -1,1 +1,1 @@
-export type TableEntity = { name: string, raiting: number, id: string }
+export type TableEntity = { name: string, rating: string, id: string }

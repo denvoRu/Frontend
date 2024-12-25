@@ -1,5 +1,8 @@
 .container {
-  padding: 8px 35px;
+  padding: 8px 0;
+  @media (max-width: $md) {
+    padding: 24px 13px;
+  }
   .settings {
     display: flex;
     justify-content: space-between;
@@ -42,6 +45,12 @@
       @include text_h3();
       text-wrap: wrap
     }
+    &__module {
+      @include text_subhead();
+      color: var(--light-black-color);
+      margin-left: 32px;
+      margin-top: 10px;
+    }
     &__email {
       @include text_subhead();
       color: var(--light-black-color);
@@ -75,9 +84,14 @@
     &__button {
       @include text_body();
     }
+    &__buttons {
+      display: flex;
+      column-gap: 8px;
+    }
     .table {
       &__buttonContainer {
         display: flex;
+        align-items: center;
         margin: -12px -18px;
         column-gap: 8px;
       }
@@ -86,7 +100,12 @@
         align-items: center;
         justify-content: space-between;
         padding: 8px 0;
+        column-gap: 16px;
         border-bottom: 1px solid var(--ultra-light-grey-color);
+        &_controls {
+          margin-bottom: 24px;
+          border-bottom: none;
+        }
       }
       &__name {
         @include text_subhead();
@@ -101,6 +120,17 @@
       }
       &__button {
         @include text_body();
+        color: var(--grey-color);
+        &_mobileHide {
+          @media (max-width: $smc) {
+            display: none;
+          }
+        }
+      }
+      &__block {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
       }
     }
   }
@@ -112,10 +142,12 @@
   flex-direction: column;
   align-items: center;
   row-gap: 16px;
+  max-width: 400px;
   &__title {
     @include text_h2();
     color: var(--light-black-color);
     margin-bottom: 8px;
+    text-align: center;
   }
   &__buttons {
     width: 100%;

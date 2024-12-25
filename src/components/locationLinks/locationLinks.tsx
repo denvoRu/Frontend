@@ -7,7 +7,7 @@ type LocationLinksProps = {
 }
 
 const translations:Record<string, string> = {
-  subjects: 'Предметы',
+  modules: 'Предметы',
   teachers: 'Преподаватели',
   institutes: 'Институты'
 };
@@ -35,10 +35,10 @@ export default function LocationLinks ({paramName}:LocationLinksProps) {
   return (
     <div className={styles.container}>
       {createBreadcrumbTrail().map(({title, link})=>(
-        <>
+        <div key={`${title}`} className={styles.container__block}>
           {link ? <Link className={styles.container__link} to={link}>{title}</Link> : <p className={styles.container__link}>{title}</p>}
           {link && <Icon size={16} glyph='arrow-right' glyphColor='ultra-light-grey'/>}
-        </>
+        </div>
       ))}
     </div>
   )

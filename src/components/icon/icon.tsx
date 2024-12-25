@@ -5,7 +5,7 @@ import { Colors } from './types';
 const Icon = forwardRef<HTMLSpanElement, IconProps>(
   ({ 
     glyph = 'arrow-right', size = 24, 
-    glyphColor = 'primary', className, ...props 
+    glyphColor = 'primary', containerStyle, className, ...props 
   }, ref) => {
     const iconStyle: React.CSSProperties = {
       maskImage: `url(/icons/${glyph}.svg)`,
@@ -14,8 +14,8 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>(
       backgroundColor: Colors[glyphColor]
     };
 
-    if (props.containerStyle) {
-      return <div className={props.containerStyle}>
+    if (containerStyle) {
+      return <div className={containerStyle}>
         <i
           className={`icon ${className}`}
           style={iconStyle}

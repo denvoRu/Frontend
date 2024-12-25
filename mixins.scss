@@ -50,3 +50,13 @@ $xsc: 100%;
   font-weight: 400;
   line-height: 20px;
 }
+
+//margins
+
+@mixin body_margin {
+  padding: 18px 40px;
+
+  @media (max-width: $md) {
+    padding: 16px 15px;
+  }
+}

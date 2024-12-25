@@ -1,10 +1,20 @@
 .container {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   column-gap: 5px;
+  overflow: hidden;
+  &__block {
+    display: flex;
+    max-width: 50%;
+    align-items: center;
+  }
   &__link {
+    width: 100%;
+    text-wrap: nowrap;
     @include text_body();
+    text-overflow: ellipsis;
+    overflow: hidden;
     &:not(:last-child) {
       color: var(--ultra-light-grey-color);
     }

@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     column-gap: 8px;
-    border-radius: var(--large-border-radius);
+    border-radius: var(--medium-border-radius);
     background-color: var(--dark-white-color);
     &_active {
       background-color: var(--main-color);
@@ -26,10 +26,11 @@
     z-index: 1;
     position: absolute;
     width: 100%;
-    margin-top: calc(var(--large-border-radius) * -1);
+    margin-top: calc(var(--medium-border-radius) * -1);
     padding: 0 18px;
     background-color: var(--dark-white-color);
-    border-radius: var(--large-border-radius);
+    border-bottom-left-radius: var(--medium-border-radius);
+    border-bottom-right-radius: var(--medium-border-radius);
   }
   &__point {
     display: flex;
@@ -37,7 +38,7 @@
     padding: 12px 0;
     color: var(--grey-color);
     &:first-child {
-      padding-top: 20px;
+      padding-top: calc(12px + var(--medium-border-radius));
     }
   }
   &__value {

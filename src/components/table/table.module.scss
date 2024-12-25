@@ -29,15 +29,26 @@
     color: var(--grey-color);
     flex: 50%;
     padding: 0 8px;
+    &:first-child {
+      flex: 85%;
+    }
+    &:last-child {
+      flex: 15%;
+    }
   }
   &__content {
     padding: 0 8px;
     @include text_body();
     color: var(--grey-color);
-    flex: 50%;
     overflow: hidden;
     text-overflow: ellipsis;
     text-wrap: nowrap;
+    &_name {
+      flex: 85%;
+    }
+    &_raiting {
+      flex: 15%;
+    }
   }
   &__block {
     cursor: pointer;
@@ -47,7 +58,7 @@
     position: absolute;
     right: 8px;
     &_open {
-      transform: rotate(90deg);
+      transform: rotate(180deg);
     }
   }
 }
@@ -56,6 +67,7 @@
   display: flex;
   justify-content: center;
   column-gap: 8px;
+  margin-bottom: 70px;
   &__control {
     display: flex;
     justify-content: center;

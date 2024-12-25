@@ -3,10 +3,10 @@ import { ButtonProps } from "./buton-props";
 import { buttonVariants } from "./button-variants";
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, children, ...props }, ref) => {
+  ({ className, variant, size, textColor, children, ...props }, ref) => {
     return (
       <button 
-        className={buttonVariants({ variant, size, className })} 
+        className={buttonVariants({ variant, size, textColor, className })} 
         ref={ref}
         {...props} 
       >

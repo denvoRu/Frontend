@@ -12,6 +12,7 @@ export type glyphs =
   'arrow-right' |
   'arrow-left' |
   'arrow-down' |
+  'arrow-up' |
   'download' |
   'edit' |
   'export' |
@@ -25,6 +26,7 @@ export type glyphs =
   'teacher' |
   'institute' |
   'dropdown' |
+  'profile' |
   'trash';
 
 type IconColor = keyof typeof Colors;

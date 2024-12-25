@@ -1,19 +1,23 @@
 import { Helmet } from 'react-helmet-async'
 import styles from '../list.module.scss'
 import teacherStyles from './teachers.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { updateRadioButtonList } from '../../utils/list'
 import {AddInput, Input} from '../../components/input/Input'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { Icon } from '../../components/icon'
 import Table from '../../components/table/table'
-import { TEACHERS } from '../../mocks/teachers'
 import Filter from '../../components/filter/filter'
 import BottomLinks from '../../components/bottomLinks/bottomLinks'
 import { ALPHABET_LIST } from '../../consts/alphabetList'
 import { Button } from '../../components/button/button'
+import axios, { PagesURl } from '../../services/api';
+import { Teachers } from '../../types/teacher'
+import { FilterParams } from '../../types/filter'
 
-export default function Teachers() {
+export default function TeachersPage() {
+
+  const [teachers, setTeachers] = useState<Teachers>()
 
   const [searchValue, setSearchValue] = useState('')
   const [searchTeacherValue, setSearchTeacherValue] = useState('')
@@ -28,7 +32,6 @@ export default function Teachers() {
   const [newTeacherValue, setNewTeacherValue] = useState<{ name: string, email: string, password: string, subjects: string[] }>(
     { name: '', email: '', password: '', subjects: [] }
   )
-
   const [filters, setFilters] = useState<{ from: string, to: string, list: string[] }>({
     from: '',
     to: '',
@@ -43,14 +46,38 @@ export default function Teachers() {
     setSortList(updateRadioButtonList(value, sortList))
   }
 
+/*   const addTeacher = () => {
+
+  } */
+
+  const getAllTeachers = async (params?:FilterParams) => {
+    try {
+      const {data} = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
+        params: params
+      })
+      console.log(data)
+      setTeachers(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    getAllTeachers()
+  },[])
+
+  if (!teachers) {
+    return <></>
+  }
+
   return (
     <>
       <Helmet>
-        <title>Предметы</title>
+        <title>Преподаватели</title>
       </Helmet>
       <div className={styles.container}>
         <div className={styles.container__controlsBlock}>
-          <h1 className={styles.container__title}>Преподаватели</h1>
+          <h1 className={styles.container__title}>Преподаватели(В разработке)</h1>
           <div className={styles.controls}>
             <div className={styles.controls__input}>
               <Input placeholder='Поиск...' value={searchValue} onChange={changeSearchValue} />
@@ -65,7 +92,7 @@ export default function Teachers() {
             </div>
           </div>
         </div>
-        <Table isOpacity={isDisplaySortList} titles={['Фамилия Имя Отчество', 'Рейтинг']} data={TEACHERS}/>
+        <Table isOpacity={isDisplaySortList} titles={['Фамилия Имя Отчество', 'Рейтинг']} data={teachers.content}/>
         <BottomLinks />
       </div>
       {displayPopup &&
