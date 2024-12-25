@@ -44,7 +44,6 @@ export default function Main() {
     const response = await axios.get<Institutes>(PagesURl.INSTITUTE, {
       params: params
     })
-    console.log(response)
     setStatistics(response.data)
   }
   const createInstitute = async () => {

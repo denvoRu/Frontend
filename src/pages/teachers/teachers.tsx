@@ -55,7 +55,6 @@ export default function TeachersPage() {
       const {data} = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
         params: params
       })
-      console.log(data)
       setTeachers(data)
     } catch (error) {
       console.log(error)

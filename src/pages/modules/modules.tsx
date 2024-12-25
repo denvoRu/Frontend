@@ -52,7 +52,6 @@ export default function Subjects() {
           ...params
         }
       })
-      console.log(response)
       setModules(response.data)
     } catch (error) {
       console.log(error)
