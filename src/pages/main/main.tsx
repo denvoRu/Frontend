@@ -48,6 +48,7 @@ export default function Main() {
   }
   const createInstitute = async () => {
     setDisplayAddInstitute(false)
+    setNewInstitute({name: '', short_name: '', address: ''})
     await axios.post<Institutes>(PagesURl.INSTITUTE, newInstitute)
     getInstitutes()
   }
@@ -102,7 +103,7 @@ export default function Main() {
         <div className={styles.statisticsBlock}>
           <div className={styles.statistics}>
             {statistics.content.map((statistic) => (
-              <Link onClick={()=>{context?.setInstituteId(statistic.id);setInstituteId(statistic.id)}} to={`/institutes/${statistic.id}`} className={`${styles.statistics__point} ${isOpenList ? 'opacity' : ''}`} key={statistic.name} style={{ width: `${statistic.rating < 35 ? 35 : statistic.rating}%` }}>
+              <Link onClick={()=>{context?.setInstituteId(statistic.id);setInstituteId(statistic.id)}} to={`/institutes/${statistic.id}`} className={`${styles.statistics__point} ${isOpenList ? 'opacity' : ''}`} key={statistic.name} style={{ width: `${statistic.rating*20 < 35 ? 35 : statistic.rating*20}%` }}>
                 <p>{statistic.short_name}</p>
                 <div className={styles.statistics__block}>
                   <p>{statistic.rating}</p>

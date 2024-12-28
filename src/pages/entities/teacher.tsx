@@ -4,20 +4,49 @@ import LocationLinks from '../../components/locationLinks/locationLinks'
 import { Button } from '../../components/button/button'
 import { Icon } from '../../components/icon'
 import SortBlock from '../../components/sortBlock/sortBlock'
-import { useEffect, useState } from 'react'
-import { PRIVILEGES } from '../../consts/privileges'
+import { useCallback, useEffect, useState } from 'react'
 import PopupContainer from '../../components/popupContainer/popupContainer'
 import {Input} from '../../components/input/Input'
+import axios, { PagesURl } from '../../services/api';
+import { useParams } from 'react-router-dom'
+import { Privilege, Teacher } from '../../types/teacher'
+import { getNameByAllNames } from '../../utils/teacher'
 
-export default function Teacher() {
+export default function TeacherPage() {
 
+  const params = useParams()
 
-  const [privileges, setPrivileges] = useState<{value: string, isActive: boolean}[]>([])
+  const [teacherId, setTeacherId] = useState<string>()
+  const [teacher, setTeacher] = useState<Teacher>()
+
+  const [privileges, setPrivileges] = useState<{value:Privilege, isActive: boolean}[]>([])
   const [isOpenPrivileges, setIsOpenPrivileges] = useState(false)
 
   const [displayDeletePopup, setDisplayDeletePopup] = useState (false)
   const [displayChangePopup, setDisplayChangePopup] = useState(false)
   const [changeData, setChangeData] = useState({name: 'Иванов Иван Иванович', email: 'example@gmail.com'})
+
+
+  const getTeacherPrivileges = async () => {
+    try {
+      const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${teacherId}/privilege`)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTeacher = useCallback( async () => {
+    try {
+      const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${teacherId}`)
+      console.log(response)
+      getNameByAllNames(response.data)
+      setTeacher(response.data)
+      getTeacherPrivileges()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [teacherId])
 
   const onChangePrivileges = (value: string) => {
     const newPrivileges = privileges.slice()
@@ -31,20 +60,28 @@ export default function Teacher() {
   }
 
   useEffect(()=>{
-    const newPrivileges = []
-    for (const key of Object.keys(PRIVILEGES)) {
-      newPrivileges.push({value: PRIVILEGES[key], isActive: false})
+    if (teacherId) {
+      getTeacher()
     }
-    setPrivileges(newPrivileges)
-  },[])
+  },[getTeacher, teacherId])
+
+  useEffect(()=>{
+    if (params.id) {
+      setTeacherId(params.id)
+    }
+  },[params])
+
+  if (!teacher) {
+    return <></>
+  }
 
   return (
     <>
       <Helmet>
-        <title>Иванов Иван Иванович</title>
+        <title>{teacher.name}</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramName='Иванов Иван Иванович' />
+        <LocationLinks paramName={teacher.name} />
         <div className={styles.settings}>
           <div className={styles.settings__controls}>
             <SortBlock 
@@ -55,7 +92,7 @@ export default function Teacher() {
             <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
               <>
                 <Icon glyph='edit' glyphColor='grey' />
-                <p className={styles.settings__button}>Изменить</p>
+                <p className={styles.settings__button}>Изменить пароль</p>
               </>
             </Button>
           </div>
@@ -70,11 +107,11 @@ export default function Teacher() {
           <div>
             <div className={styles.info__block}>
               <Icon glyph='teacher' />
-              <h1 className={styles.info__name}>Иванов Иван Иванович</h1>
+              <h1 className={styles.info__name}>{teacher.name}</h1>
             </div>
-            <p className={styles.info__email}>example@gmail.com</p>
+            <p className={styles.info__email}>{teacher.email}</p>
           </div>
-          <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${99}`}</p>
+          <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${teacher.rating}`}</p>
         </div>
         <div className={`${styles.container__block} ${styles.subjects} ${isOpenPrivileges ? styles.container__block_opacity : ''}`}>
           <div className={styles.subjects__line}>

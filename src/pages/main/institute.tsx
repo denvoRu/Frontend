@@ -140,7 +140,7 @@ export default function InstitutePage() {
                 <Icon containerStyle={styles.info__titleIcon} glyph='institute' />
                 <h1 className={styles.info__title}>{institute.name}</h1>
               </div>
-              <p className={styles.info__text}>{`${institute.short_name} ${institute.address}`}</p>
+              <p className={styles.info__text}><span className={styles.info__text_mobile}>{institute.short_name}&nbsp;</span>{`${institute.address}`}</p>
             </div>
             <p className={styles.info__raiting}>{`Рейтинг: ${institute.rating}`}</p>
           </div>
@@ -160,7 +160,7 @@ export default function InstitutePage() {
           </div>
           <div className={styles.statistics}>
             {statistics.content.map((statistic) => (
-              <div key={statistic.name} className={`${styles.statistics__point} ${styles.statistics__point_blue} ${isOpenList ? 'opacity' : ''}`} style={{ width: `${statistic.rating > 30 ? statistic.rating : 30}%` }}>
+              <div key={statistic.name} className={`${styles.statistics__point} ${styles.statistics__point_blue} ${isOpenList ? 'opacity' : ''}`} style={{ width: `${statistic.rating *20 > 30 ? statistic.rating*20 : 30}%` }}>
                 <p>{statistic.name}</p>
                 <p>{statistic.rating}</p>
               </div>

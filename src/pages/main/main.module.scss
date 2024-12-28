@@ -130,6 +130,12 @@
       @include text_subhead();
       color: var(--light-grey-color);
       margin-left: 32px;
+      &_mobile {
+        @media (max-width: $sm) {
+          display: block;
+          margin-top: 10px;
+        }
+      }
     }
     &__raiting {
       text-wrap: nowrap;

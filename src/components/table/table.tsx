@@ -8,12 +8,23 @@ type TableProps = {
   titles: string[]
   data: (TableEntity | { name: string, rating: number, subjects: TableEntity[] })[]
   isOpacity?: boolean
+  changePage: (toNext: boolean) => void
+  currentPage: number
+  totalPages: number
 }
 
 
-export default function Table({ titles, data, isOpacity }: TableProps) {
+export default function Table({ titles, data, isOpacity, changePage, totalPages, currentPage }: TableProps) {
 
   const navigate = useNavigate()
+
+  const onChangePage = (isNext: boolean) => {
+    if (!isNext && currentPage !== 1){
+      changePage(false)
+    } else if (isNext && totalPages !== currentPage){
+      changePage(true)
+    }
+  }
 
   return (
     data.length !== 0 && 
@@ -34,11 +45,11 @@ export default function Table({ titles, data, isOpacity }: TableProps) {
         ))}
       </div>
       
-      <div className={styles.pagination}>
-        <Icon glyph='arrow-left' glyphColor='grey' containerStyle={styles.pagination__control} />
-        <Icon glyph='arrow-right' glyphColor='black' containerStyle={styles.pagination__control} />
-        не работает
-      </div>
+      {totalPages > 1 &&
+       <div className={styles.pagination}>
+        <Icon onClick={()=>{onChangePage(false)}} glyph='arrow-left' glyphColor={currentPage === 1 ? 'grey' : 'black'}containerStyle={`${styles.pagination__control} ${currentPage !== 1 ? styles.pagination__control_active : ''}`} />
+        <Icon onClick={()=>{onChangePage(true)}} glyph='arrow-right' glyphColor={totalPages === currentPage ? 'grey' : 'black'} containerStyle={`${styles.pagination__control} ${totalPages !== currentPage ? styles.pagination__control_active : ''}`} />
+      </div>}
     </>
   )
 }

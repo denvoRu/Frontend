@@ -6,7 +6,7 @@ import { Icon } from '../icon'
 type InputProps = {
   placeholder?: string
   required?: boolean
-  type?: 'email' | 'password'
+  type?: 'email' | 'password' | 'search'
   value: string
   onChange: (value: string) => void
 }
@@ -37,28 +37,36 @@ export function Input ({placeholder, value, required, type, onChange}:InputProps
 }, [textarea]);
 
   return (
-    type ? <input type={type} required={required} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{onChange(e.target.value)}}/> :
-    <textarea ref={textarea} rows={rows} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{changeTextarea(e.target.value)}}/>
+    <div className={styles.inputBlock}>
+      {type ? <input type={type} required={required} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{onChange(e.target.value)}}/> :
+    <textarea ref={textarea} rows={rows} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{changeTextarea(e.target.value)}}/>}
+    {type === 'search' && value!=='' && <img onClick={()=>{onChange('')}} className={styles.input__clear} src='/icons/close.svg'/>}
+    </div>
   )
 }
 
 type AddInputProps = {
   changeInputList: (newList: string[]) => void
+  onSeeMore: (searchValue?:string) => void
+  onSearch: (searchValue?:string) => void
   selectedList: string[]
   allList: string[]
   title: string
   placeholder: string
   singleMode?:boolean
+  totalParts: number
+  currentPart: number
 }
 
 
-export function AddInput({ selectedList, changeInputList, allList, title, placeholder, singleMode }: AddInputProps) {
+export function AddInput({ selectedList, changeInputList, allList, title, placeholder, singleMode, totalParts, currentPart, onSeeMore, onSearch }: AddInputProps) {
 
   const [searchValue, setSearchValue] = useState('')
   const [displayList, setDisplayList] = useState(false)
 
   const changeSearchValue = (newvalue: string) => {
     setSearchValue(newvalue)
+    onSearch(newvalue!=='' ? newvalue : undefined)
   }
 
 
@@ -75,6 +83,10 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
       newList.push(value)
     }
     changeInputList(newList)
+  }
+
+  const seeMore = () => {
+    onSeeMore(searchValue!=='' ? searchValue : undefined)
   }
 
   return (
@@ -94,7 +106,7 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
             <p>{el}</p>
           </div>
         ))}
-        <p className={styles.list__showMore}>Показать еще...</p>
+        {totalParts !== currentPart && <p onClick={seeMore} className={styles.list__showMore}>Показать еще...</p>}
       </div>}
     </div>
   )

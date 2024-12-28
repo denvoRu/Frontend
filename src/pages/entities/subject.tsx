@@ -147,6 +147,10 @@ export default function Teacher() {
           <div className={styles.deletePopup}>
             <h2 className={styles.deletePopup__title}>Добавить преподавателя</h2>
             <AddInput title='Выбрать преподавателя из списка' placeholder='Введите ФИО преподавателя' 
+              currentPart={1}
+              totalParts={1}
+              onSeeMore={()=>{}}
+              onSearch={()=>{}}
               allList={['Фамилия Имя Отчество1','Фамилия Имя Отчество2','Фамилия Имя Отчество3']}
               selectedList={newTeachers}
               changeInputList={setNewTeachers}/>

@@ -1,4 +1,4 @@
-export type FilterType = {from: string, to: string, list: string[]}
+export type FilterType = {rating_start: string, rating_end: string, list: {name: string, id: string}[]}
 
 export type FilterParams= {
   page?:number

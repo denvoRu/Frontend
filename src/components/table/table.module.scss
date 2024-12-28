@@ -71,9 +71,11 @@
   &__control {
     display: flex;
     justify-content: center;
-    cursor: pointer;
     padding: 8px;
     background-color: var(--dark-white-color);
     border-radius: var(--medium-border-radius);
+    &_active {
+      cursor: pointer;
+    }
   }
 }

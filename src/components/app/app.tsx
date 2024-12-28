@@ -1,5 +1,5 @@
 import './app.scss'
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Login from '../../pages/login/login';
 import Header from '../header/header';
@@ -9,23 +9,22 @@ import Subject from '../../pages/entities/subject';
 import Teacher from '../../pages/entities/teacher';
 import Institute from '../../pages/main/institute';
 import Subjects from '../../pages/modules/modules';
-import { useEffect, useState } from 'react';
-import { getTokenFromCookie, removeTokensFromCookies } from '../../services/token';
+import { useState } from 'react';
 import { AppContext, ProviderProps } from '../../contexts/appContext';
 
 function App() {
 
   function OutletWrapper() {
 
-    const navigate = useNavigate()
+    //const navigate = useNavigate()
 
-    useEffect(()=>{
+/*     useEffect(()=>{
       if (!getTokenFromCookie('access') || !getTokenFromCookie('refresh')){
         removeTokensFromCookies('access')
         removeTokensFromCookies('refresh')
         navigate('/login')
       } 
-    },[navigate])
+    },[navigate]) */
 
     return (
       <>
