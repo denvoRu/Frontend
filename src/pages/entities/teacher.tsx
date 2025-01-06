@@ -9,8 +9,9 @@ import PopupContainer from '../../components/popupContainer/popupContainer'
 import {Input} from '../../components/input/Input'
 import axios, { PagesURl } from '../../services/api';
 import { useParams } from 'react-router-dom'
-import { Privilege, Teacher } from '../../types/teacher'
+import { Privileges, PrivilegeValues, Teacher } from '../../types/teacher'
 import { getNameByAllNames } from '../../utils/teacher'
+import { PRIVILEGES } from '../../consts/privileges'
 
 export default function TeacherPage() {
 
@@ -19,7 +20,7 @@ export default function TeacherPage() {
   const [teacherId, setTeacherId] = useState<string>()
   const [teacher, setTeacher] = useState<Teacher>()
 
-  const [privileges, setPrivileges] = useState<{value:Privilege, isActive: boolean}[]>([])
+  const [privileges, setPrivileges] = useState<Privileges>(PRIVILEGES)
   const [isOpenPrivileges, setIsOpenPrivileges] = useState(false)
 
   const [displayDeletePopup, setDisplayDeletePopup] = useState (false)
@@ -29,8 +30,28 @@ export default function TeacherPage() {
 
   const getTeacherPrivileges = async () => {
     try {
-      const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${teacherId}/privilege`)
+      const response = await axios.get<PrivilegeValues[]>(PagesURl.TEACHER + `/${teacherId}/privilege`)
+      const newPrivileges = [...privileges]
+      for (const privilege of response.data){
+        for (const defaultPrivilege of newPrivileges){
+          if (privilege === defaultPrivilege.name){
+            defaultPrivilege.isActive = true
+          }
+        }
+      }
+      setPrivileges(newPrivileges)
       console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const changeTeacherPrivileges = async (privilege: PrivilegeValues, isAdd: boolean) => {
+    try {
+      if (isAdd) {
+        await axios.post(PagesURl.TEACHER + `/${teacherId}/privilege/${privilege}`)
+      } else {
+        await axios.delete(PagesURl.TEACHER + `/${teacherId}/privilege/${privilege}`)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -52,11 +73,13 @@ export default function TeacherPage() {
     const newPrivileges = privileges.slice()
     for (const privilege of newPrivileges) {
       if (privilege.value === value){
+        changeTeacherPrivileges(privilege.name, !privilege.isActive)
         privilege.isActive = !privilege.isActive
         setPrivileges(newPrivileges)
-        return
+        continue
       }
     }
+
   }
 
   useEffect(()=>{
@@ -81,10 +104,11 @@ export default function TeacherPage() {
         <title>{teacher.name}</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramName={teacher.name} />
+        <LocationLinks paramNames={[teacher.name]} />
         <div className={styles.settings}>
           <div className={styles.settings__controls}>
             <SortBlock 
+              alwaysDisplayTitle
               isOpenList={isOpenPrivileges} 
               changeIsOpenList={()=>{setIsOpenPrivileges(!isOpenPrivileges)}} 
               titlePadding={24.5} title='Привилегии' icon='privilege' type='checkbox' list={privileges} onChange={onChangePrivileges}
@@ -92,7 +116,7 @@ export default function TeacherPage() {
             <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
               <>
                 <Icon glyph='edit' glyphColor='grey' />
-                <p className={styles.settings__button}>Изменить пароль</p>
+                <p className={styles.settings__button}>Изменить пароль Не готово</p>
               </>
             </Button>
           </div>

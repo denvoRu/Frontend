@@ -11,6 +11,7 @@ import Institute from '../../pages/main/institute';
 import Subjects from '../../pages/modules/modules';
 import { useState } from 'react';
 import { AppContext, ProviderProps } from '../../contexts/appContext';
+import ModulePage from '../../pages/entities/module';
 
 function App() {
 
@@ -47,7 +48,8 @@ function App() {
             <Route path="/institutes" element={<Main />} />
             <Route path='/institutes/:id' element={<Institute/>} />
             <Route path='/modules' element={<Subjects/>} />
-            <Route path='/modules/:id' element={<Subject/>} />
+            <Route path='/modules/:id' element={<ModulePage/>} />
+            <Route path='/modules/:id/:subjectId' element={<Subject/>}/>
             <Route path='/teachers' element={<Teachers/>} />
             <Route path='/teachers/:id' element={<Teacher/>} />
           </Route>

@@ -9,12 +9,13 @@ type SortBlockProps = {
   list: {value: string, isActive: boolean}[]
   onChange: (value: string) => void
   type: 'radioButton' | 'checkbox'
+  alwaysDisplayTitle?:boolean
   isOpenList?: boolean
   titlePadding?:number
   changeIsOpenList?: () => void
 }
 
-export default function SortBlock ({title, icon, list, type, isOpenList, titlePadding, onChange, changeIsOpenList}:SortBlockProps) {
+export default function SortBlock ({title, icon, list, type, isOpenList, titlePadding, alwaysDisplayTitle, onChange, changeIsOpenList}:SortBlockProps) {
 
   const [isOpen, setIsOpen] = useState(isOpenList !== undefined ? isOpenList : false)
 
@@ -23,6 +24,17 @@ export default function SortBlock ({title, icon, list, type, isOpenList, titlePa
       changeIsOpenList()
     }
     setIsOpen(!isOpen)
+  }
+
+  const getTitle = () => {
+    if (alwaysDisplayTitle) {
+      return title
+    }
+    const name = list.filter((point)=>point.isActive)[0]
+    if (name){
+      return name.value
+    }
+    return title
   }
 
   useEffect(()=>{
@@ -35,7 +47,7 @@ export default function SortBlock ({title, icon, list, type, isOpenList, titlePa
     <div className={styles.container}>
       <div style={titlePadding ? {padding: `12px ${titlePadding}px` } : {}} onClick={changeOpenList} className={`${styles.container__titleBlock} ${isOpen ? styles.container__titleBlock_active : ''}`}>
         <Icon glyph={icon} glyphColor={isOpen ? 'white' : 'grey'}/>
-        <p className={`${styles.container__title} ${isOpen ? styles.container__title_active : ''}`}>{type==='radioButton' ? list.filter((point)=>point.isActive)[0]?.value : title}</p>
+        <p className={`${styles.container__title} ${isOpen ? styles.container__title_active : ''}`}>{getTitle()}</p>
       </div>
       {isOpen && 
         <div className={styles.container__list}>

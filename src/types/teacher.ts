@@ -14,4 +14,6 @@ export type Teacher = {
   rating: number
 }
 
-export type Privilege = 'rating' | 'comments'
+export type PrivilegeValues = 'rating' | 'comments'
+
+export type Privileges = {name: PrivilegeValues, value: string, isActive: boolean}[]

@@ -1,24 +1,17 @@
 import { Helmet } from 'react-helmet-async'
 import styles from './entities.module.scss'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LocationLinks from '../../components/locationLinks/locationLinks'
 import { Button } from '../../components/button/button'
 import { Icon } from '../../components/icon'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import PopupContainer from '../../components/popupContainer/popupContainer'
 import {AddInput, Input} from '../../components/input/Input'
 import { TEACHERS } from '../../mocks/teachers'
 import { removeElementAtIndex } from '../../utils'
-import axios, { PagesURl } from '../../services/api';
-import { Subject } from '../../types/subject'
-import { Module } from '../../types/module'
 
-export default function SubjectPage() {
+export default function ModulePage() {
 
-  const {subjectId, id} = useParams()
- 
-  const [subject, setSubject] = useState<Subject>()
-  const [moduleName, setModuleName] = useState<string>()
 
   const [displayDeletePopup, setDisplayDeletePopup] = useState (false)
   const [displayChangePopup, setDisplayChangePopup] = useState(false)
@@ -31,23 +24,6 @@ export default function SubjectPage() {
   const [teachersToDelete, setTeachersToDelete] = useState<string[]>([])
 
   const [teachers,] = useState(TEACHERS)
-
-  const getSubject = async () => {
-    try {
-      const response = await axios.get<Subject>(PagesURl.SUBJECT + `/${subjectId}`)
-      setSubject(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  const getModuleName = async () => {
-    try {
-      const response = await axios.get<Module>(PagesURl.MODULE + `/${id}`)
-      setModuleName(response.data.name)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const resetDeleteTeachers = () => {
     setTeachersToDelete([])
@@ -64,22 +40,13 @@ export default function SubjectPage() {
     setTeachersToDelete(newList)
   }
 
-  useEffect(()=>{
-    getModuleName()
-    getSubject()
-  },[])
-
-  if (!moduleName || !subject) {
-    return <></>
-  }
-
   return (
     <>
       <Helmet>
         <title>Предмет</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramNames={[moduleName,subject.name]} />
+        <LocationLinks paramNames={['Предмет']} />
         <div className={styles.settings}>
           <div className={styles.settings__controls}>
             <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
@@ -100,11 +67,11 @@ export default function SubjectPage() {
           <div>
             <div className={styles.info__block}>
               <Icon glyph='subject' />
-              <h1 className={styles.info__name}>{subject.name}</h1>
+              <h1 className={styles.info__name}>Предмет</h1>
             </div>
-            <p className={styles.info__module}>{moduleName}</p>
+            <p className={styles.info__module}>Название модуля</p>
           </div>
-          <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${subject.rating}`}</p>
+          <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${'5.00'}`}</p>
         </div>
         <div className={`${styles.container__block} ${styles.subjects}`}>
           <div className={styles.subjects__line}>

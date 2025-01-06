@@ -3,10 +3,11 @@ import { Icon } from '../icon'
 import styles from './table.module.scss'
 import { TableEntity } from '../../types/tableEntity'
 import { useState } from 'react'
+import { ModuleWithSubjects } from '../../types/module'
 
 type TableProps = {
   titles: string[]
-  data: (TableEntity | { name: string, rating: number, subjects: TableEntity[] })[]
+  data: (TableEntity | ModuleWithSubjects)[]
   isOpacity?: boolean
   changePage: (toNext: boolean) => void
   currentPage: number
@@ -55,7 +56,7 @@ export default function Table({ titles, data, isOpacity, changePage, totalPages,
 }
 
 type ModuleProps = {
-  module: { name: string, rating: number, subjects: TableEntity[] }
+  module: ModuleWithSubjects
 }
 
 function ModuleBlock({ module }: ModuleProps) {
@@ -70,7 +71,7 @@ function ModuleBlock({ module }: ModuleProps) {
         <Icon className={`${styles.table__icon} ${isDisplayList ? styles.table__icon_open : ''}`} glyph={`arrow-up`} glyphColor='grey'/>
       </div>
       {isDisplayList && module.subjects.map((subject) => (
-        <Link key={subject.id} to={`/modules/${subject.id}`} className={`${styles.table__line} ${styles.table__line_content}`}>
+        <Link key={subject.id} to={`/modules/${module.id}/${subject.id}`} className={`${styles.table__line} ${styles.table__line_content}`}>
           <p className={`${styles.table__content} ${styles.table__line_margin}  ${styles.table__content_name}`}>{subject.name}</p>
           <p className={`${styles.table__content} ${styles.table__content_raiting}`}>{subject.rating}</p>
         </Link>

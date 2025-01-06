@@ -5,7 +5,7 @@ import BottomLinks from '../../components/bottomLinks/bottomLinks'
 import { AddInput, Input } from '../../components/input/Input'
 import { useEffect, useState } from 'react'
 import SortBlock from '../../components/sortBlock/sortBlock'
-import { ALPHABET_LIST } from '../../consts/alphabetList'
+import { ALPHABET_MODULE_LIST } from '../../consts/alphabetList'
 import { updateRadioButtonList } from '../../utils/list'
 import { Icon } from '../../components/icon'
 import { Button } from '../../components/button/button'
@@ -25,7 +25,7 @@ export default function Subjects() {
 
   const [searchValue, setSearchValue] = useState('')
   const [searchTeacherValue, setSearchSubjectValue] = useState('')
-  const [sortList, setSortList] = useState(ALPHABET_LIST)
+  const [sortList, setSortList] = useState(ALPHABET_MODULE_LIST)
   const [teachers, setTeachers] = useState<Teachers>()
   const [modules, setModules] = useState<ModulesWithSubjects>()
 
@@ -133,7 +133,7 @@ export default function Subjects() {
   }
   const getTeachers = async (addToList?: boolean, params?:FilterParams) => {
     try {
-      const {data} = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
+      const {data} = await axios.get<Teachers>(PagesURl.TEACHER, {
         params: {
           institute_ids: getInstituteId(),
           limit: LIST_LIMIT,
