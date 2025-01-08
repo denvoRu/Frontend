@@ -76,6 +76,11 @@
         flex-basis: 100%;
       }
     }
+    &__sort {
+      @media (max-width: $sm) {
+        margin-left: auto;
+      }
+    }
     &__raiting {
       display: none;
       @include text_h2();

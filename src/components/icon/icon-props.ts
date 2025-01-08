@@ -14,19 +14,21 @@ export type glyphs =
   'arrow-down' |
   'arrow-up' |
   'download' |
+  'dropdown' |
   'edit' |
   'export' |
   'filter' |
   'privilege' |
+  'profile' |
   'rating' |
   'review' |
   'search' |
   'sort' |
   'subject' |
+  'schedule' |
   'teacher' |
+  'trash' |
   'institute' |
-  'dropdown' |
-  'profile' |
-  'trash';
+  'module';
 
 type IconColor = keyof typeof Colors;

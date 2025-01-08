@@ -1,0 +1,1 @@
+export type AddInputList = {name: string, id: string}

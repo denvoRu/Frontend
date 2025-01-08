@@ -38,8 +38,8 @@ export default function Table({ titles, data, isOpacity, changePage, totalPages,
         </div>
         {data.map((el) => (
           'subjects' in el ?
-            <ModuleBlock key={el.name} module={el}/> :
-            <div key={el.name} onClick={() => { navigate(`/teachers/${el.id}`) }} className={`${styles.table__line} ${styles.table__line_content}`}>
+            <ModuleBlock key={el.id} module={el}/> :
+            <div key={el.id} onClick={() => { navigate(`/teachers/${el.id}`) }} className={`${styles.table__line} ${styles.table__line_content}`}>
               <p className={`${styles.table__content} ${styles.table__content_name}`}>{el.name}</p>
               <p className={`${styles.table__content} ${styles.table__content_raiting}`}>{el.rating}</p>
             </div>
@@ -65,10 +65,12 @@ function ModuleBlock({ module }: ModuleProps) {
 
   return (
     <div className={styles.table__block}>
-      <div onClick={()=>{setIsDisplayList(!isDisplayList)}} className={`${styles.table__line} ${styles.table__line_content}`}>
-      <p className={`${styles.table__content} ${styles.table__content_name}`}>{module.name}</p>
-      <p className={`${styles.table__content} ${styles.table__content_raiting}`}>{module.rating}</p>
-        <Icon className={`${styles.table__icon} ${isDisplayList ? styles.table__icon_open : ''}`} glyph={`arrow-up`} glyphColor='grey'/>
+      <div className={`${styles.table__line} ${styles.table__line_content}`}>
+        <Link className={styles.table__link} to={`/modules/${module.id}`}>
+          <p className={`${styles.table__content} ${styles.table__content_name}`}>{module.name}</p>
+          <p className={`${styles.table__content} ${styles.table__content_raiting}`}>{module.rating}</p>
+        </Link>
+        <Icon onClick={(e)=>{e.stopPropagation();setIsDisplayList(!isDisplayList)}} className={`${styles.table__icon} ${isDisplayList ? styles.table__icon_open : ''}`} glyph={`arrow-up`} glyphColor='grey'/>
       </div>
       {isDisplayList && module.subjects.map((subject) => (
         <Link key={subject.id} to={`/modules/${module.id}/${subject.id}`} className={`${styles.table__line} ${styles.table__line_content}`}>

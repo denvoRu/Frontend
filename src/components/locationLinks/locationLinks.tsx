@@ -3,7 +3,7 @@ import styles from './locationLinks.module.scss';
 import { Icon } from '../icon';
 
 type LocationLinksProps = {
-  paramNames?: string[]; // Теперь это массив строк
+  paramNames?: {name: string, id: string}[];
 };
 
 const translations: Record<string, string> = {
@@ -16,20 +16,25 @@ export default function LocationLinks({ paramNames }: LocationLinksProps) {
   const location = useLocation();
 
   const createBreadcrumbTrail = () => {
-    const parts = location.pathname.replace(/^\/|\/$/g, '').split('/');
-    
+    const parts:(string | {name: string, id: string})[] = location.pathname.replace(/^\/|\/$/g, '').split('/');
     if (paramNames?.length) {
       for (let i = Math.max(parts.length - paramNames.length, 0); i < parts.length; i++) {
         parts[i] = paramNames[paramNames.length - (parts.length - i)];
       }
     }
 
-    return parts.map((part, index) => {
-      const title = translations[part] ?? part;
-      const link = index < parts.length - 1 ? `/${parts.slice(0, index + 1).join('/')}` : undefined;
-
+    const result = parts.map((part, index) => {
+      const title = typeof part === 'object' ?  part.name : translations[part];
+      if (index === parts.length - 1) {
+        return {title, link: undefined}
+      }
+      let link: string|string[] = parts.slice(0, index + 1).map((point)=>{
+        return typeof point === 'object' ? `${point.id}` : point
+      })
+      link = '/' + link.join('/')
       return { title, link };
     });
+    return result
   };
 
   return (

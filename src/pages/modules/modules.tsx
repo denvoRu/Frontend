@@ -20,6 +20,7 @@ import { getInstituteId } from '../../services/institute'
 import { Teachers } from '../../types/teacher'
 import { LIST_LIMIT } from '../../consts/limit'
 import { getNameByAllNames } from '../../utils/teacher'
+import { AddInputList } from '../../types/input'
 
 export default function Subjects() {
 
@@ -35,7 +36,7 @@ export default function Subjects() {
   const [addModulePopup, setAddModulePopup] = useState(false)
   const [addSubjectPopup, setAddSubjectPopup] = useState(false)
 
-  const [addSubjectValues, setAddSubjectValues] = useState<{name: string, module: string, teachers: string[]}>({name: '', module: '', teachers: []})
+  const [addSubjectValues, setAddSubjectValues] = useState<{ name: string, module: AddInputList | undefined, teachers: string[] }>({ name: '', module: undefined, teachers: [] })
 
   const [displayFilters, setDisplayFilters] = useState(false)
 
@@ -50,19 +51,18 @@ export default function Subjects() {
   })
   const [isActiveFilter, setIsActiveFilter] = useState(false)
 
-  const getModules = async (params?:FilterParams) => {
-    const activeSortValue = sortList.filter((point)=>(point.isActive))[0]
+  const getModules = async (params?: FilterParams) => {
+    const activeSortValue = sortList.filter((point) => (point.isActive))[0]
     let filterParams
-    if (isActiveFilter){
+    if (isActiveFilter) {
       filterParams = {
-        teacher_ids: filters.list.map((point)=>point.id)[0], 
+        teacher_ids: filters.list.map((point) => point.id)[0],
         rating_start: filters.rating_start && parseInt(filters.rating_start) ? parseInt(filters.rating_start) : -1,
         rating_end: filters.rating_end && parseInt(filters.rating_end) ? parseInt(filters.rating_end) : -1
       }
     }
-    console.log(isActiveFilter, parseInt(filters.rating_start))
     try {
-      const response = await axios.get<ModulesWithSubjects>(PagesURl.MODULE + '/subjects',{
+      const response = await axios.get<ModulesWithSubjects>(PagesURl.MODULE + '/subjects', {
         params: {
           institute_ids: getInstituteId(),
           sort: activeSortValue.backName,
@@ -72,7 +72,6 @@ export default function Subjects() {
         }
       })
       setModules(response.data)
-      console.log(response)
       getTeachers()
       getAddSubjectModules()
     } catch (error) {
@@ -80,7 +79,7 @@ export default function Subjects() {
     }
   }
 
-  const getAddSubjectModules = async (addToList?: boolean, params?:FilterParams) => {
+  const getAddSubjectModules = async (addToList?: boolean, params?: FilterParams) => {
     try {
       const response = await axios.get<Modules>(PagesURl.MODULE, {
         params: {
@@ -88,7 +87,7 @@ export default function Subjects() {
           ...params
         }
       })
-      if (!addSubjectModules || !addToList){
+      if (!addSubjectModules || !addToList) {
         setAddSubjectModules(response.data)
       } else {
         setAddSubjectModules({
@@ -113,10 +112,13 @@ export default function Subjects() {
     }
   }
   const createSubject = async () => {
+    if (!addSubjectValues.module){
+      return
+    }
     try {
       await axios.post(PagesURl.SUBJECT, {
         name: addSubjectValues.name,
-        module_id: modules?.content.filter((el)=>(el.name === addSubjectValues.module))[0].id
+        module_id: addSubjectValues.module.id
       })
       onResetAdd(setAddSubjectPopup)
       getModules()
@@ -131,20 +133,19 @@ export default function Subjects() {
       page: 1
     })
   }
-  const getTeachers = async (addToList?: boolean, params?:FilterParams) => {
+  const getTeachers = async (addToList?: boolean, params?: FilterParams) => {
     try {
-      const {data} = await axios.get<Teachers>(PagesURl.TEACHER, {
+      const { data } = await axios.get<Teachers>(PagesURl.TEACHER, {
         params: {
           institute_ids: getInstituteId(),
           limit: LIST_LIMIT,
           ...params
         }
       })
-      console.log(data)
       data.content.forEach((teacher) => (
         getNameByAllNames(teacher)
       ))
-      if (!addToList || !teachers){
+      if (!addToList || !teachers) {
         setTeachers(data)
       } else {
         setTeachers({
@@ -159,26 +160,26 @@ export default function Subjects() {
 
   const changeSortValue = (value: string) => {
     setSortList(updateRadioButtonList(value, sortList))
-    setIsDisplaySortList(false) 
+    setIsDisplaySortList(false)
     getModules()
   }
   const changeSearchFilterValue = (value: string) => {
-    getTeachers(false, value !== '' ? {search: value, page: 1} : {page: 1} )
+    getTeachers(false, value !== '' ? { search: value, page: 1 } : { page: 1 })
     setSearchSubjectValue(value)
   }
 
   const onResetAdd = (func: (bool: boolean) => void) => {
     func(false)
     setNewModuleValue('')
-    setAddSubjectValues({name: '', module: '', teachers: []})
+    setAddSubjectValues({ name: '', module: undefined, teachers: [] })
   }
 
   const onChangePage = (isNext: boolean) => {
-    if (!modules){
+    if (!modules) {
       return
     }
     getModules({
-      page: modules.page_number + (isNext ? 1 : -1) 
+      page: modules.page_number + (isNext ? 1 : -1)
     })
   }
 
@@ -190,27 +191,26 @@ export default function Subjects() {
     })
     setIsActiveFilter(false)
     setDisplayFilters(false)
-    getModules({page: 1})
+    getModules({ page: 1 })
   }
   const submitFilters = () => {
     setIsActiveFilter(true)
-    getModules({page: 1})
+    getModules({ page: 1 })
     setDisplayFilters(false)
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getModules()
-  },[])
+  }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     getModules()
-  },[isActiveFilter])
+  }, [isActiveFilter])
 
-  useEffect(()=>{
+  useEffect(() => {
     getAddSubjectModules(false)
     getTeachers(false)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[addSubjectPopup])
+  }, [addSubjectPopup])
 
   if (!modules || !teachers || !addSubjectModules) {
     return <></>
@@ -228,25 +228,29 @@ export default function Subjects() {
             <div className={styles.controls__input}>
               <Input type='search' placeholder='Поиск...' value={searchValue} onChange={changeSearchValue} />
             </div>
-            <SortBlock isOpenList={isDisplaySortList} changeIsOpenList={() => { setIsDisplaySortList(!isDisplaySortList) }} title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList} />
-            <div onClick={() => { setDisplayFilters(true); }} className={styles.controls__filters}>
-              <Icon glyph='filter' glyphColor='grey' />
-              <p className={styles.controls__text}>Фильтры</p>
+            <div className={styles.controls__sort}>
+              <SortBlock isOpenList={isDisplaySortList} changeIsOpenList={() => { setIsDisplaySortList(!isDisplaySortList) }} title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList} />
             </div>
-            <div className={styles.controls__block}>
-              <div onClick={() => { setDisplaySettings(!displaySettings) }} className={`${styles.controls__filters} ${displaySettings ? styles.controls__filters_active : ''}`}>
-                <Icon glyph='add' glyphColor={displaySettings ? 'white' : 'grey'} />
+            <div className={styles.controls__settings}>
+              <div onClick={() => { setDisplayFilters(true); }} className={styles.controls__filters}>
+                <Icon glyph='filter' glyphColor='grey' />
+                <p className={styles.controls__text}>Фильтры</p>
               </div>
-              {displaySettings && <div className={styles.controls__list}>
-                <div onClick={() => { setAddModulePopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
-                  <p>Добавить модуль</p>
-                  <Icon glyph='arrow-right' glyphColor='grey' />
+              <div className={styles.controls__block}>
+                <div onClick={() => { setDisplaySettings(!displaySettings) }} className={`${styles.controls__filters} ${displaySettings ? styles.controls__filters_active : ''}`}>
+                  <Icon glyph='add' glyphColor={displaySettings ? 'white' : 'grey'} />
                 </div>
-                <div onClick={() => { setAddSubjectPopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
-                  <p>Добавить предмет</p>
-                  <Icon glyph='arrow-right' glyphColor='grey' />
-                </div>
-              </div>}
+                {displaySettings && <div className={styles.controls__list}>
+                  <div onClick={() => { setAddModulePopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
+                    <p>Добавить модуль</p>
+                    <Icon glyph='arrow-right' glyphColor='grey' />
+                  </div>
+                  <div onClick={() => { setAddSubjectPopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
+                    <p>Добавить предмет</p>
+                    <Icon glyph='arrow-right' glyphColor='grey' />
+                  </div>
+                </div>}
+              </div>
             </div>
           </div>
         </div>
@@ -256,14 +260,14 @@ export default function Subjects() {
       {displayFilters &&
         <Filter
           isSeeAll={teachers.content.length === teachers.total_record}
-          onSeeAll={()=>{getTeachers(false, {limit: teachers.total_record})}}
+          onSeeAll={() => { getTeachers(false, { limit: teachers.total_record }) }}
           submitFilters={submitFilters}
           filter={filters} listName='Преподаватели'
-          list={teachers.content.map((teacher)=>({id: teacher.id, name: teacher.name}))}
+          list={teachers.content.map((teacher) => ({ id: teacher.id, name: teacher.name }))}
           searchValue={searchTeacherValue}
           changeSearchValue={changeSearchFilterValue}
           setDisplayFilters={setDisplayFilters}
-          changeFilter={setFilters} 
+          changeFilter={setFilters}
           resetFilters={resetFilters}
         />
       }
@@ -273,8 +277,8 @@ export default function Subjects() {
             <h2 className={subjectStyles.popup__title}>Добавить модуль</h2>
             <Input placeholder='Название модуля' value={newModuleValue} onChange={setNewModuleValue} />
             <div className={subjectStyles.popup__buttons}>
-              <Button onClick={() => { onResetAdd(setAddModulePopup)}} variant='whiteMain' size={'max'} >Отмена</Button>
-              <Button onClick={()=>{createModule(); onResetAdd(setAddModulePopup)}} variant='primary' size={'max'} >Добавить</Button>
+              <Button onClick={() => { onResetAdd(setAddModulePopup) }} variant='whiteMain' size={'max'} >Отмена</Button>
+              <Button onClick={() => { createModule(); onResetAdd(setAddModulePopup) }} variant='primary' size={'max'} >Добавить</Button>
             </div>
           </div>
         </PopupContainer>
@@ -284,28 +288,28 @@ export default function Subjects() {
           <div className={subjectStyles.popup__content}>
             <h2 className={subjectStyles.popup__title}>Добавить предмет</h2>
             <div className={subjectStyles.popup__inputs}>
-              <Input placeholder='Название предмета' value={addSubjectValues.name} onChange={(value)=>{setAddSubjectValues({...addSubjectValues, name: value})}} />
-              <AddInput 
-                onSearch={(searchValue)=>getAddSubjectModules(false, searchValue ? {page: 1, search: searchValue} : {page: 1})} 
-                onSeeMore={(searchValue)=>{getAddSubjectModules(true, {page: addSubjectModules.page_number + 1, search: searchValue})}} 
-                totalParts={addSubjectModules.total_pages} currentPart={addSubjectModules.page_number} 
-                singleMode title='Выбрать модуль из списка' placeholder='Введите название модуля(не работает)' 
-                selectedList={[addSubjectValues.module]} allList={addSubjectModules.content.map((module)=>module.name)} 
-                changeInputList={(list)=>{setAddSubjectValues({...addSubjectValues, module: list[0]})}}
+              <Input placeholder='Название предмета' value={addSubjectValues.name} onChange={(value) => { setAddSubjectValues({ ...addSubjectValues, name: value }) }} />
+              <AddInput
+                onSearch={(searchValue) => getAddSubjectModules(false, searchValue ? { page: 1, search: searchValue } : { page: 1 })}
+                onSeeMore={(searchValue) => { getAddSubjectModules(true, { page: addSubjectModules.page_number + 1, search: searchValue }) }}
+                totalParts={addSubjectModules.total_pages} currentPart={addSubjectModules.page_number}
+                singleMode title='Выбрать модуль из списка' placeholder='Введите название модуля'
+                selectedList={addSubjectValues.module ? [addSubjectValues.module] : []} allList={addSubjectModules.content.map((module) => ({name: module.name, id: module.id}))}
+                changeInputList={(list) => { setAddSubjectValues({ ...addSubjectValues, module: list[0] }) }}
               />
-              <AddInput 
-                onSearch={(searchValue)=>getTeachers(false, searchValue ? {page: 1, search: searchValue} : {page: 1})} 
-                onSeeMore={(searchValue)=>{getTeachers(true, {page: teachers.page_number + 1, search: searchValue})}} 
-                currentPart={teachers.page_number} 
-                totalParts={teachers.total_pages} 
-                title='Выбрать преподавателя из списка(не заполнять)' placeholder='Введите ФИО преподавателя...' 
-                selectedList={addSubjectValues.teachers} allList={teachers.content.map((teacher)=>(teacher.name))} 
-                changeInputList={(list)=>{setAddSubjectValues({...addSubjectValues, teachers: list})}}
-              />
+              {/* <AddInput
+                onSearch={(searchValue) => getTeachers(false, searchValue ? { page: 1, search: searchValue } : { page: 1 })}
+                onSeeMore={(searchValue) => { getTeachers(true, { page: teachers.page_number + 1, search: searchValue }) }}
+                currentPart={teachers.page_number}
+                totalParts={teachers.total_pages}
+                title='Выбрать преподавателя из списка' placeholder='Введите ФИО преподавателя...'
+                selectedList={addSubjectValues.teachers} allList={teachers.content.map((teacher) => (teacher.name))}
+                changeInputList={(list) => { setAddSubjectValues({ ...addSubjectValues, teachers: list }) }}
+              /> */}
             </div>
             <div className={subjectStyles.popup__buttons}>
-              <Button size={'max'} onClick={() => { onResetAdd(setAddSubjectPopup)}} variant='whiteMain' >Отмена</Button>
-              <Button size={'max'} onClick={createSubject}  variant='primary' >Добавить</Button>
+              <Button size={'max'} onClick={() => { onResetAdd(setAddSubjectPopup) }} variant='whiteMain' >Отмена</Button>
+              <Button size={'max'} onClick={createSubject} variant='primary' >Добавить</Button>
             </div>
           </div>
         </RightPopupContainer>

@@ -18,6 +18,7 @@ import { getInstituteId } from '../../services/institute'
 import { Subjects } from '../../types/subject'
 import { LIST_LIMIT } from '../../consts/limit'
 import { getNameByAllNames } from '../../utils/teacher'
+import { AddInputList } from '../../types/input'
 
 export default function TeachersPage() {
 
@@ -33,8 +34,8 @@ export default function TeachersPage() {
   const [displayFilters, setDisplayFilters] = useState(false)
   const [displayPopup, setDisplayPopup] = useState(false)
 
-  const [newTeacherValue, setNewTeacherValue] = useState<{ name: string, email: string, password: string, subjects: string[] }>(
-    { name: '', email: '', password: '', subjects: [] }
+  const [newTeacherValue, setNewTeacherValue] = useState<{ first_name: string, second_name: string, third_name: string, email: string, password: string, subjects: AddInputList[] }>(
+    { first_name: '', second_name: '', third_name:'' , email: '', password: '', subjects: [] }
   )
   const [filters, setFilters] = useState<FilterType>({
     rating_start: '',
@@ -65,9 +66,29 @@ export default function TeachersPage() {
     }
   }
 
-/*   const addTeacher = () => {
+  const resetNewTeacher = () => {
+    setDisplayPopup(false); 
+    setNewTeacherValue({ first_name: '', second_name: '', third_name:'' , email: '', password: '', subjects: [] })
+  }
 
-  } */
+  const addTeacher = async () => {
+    console.log({
+      ...newTeacherValue,
+      subjects: newTeacherValue.subjects.map((subject)=>subject.id),
+      role: 'teacher',
+      institute_id: getInstituteId()
+    })
+    try {
+      await axios.post(PagesURl.AUTH + '/register', {
+        ...newTeacherValue,
+        subjects: newTeacherValue.subjects.map((subject)=>subject.id),
+        role: 'teacher',
+        institute_id: getInstituteId()
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const getAllTeachers = async (params?:FilterParams) => {
     const activeSortValue = sortList.filter((point)=>(point.isActive))[0]
@@ -80,7 +101,7 @@ export default function TeachersPage() {
       }
     }
     try {
-      const {data, config} = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
+      const {data} = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
         params: {
           institute_ids: getInstituteId(),
           sort: activeSortValue.backName,
@@ -89,7 +110,6 @@ export default function TeachersPage() {
           ...params
         }
       })
-      console.log(data, isActiveFilter, filterParams, config)
       data.content.forEach((teacher) => (
         getNameByAllNames(teacher)
       ))
@@ -188,14 +208,25 @@ export default function TeachersPage() {
       {displayPopup &&
         <div className={teacherStyles.popup}>
           <div className={teacherStyles.popup__content}>
-            <h2 className={teacherStyles.popup__title}>Добавить преподавателя(не работает)</h2>
-            <Input placeholder='Фамилия Имя Отчество' value={newTeacherValue.name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, name: value }) }} />
+            <h2 className={teacherStyles.popup__title}>Добавить преподавателя</h2>
+            <Input placeholder='Фамилия' value={newTeacherValue.first_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, first_name: value }) }} />
+            <Input placeholder='Имя' value={newTeacherValue.second_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, second_name: value }) }} />
+            <Input placeholder='Отчество' value={newTeacherValue.third_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, third_name: value }) }} />
             <Input placeholder='Почта' value={newTeacherValue.email} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, email: value }) }} />
             <Input placeholder='Разовый пароль...' value={newTeacherValue.password} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, password: value }) }} />
-            <AddInput onSearch={()=>{}} onSeeMore={()=>{}} totalParts={1} currentPart={1} title='Добавить предметы' placeholder='Введите название предмета' allList={['Предмет1', 'Предмет2', 'Предмет3']} selectedList={newTeacherValue.subjects} changeInputList={(newList) => { setNewTeacherValue({ ...newTeacherValue, subjects: newList }) }} />
-            <Button variant='primary' style={{ width: '100%' }}>Отправить пригласительное письмо</Button>
+            <AddInput 
+              onSearch={(searchValue) => getSubjects(false, searchValue ? { page: 1, search: searchValue } : { page: 1 })} 
+              onSeeMore={(searchValue) => { getSubjects(true, { page: subjects.page_number + 1, search: searchValue }) }} 
+              totalParts={subjects.total_pages} 
+              currentPart={subjects.page_number} 
+              title='Добавить предметы' placeholder='Введите название предмета' 
+              allList={subjects.content.map((subject)=>({name: subject.name, id: subject.id}))} 
+              selectedList={newTeacherValue.subjects} 
+              changeInputList={(newList) => { setNewTeacherValue({ ...newTeacherValue, subjects: newList }) }} 
+            />
+            <Button onClick={addTeacher} variant='primary' style={{ width: '100%' }}>Отправить пригласительное письмо</Button>
             <Button
-              onClick={() => { setDisplayPopup(false); setNewTeacherValue({ name: '', email: '', password: '', subjects: [] }) }}
+              onClick={resetNewTeacher}
               variant='whiteMain' style={{ width: '100%' }}>
               Отмена
             </Button>

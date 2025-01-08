@@ -4,21 +4,28 @@ import LocationLinks from '../../components/locationLinks/locationLinks'
 import { Button } from '../../components/button/button'
 import { Icon } from '../../components/icon'
 import SortBlock from '../../components/sortBlock/sortBlock'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PopupContainer from '../../components/popupContainer/popupContainer'
 import {Input} from '../../components/input/Input'
 import axios, { PagesURl } from '../../services/api';
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Privileges, PrivilegeValues, Teacher } from '../../types/teacher'
 import { getNameByAllNames } from '../../utils/teacher'
 import { PRIVILEGES } from '../../consts/privileges'
+import EntitiesList from '../../components/entitiesList/entitiesList'
+import { Subjects } from '../../types/subject'
+import { LIST_LIMIT } from '../../consts/limit'
+import { removeElementAtIndex } from '../../utils'
 
 export default function TeacherPage() {
 
   const params = useParams()
+  const navigate = useNavigate()
 
-  const [teacherId, setTeacherId] = useState<string>()
+  const teacherId = params.id
   const [teacher, setTeacher] = useState<Teacher>()
+  const [subjects, setSubjects] = useState<Subjects>()
+  const [newSubjects, setNewSubjects] = useState<Subjects>()
 
   const [privileges, setPrivileges] = useState<Privileges>(PRIVILEGES)
   const [isOpenPrivileges, setIsOpenPrivileges] = useState(false)
@@ -40,7 +47,6 @@ export default function TeacherPage() {
         }
       }
       setPrivileges(newPrivileges)
-      console.log(response)
     } catch (error) {
       console.log(error)
     }
@@ -57,18 +63,26 @@ export default function TeacherPage() {
     }
   }
 
-  const getTeacher = useCallback( async () => {
+  const deleteTeacher = async () => {
+    try {
+      await axios.delete(PagesURl.TEACHER + `/${teacherId}`)
+      setDisplayDeletePopup(false)
+      navigate('/teachers')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTeacher = async () => {
     try {
       const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${teacherId}`)
-      console.log(response)
       getNameByAllNames(response.data)
       setTeacher(response.data)
       getTeacherPrivileges()
     } catch (error) {
       console.log(error)
     }
-  }, [teacherId])
-
+  }
   const onChangePrivileges = (value: string) => {
     const newPrivileges = privileges.slice()
     for (const privilege of newPrivileges) {
@@ -81,20 +95,68 @@ export default function TeacherPage() {
     }
 
   }
+  const getSubjects = async (page?: number) => {
+    try {
+      const {data} = await axios.get<Subjects>(PagesURl.SUBJECT,{
+        params: {
+          teacher_ids: teacherId,
+          limit: LIST_LIMIT,
+          page: page
+        }
+      })
+      if (page && subjects) {
+        setSubjects({...data, content: [...subjects.content, ...data.content]})
+      } else {
+        setSubjects(data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const getNewSubjects = async (search?: string) => {
+    try {
+      const {data} = await axios.get<Subjects>(PagesURl.SUBJECT,{
+        params: {
+          not_in_module_by_id: teacherId,
+          limit: LIST_LIMIT,
+          search: search ? search : undefined
+        }
+      })
+      setNewSubjects(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const deleteSubject = async (id: string) => {
+    try {
+      await axios.delete(PagesURl.SUBJECT + `/${id}`)
+      if (!subjects){
+        return
+      }
+      let newContent = subjects.content.slice()
+      newContent = removeElementAtIndex(newContent, newContent.findIndex(item=>item.id === id))
+      setSubjects({...subjects, content: newContent})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const addNewSubjects = async (list: string[]) => {
+    try {
+      alert('not working')
+      await axios.post(PagesURl.TEACHER + `/${teacherId}/subjects`,[...list])
+      console.log(list)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(()=>{
-    if (teacherId) {
-      getTeacher()
-    }
-  },[getTeacher, teacherId])
+    getTeacher()
+    getSubjects()
+    getNewSubjects()
+  },[])
 
-  useEffect(()=>{
-    if (params.id) {
-      setTeacherId(params.id)
-    }
-  },[params])
-
-  if (!teacher) {
+  if (!teacher || !subjects || !newSubjects) {
     return <></>
   }
 
@@ -104,21 +166,27 @@ export default function TeacherPage() {
         <title>{teacher.name}</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramNames={[teacher.name]} />
+        <LocationLinks paramNames={[{name: teacher.name, id: teacher.id}]} />
         <div className={styles.settings}>
           <div className={styles.settings__controls}>
+          <Button variant={'whiteMain'}>
+              <Link className={styles.settings__schedule} to={'/'}>
+                <Icon glyph='schedule' glyphColor='grey'/>
+                <p className={styles.settings__button}>Полное расписание</p>
+              </Link>
+            </Button>
             <SortBlock 
               alwaysDisplayTitle
               isOpenList={isOpenPrivileges} 
               changeIsOpenList={()=>{setIsOpenPrivileges(!isOpenPrivileges)}} 
               titlePadding={24.5} title='Привилегии' icon='privilege' type='checkbox' list={privileges} onChange={onChangePrivileges}
             />
-            <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
+            {/* <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
               <>
                 <Icon glyph='edit' glyphColor='grey' />
-                <p className={styles.settings__button}>Изменить пароль Не готово</p>
+                <p className={styles.settings__button}>Изменить пароль</p>
               </>
-            </Button>
+            </Button> */}
           </div>
           <Button onClick={()=>{setDisplayDeletePopup(true)}} variant={'whiteMain'}>
             <>
@@ -137,53 +205,19 @@ export default function TeacherPage() {
           </div>
           <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${teacher.rating}`}</p>
         </div>
-        <div className={`${styles.container__block} ${styles.subjects} ${isOpenPrivileges ? styles.container__block_opacity : ''}`}>
-          <div className={styles.subjects__line}>
-            <div className={styles.subjects__block}>
-              <Icon glyph='subject' />
-              <h1 className={styles.subjects__title}>Предметы</h1>
-            </div>
-            <Button variant={'whiteMain'}>
-              <p className={styles.subjects__button}>Добавить</p>
-              <Icon glyph='add' />
-            </Button>
-          </div>
-          <div className={styles.table}>
-            <div className={styles.table__row}>
-              <p className={styles.table__name}>Предмет</p>
-              <Button variant={'whiteMain'}>
-                <div className={styles.table__buttonContainer}>
-                  <p className={styles.table__button}>Расписание</p>
-                  <Icon glyph='arrow-right' />
-                </div>
-              </Button>
-            </div>
-            <div className={styles.table__row}>
-              <p className={styles.table__name}>Предмет</p>
-              <Button variant={'whiteMain'}>
-                <div className={styles.table__buttonContainer}>
-                  <p className={styles.table__button}>Расписание</p>
-                  <Icon glyph='arrow-right' />
-                </div>
-              </Button>
-            </div>
-            <div className={styles.table__row}>
-              <p className={styles.table__name}>Предмет</p>
-              <Button variant={'whiteMain'}>
-                <div className={styles.table__buttonContainer}>
-                  <p className={styles.table__button}>Расписание</p>
-                  <Icon glyph='arrow-right' />
-                </div>
-              </Button>
-            </div>
-            <div className={styles.table__showMore}>
-              <Button variant={'whiteMain'}>
-                <p className={styles.subjects__button}>Посмотреть еще 3 предмета</p>
-                <Icon glyph='arrow-down' />
-              </Button>
-            </div>
-          </div>
-        </div>
+        <EntitiesList
+          displayOpacity={isOpenPrivileges}
+          icon='subject'
+          title='Предметы'
+          subtitle='Добавить предмет из списка'
+          list={subjects.content}
+          addList={newSubjects.content}
+          changeSearchValue={getNewSubjects}
+          showMore={getSubjects}
+          deleteItem={deleteSubject}
+          onConfirmChanges={addNewSubjects}
+          totalPages={subjects.total_pages}
+        />
       </div>
       {displayChangePopup && <PopupContainer>
         <div className={styles.popup}>
@@ -201,8 +235,8 @@ export default function TeacherPage() {
           <h2 className={styles.deletePopup__title}>Удалить преподавателя</h2>
           <p className={styles.deletePopup__text}>Вы дейсвительно хотите удалить преподавателя без возможности восстановления?</p>
           <div className={styles.popup__buttons}>
-            <Button onClick={()=>{setDisplayDeletePopup(false)}} style={{flex: '1'}} variant='whiteMain'><span className={styles.deletePopup__text_grey}>Отменить</span></Button>
-            <Button style={{flex: '1'}} variant='secondary'>Удалить</Button>
+            <Button onClick={()=>{setDisplayDeletePopup(false)}} size='max' variant='whiteMain'><span className={styles.deletePopup__text_grey}>Отменить</span></Button>
+            <Button onClick={deleteTeacher} size={'max'} variant='secondary'>Удалить</Button>
           </div>
         </div>
         </PopupContainer>}

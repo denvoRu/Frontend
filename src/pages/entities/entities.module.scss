@@ -23,6 +23,11 @@
       }
 
     }
+    &__schedule {
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
+    }
   }
   &__block {
     padding: 20px 24px;

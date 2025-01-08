@@ -22,6 +22,10 @@
     align-items: center;
     flex-wrap: wrap;
     position: relative;
+    @media (max-width: $md) {
+      width: 100%;
+    }
+
     &__input {
       width: 250px;
 
@@ -29,6 +33,17 @@
         flex-basis: 100%;
         margin-bottom: 16px;
       }
+    }
+    &__sort {
+      @media (max-width: $md) {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+    }
+    &__settings {
+      display: flex;
+      column-gap: 8px;
     }
 
     &__filters {
@@ -46,7 +61,7 @@
     }
 
     &__text {
-      @media (max-width: $smc) {
+      @media (max-width: $md) {
         display: none;
       }
     }
@@ -65,7 +80,7 @@
       z-index: 2;
       @media (max-width: $sm) {
         top: 56px;
-        left: auto;
+        left: 0;
       }
     }
     &__point {

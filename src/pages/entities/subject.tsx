@@ -1,17 +1,19 @@
 import { Helmet } from 'react-helmet-async'
 import styles from './entities.module.scss'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import LocationLinks from '../../components/locationLinks/locationLinks'
 import { Button } from '../../components/button/button'
 import { Icon } from '../../components/icon'
 import { useEffect, useState } from 'react'
 import PopupContainer from '../../components/popupContainer/popupContainer'
-import {AddInput, Input} from '../../components/input/Input'
-import { TEACHERS } from '../../mocks/teachers'
-import { removeElementAtIndex } from '../../utils'
 import axios, { PagesURl } from '../../services/api';
 import { Subject } from '../../types/subject'
 import { Module } from '../../types/module'
+import EntitiesList from '../../components/entitiesList/entitiesList'
+import { LIMIT, LIST_LIMIT } from '../../consts/limit'
+import { Teachers } from '../../types/teacher'
+import { getNameByAllNames } from '../../utils/teacher'
+import { removeElementAtIndex } from '../../utils'
 
 export default function SubjectPage() {
 
@@ -19,19 +21,19 @@ export default function SubjectPage() {
  
   const [subject, setSubject] = useState<Subject>()
   const [moduleName, setModuleName] = useState<string>()
+  const [teachers, setTeachers] = useState<Teachers>()
+  const [newTeachers, setNewTeachers] = useState<Teachers>()
 
-  const [displayDeletePopup, setDisplayDeletePopup] = useState (false)
-  const [displayChangePopup, setDisplayChangePopup] = useState(false)
-  const [displayAddTeacher, setDisplayAddTeacher] = useState(false)
-  const [displayDeleteTeacher, setDisplayDeleteTeacher] = useState(false)
-  const [newTeachers, setNewTeachers] = useState<string[]>([])
+  const [displayDeletePopup, setDisplayDeletePopup] = useState(false)
 
-  const [changeData, setChangeData] = useState({name: 'Предмет'})
-
-  const [teachersToDelete, setTeachersToDelete] = useState<string[]>([])
-
-  const [teachers,] = useState(TEACHERS)
-
+  const addTeachersToSubject = async (list: string[]) => {
+    try {
+      alert('not working')
+      await axios.post(PagesURl.SUBJECT + `/${subjectId}/teachers`,[...list])
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const getSubject = async () => {
     try {
       const response = await axios.get<Subject>(PagesURl.SUBJECT + `/${subjectId}`)
@@ -48,47 +50,82 @@ export default function SubjectPage() {
       console.log(error)
     }
   }
-
-  const resetDeleteTeachers = () => {
-    setTeachersToDelete([])
-    setDisplayDeleteTeacher(false)
-  }
-
-  const changeTeachersToDeleteList = (teacher: string) => {
-    let newList = teachersToDelete.slice()
-    if (newList.includes(teacher)){
-      newList = removeElementAtIndex(newList, newList.indexOf(teacher))
-    } else {
-      newList.push(teacher)
+  const getTeachers = async (page?: number) => {
+    try {
+      const {data} = await axios.get<Teachers>(PagesURl.TEACHER, {
+        params: {
+          subject_ids: subjectId,
+          limit: LIMIT,
+          page: page
+        }
+      })
+      data.content.forEach((teacher) => (
+        getNameByAllNames(teacher)
+      ))
+      if (page && teachers) {
+        setTeachers({...data, content: [...teachers.content, ...data.content]})
+      } else {
+        setTeachers(data)
+      }
+    } catch (error) {
+      console.log(error)
     }
-    setTeachersToDelete(newList)
+  }
+  const getNewTeachers = async (search?: string) => {
+    try {
+      const {data} = await axios.get<Teachers>(PagesURl.TEACHER,{
+        params: {
+          not_in_subject_by_id: id,
+          limit: LIST_LIMIT,
+          search: search ? search : undefined
+        }
+      })
+      data.content.forEach((teacher) => (
+        getNameByAllNames(teacher)
+      ))
+      setNewTeachers(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const deleteTeacherFromSubject = async (id: string) => {
+    try {
+      await axios.delete(PagesURl.TEACHER,{
+        params: {
+          subject_id: subjectId,
+          teacher_id: id
+        }
+      })
+      if (!teachers){
+        return
+      }
+      let newContent = teachers.content.slice()
+      newContent = removeElementAtIndex(newContent, newContent.findIndex(item=>item.id === id))
+      setTeachers({...teachers, content: newContent})
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(()=>{
     getModuleName()
     getSubject()
+    getTeachers()
+    getNewTeachers()
   },[])
 
-  if (!moduleName || !subject) {
+  if (!moduleName || !subject || !teachers || !newTeachers) {
     return <></>
   }
 
   return (
     <>
       <Helmet>
-        <title>Предмет</title>
+        <title>{subject.name}</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramNames={[moduleName,subject.name]} />
-        <div className={styles.settings}>
-          <div className={styles.settings__controls}>
-            <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
-              <>
-                <Icon glyph='edit' glyphColor='grey' />
-                <p className={styles.settings__button}>Изменить</p>
-              </>
-            </Button>
-          </div>
+        <LocationLinks paramNames={[{name: moduleName, id: id ? id : ''}, {name: subject.name, id: subjectId ? subjectId : ''}]} />
+        <div style={{justifyContent: 'flex-end'}}  className={styles.settings}>
           <Button onClick={()=>{setDisplayDeletePopup(true)}} variant={'whiteMain'}>
             <>
               <Icon glyph='trash' glyphColor='dangerous' />
@@ -106,64 +143,19 @@ export default function SubjectPage() {
           </div>
           <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${subject.rating}`}</p>
         </div>
-        <div className={`${styles.container__block} ${styles.subjects}`}>
-          <div className={styles.subjects__line}>
-            <div className={styles.subjects__block}>
-              <Icon glyph='teacher' />
-              <h4 className={styles.subjects__title}>Преподаватели</h4>
-            </div>
-            <div className={styles.subjects__buttons}>
-              <Button size={'small'} onClick={() => { setDisplayAddTeacher(true);resetDeleteTeachers() }} variant={'whiteMain'}>
-                <Icon glyph='add' glyphColor={displayDeleteTeacher ? 'grey' : 'primary'}/>
-              </Button>
-              <Button size={'small'}  onClick={()=>{setDisplayDeleteTeacher(true)}} variant={'whiteMain'}>
-                <Icon glyphColor={displayDeleteTeacher ? 'dangerous' : 'grey'} glyph='trash'/>
-              </Button>
-            </div>
-          </div>
-          <div className={styles.table}>
-            {displayDeleteTeacher && 
-              <div className={`${styles.table__row} ${styles.table__row_controls}`}>
-                <Button onClick={()=>{setTeachersToDelete(TEACHERS.map((el)=>el.name))}} size={'small'} variant={'whiteMain'}>Выбрать все</Button>
-                <p className={styles.table__name}>{`Выбрано: ${teachersToDelete.length}`}</p>
-                <Button onClick={()=>{resetDeleteTeachers()}} size={'small'} variant={'whiteMain'} textColor={'lightGrey'}>Отменить</Button>
-              </div>
-            }
-            {teachers.map((teacher) => (
-              <div className={styles.table__row}>
-                <div onClick={()=>{changeTeachersToDeleteList(teacher.name)}} className={styles.table__block}>
-                  {displayDeleteTeacher && 
-                    <img className={'pointer'} src={`/icons/checkbox/${teachersToDelete.includes(teacher.name) ? 'active' : 'disable'}.svg`} />
-                  }
-                  <p className={styles.table__name}>{teacher.name}</p>
-                </div>
-                <Button variant={'whiteMain'}>
-                  <Link to={`/teachers/${teacher.id}`} className={styles.table__buttonContainer}>
-                    <p className={styles.table__button}><span className={styles.table__button_mobileHide}>Рейтинг:&nbsp;</span>{teacher.raiting}</p>
-                    <Icon glyph='arrow-right' glyphColor='grey' />
-                  </Link>
-                </Button>
-              </div>
-            ))}
-            <div className={styles.table__showMore}>
-              <Button variant={'whiteMain'}>
-                <p className={styles.subjects__button}>{displayDeleteTeacher ? 'Сохранить изменения' : 'Посмотреть еще'}</p>
-                {!displayDeleteTeacher && <Icon glyph='arrow-down' />}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <EntitiesList
+          icon='teacher'
+          title='Преподаватели'
+          subtitle='Добавить преподавателя из списка'
+          list={teachers.content}
+          addList={newTeachers.content}
+          changeSearchValue={getNewTeachers}
+          showMore={getTeachers}
+          deleteItem={deleteTeacherFromSubject}
+          onConfirmChanges={addTeachersToSubject}
+          totalPages={teachers.total_pages}
+        />
       </div>
-      {displayChangePopup && <PopupContainer>
-        <div className={styles.popup}>
-          <h2 className={styles.popup__title}>Изменить название предмета</h2>
-          <Input placeholder='Введите новое название предмета' value={changeData.name} onChange={(value)=>{setChangeData({...changeData, name: value})}}/>
-          <div className={styles.popup__buttons}>
-            <Button onClick={()=>{setDisplayChangePopup(false)}} style={{flex: '1'}} variant='whiteMain'>Отменить</Button>
-            <Button style={{flex: '1'}} variant='primary'>Сохранить</Button>
-          </div>
-        </div>
-      </PopupContainer>}
       {displayDeletePopup && <PopupContainer>
         <div className={styles.deletePopup}>
           <h2 className={styles.deletePopup__title}>Удалить предмет</h2>
@@ -173,25 +165,6 @@ export default function SubjectPage() {
             <Button style={{flex: '1'}} variant='secondary'>Удалить</Button>
           </div>
         </div>
-        </PopupContainer>
-      }
-      {displayAddTeacher && 
-        <PopupContainer>
-          <div className={styles.deletePopup}>
-            <h2 className={styles.deletePopup__title}>Добавить преподавателя</h2>
-            <AddInput title='Выбрать преподавателя из списка' placeholder='Введите ФИО преподавателя' 
-              currentPart={1}
-              totalParts={1}
-              onSeeMore={()=>{}}
-              onSearch={()=>{}}
-              allList={['Фамилия Имя Отчество1','Фамилия Имя Отчество2','Фамилия Имя Отчество3']}
-              selectedList={newTeachers}
-              changeInputList={setNewTeachers}/>
-            <div className={styles.popup__buttons}>
-              <Button onClick={()=>{setDisplayAddTeacher(false);setNewTeachers([])}} style={{flex: '1'}} variant='whiteMain'>Отменить</Button>
-              <Button style={{flex: '1'}} variant='primary'>Добавить</Button>
-          </div>
-          </div>
         </PopupContainer>
       }
     </>

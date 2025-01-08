@@ -1,0 +1,73 @@
+.titleLine {
+  display: flex;
+  column-gap: 8px;
+}
+
+.title {
+  @include text_subhead();
+}
+
+.switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0;
+  padding: 8px;
+  cursor: pointer;
+  &__title {
+    @include text_subhead();
+    color: var(--light-grey-color);
+  }
+}
+
+.table {
+  margin-bottom: 20px;
+  &__line {
+    position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    padding: 8px;
+    border-bottom: 1px solid var(--ultra-light-grey-color);
+    padding-right: 30px;
+  }
+  &__search {
+    width: 100%;
+    background-color: var(--dark-white-color);
+    @include text_body();
+  }
+  &__name {
+    @include text_subhead();
+    color: var(--grey-color);
+    flex: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &_onAdd {
+      @include text_body();
+      color: var(--grey-color);
+      flex: 75%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  &__checkbox {
+    cursor: pointer;
+  }
+  &__rating {
+    @include text_body();
+    color: var(--grey-color);
+    flex: 25%;
+  }
+  &__delete {
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+  }
+  &__showMore {
+    cursor: pointer;
+    text-align: center;
+    margin-top: 24px;
+    @include text_body();
+    color: var(--main-color);
+  }
+}

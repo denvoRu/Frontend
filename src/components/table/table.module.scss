@@ -8,6 +8,7 @@
   &__line {
     display: flex;
     padding-right: 35px;
+    width: 100%;
     &_title {
       margin-bottom: 16px;
     }
@@ -23,6 +24,10 @@
     &_margin {
       padding-left: 48px !important;
     }
+  }
+  &__link {
+    display: flex;
+    width: 100%;
   }
   &__title {
     @include text_subhead();

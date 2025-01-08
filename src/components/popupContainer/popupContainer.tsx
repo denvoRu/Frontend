@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import styles from './popupContainer.module.scss'
 
 type PopupContainerProps = {
@@ -5,6 +6,11 @@ type PopupContainerProps = {
 }
 
 export default function PopupContainer ({children}:PopupContainerProps) {
+
+  useEffect(()=>{
+    window.scrollX = 0
+  },[])
+
   return (
     <div className={styles.container}>
       <div className={styles.container__content}>

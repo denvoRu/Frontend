@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './input.module.scss'
 import { removeElementAtIndex } from '../../utils'
 import { Icon } from '../icon'
+import { AddInputList } from '../../types/input'
 
 type InputProps = {
   placeholder?: string
@@ -46,11 +47,11 @@ export function Input ({placeholder, value, required, type, onChange}:InputProps
 }
 
 type AddInputProps = {
-  changeInputList: (newList: string[]) => void
+  changeInputList: (newList: AddInputList[]) => void
   onSeeMore: (searchValue?:string) => void
   onSearch: (searchValue?:string) => void
-  selectedList: string[]
-  allList: string[]
+  selectedList: AddInputList[]
+  allList: AddInputList[]
   title: string
   placeholder: string
   singleMode?:boolean
@@ -70,10 +71,11 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
   }
 
 
-  const changeList = (value: string) => {
+  const changeList = (value: AddInputList) => {
     let newList = selectedList.slice()
-    if (selectedList.includes(value)) {
-      newList = removeElementAtIndex(newList, newList.indexOf(value))
+    const valueIndex = selectedList.findIndex((item)=>item.id === value.id)
+    if (valueIndex !== -1) {
+      newList = removeElementAtIndex(newList, valueIndex)
       changeInputList(newList)
       return
     }
@@ -101,12 +103,12 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
           <input value={searchValue} onChange={(e) => { changeSearchValue(e.target.value) }} placeholder={`${placeholder}...`} className={styles.list__search} />
         </div>
         {allList.map((el) => (
-          <div key={el} onClick={() => { changeList(el) }} className={styles.list__line}>
-            <img src={`/icons/${singleMode ? 'radioButton': 'checkbox'}/${selectedList.includes(el) ? 'active' : 'disable'}.svg`} />
-            <p>{el}</p>
+          <div key={el.id} onClick={() => { changeList(el) }} className={styles.list__line}>
+            <img src={`/icons/${singleMode ? 'radioButton': 'checkbox'}/${selectedList.findIndex((item)=>item.id === el.id) !== -1 ? 'active' : 'disable'}.svg`} />
+            <p>{el.name}</p>
           </div>
         ))}
-        {totalParts !== currentPart && <p onClick={seeMore} className={styles.list__showMore}>Показать еще...</p>}
+        {totalParts !== currentPart && allList.length!==0 && <p onClick={seeMore} className={styles.list__showMore}>Показать еще...</p>}
       </div>}
     </div>
   )

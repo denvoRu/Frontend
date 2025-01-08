@@ -117,7 +117,7 @@ export default function InstitutePage() {
         <title>{institute.short_name}</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramNames={[institute.short_name]} />
+        <LocationLinks paramNames={[{name: institute.short_name, id: institute.id}]} />
         <div className={styles.container__sort}>
           <div className={styles.settings}>
             <Button onClick={() => setDisplayChange(true)} variant={'whiteMain'}>
@@ -151,12 +151,14 @@ export default function InstitutePage() {
               <h3 className={styles.statistics__title}>Рейтинг института</h3>
               <p className={styles.statistics__raiting}>{institute.rating}</p>
             </div>
-            <SortBlock
-              title='По рейтингу' icon='sort' list={sortList} type='radioButton'
-              onChange={onChangeSortList}
-              isOpenList={isOpenList}
-              changeIsOpenList={() => setIsOpenList(!isOpenList)}
-            />
+            <div className={styles.statistics__sort}>
+              <SortBlock
+                title='По рейтингу' icon='sort' list={sortList} type='radioButton'
+                onChange={onChangeSortList}
+                isOpenList={isOpenList}
+                changeIsOpenList={() => setIsOpenList(!isOpenList)}
+              />
+            </div>
           </div>
           <div className={styles.statistics}>
             {statistics.content.map((statistic) => (
