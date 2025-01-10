@@ -12,6 +12,7 @@ import Subjects from '../../pages/modules/modules';
 import { useState } from 'react';
 import { AppContext, ProviderProps } from '../../contexts/appContext';
 import ModulePage from '../../pages/entities/module';
+import Schedule from '../../pages/schedule/schedule';
 
 function App() {
 
@@ -52,6 +53,8 @@ function App() {
             <Route path='/modules/:id/:subjectId' element={<Subject/>}/>
             <Route path='/teachers' element={<Teachers/>} />
             <Route path='/teachers/:id' element={<Teacher/>} />
+            <Route path='/teachers/:id/schedule' element={<Schedule/>}/>
+            <Route path='/:id' element={<></>}/>
           </Route>
         </Routes>
       </HelmetProvider>

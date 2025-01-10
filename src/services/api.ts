@@ -13,7 +13,7 @@ export const PagesURl = {
   INSTITUTE: 'institute',
   MODULE: 'module',
   SUBJECT: 'subject',
-  LESSONS: 'lessons',
+  LESSON: 'lesson',
   FORM: 'form',
   SCHEDULE: 'schedule',
 }

@@ -72,12 +72,6 @@ export default function TeachersPage() {
   }
 
   const addTeacher = async () => {
-    console.log({
-      ...newTeacherValue,
-      subjects: newTeacherValue.subjects.map((subject)=>subject.id),
-      role: 'teacher',
-      institute_id: getInstituteId()
-    })
     try {
       await axios.post(PagesURl.AUTH + '/register', {
         ...newTeacherValue,

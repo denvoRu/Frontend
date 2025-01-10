@@ -21,7 +21,7 @@ type EntitiesListProps = {
   changeSearchValue: (value: string) => void
   showMore: (nextPage: number) => void
   deleteItem: (id: string) => void
-  onConfirmChanges: (selectedIds: string[]) => void
+  onConfirmChanges?: (selectedIds: string[]) => void
   totalPages: number
 }
 
@@ -58,7 +58,7 @@ export default function EntitiesList (props:EntitiesListProps) {
 
   const onConfirmChanges = () => {
     setIsDisplayAdd(false)
-    if (selectedList.length !== 0) {
+    if (selectedList.length !== 0 && props.onConfirmChanges) {
       props.onConfirmChanges(selectedList.map((value)=>value.id))
     }
     setSelectedList([])
@@ -76,10 +76,10 @@ export default function EntitiesList (props:EntitiesListProps) {
           <Icon glyph={props.icon}/>
           <h3 className={styles.title}>{props.title}</h3>
         </div>
-        <div onClick={changeIsDisplayAdd} className={styles.switch}>
+        {props.onConfirmChanges && !(props.addList.length==0 && searchValue==='') && <div onClick={changeIsDisplayAdd} className={styles.switch}>
           <h3 className={styles.switch__title}>{props.subtitle}</h3>
           <Icon glyph='arrow-down' glyphColor='grey'/>
-        </div>
+        </div>}
         <div className={styles.table}>
           {!isDisplayAdd ? props.list.map((item) => (
             <div key={item.id} className={styles.table__line}>

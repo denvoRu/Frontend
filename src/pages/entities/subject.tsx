@@ -28,8 +28,9 @@ export default function SubjectPage() {
 
   const addTeachersToSubject = async (list: string[]) => {
     try {
-      alert('not working')
       await axios.post(PagesURl.SUBJECT + `/${subjectId}/teachers`,[...list])
+      getTeachers()
+      getNewTeachers()
     } catch (error) {
       console.log(error)
     }
@@ -52,9 +53,8 @@ export default function SubjectPage() {
   }
   const getTeachers = async (page?: number) => {
     try {
-      const {data} = await axios.get<Teachers>(PagesURl.TEACHER, {
+      const {data} = await axios.get<Teachers>(PagesURl.SUBJECT + `/${subjectId}/teachers`, {
         params: {
-          subject_ids: subjectId,
           limit: LIMIT,
           page: page
         }
@@ -75,7 +75,7 @@ export default function SubjectPage() {
     try {
       const {data} = await axios.get<Teachers>(PagesURl.TEACHER,{
         params: {
-          not_in_subject_by_id: id,
+          not_in_subject_by_id: subjectId,
           limit: LIST_LIMIT,
           search: search ? search : undefined
         }
@@ -102,6 +102,7 @@ export default function SubjectPage() {
       let newContent = teachers.content.slice()
       newContent = removeElementAtIndex(newContent, newContent.findIndex(item=>item.id === id))
       setTeachers({...teachers, content: newContent})
+      getNewTeachers()
     } catch (error) {
       console.log(error)
     }

@@ -58,14 +58,6 @@ export default function ModulePage() {
       console.log(error)
     }
   }
-  const addNewSubjects = async (list: string[]) => {
-    try {
-      alert('not working')
-      console.log(list)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const getModule = async () => {
     try {
@@ -93,6 +85,8 @@ export default function ModulePage() {
       let newContent = moduleSubjects.content.slice()
       newContent = removeElementAtIndex(newContent, newContent.findIndex(item=>item.id === id))
       setModuleSubjects({...moduleSubjects, content: newContent})
+      setSubjectIdToDelete(undefined)
+      getNewSubjects()
     } catch (error) {
       console.log(error)
     }
@@ -141,7 +135,6 @@ export default function ModulePage() {
           changeSearchValue={getNewSubjects}
           totalPages={moduleSubjects.total_pages}
           showMore={getModuleSubjects}
-          onConfirmChanges={addNewSubjects}
           deleteItem={onClickDeleteSubject}/>
       </div>
       {displayDeletePopup && <PopupContainer>

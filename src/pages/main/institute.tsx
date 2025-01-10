@@ -45,7 +45,6 @@ export default function InstitutePage() {
           ...params
         }
       })
-      console.log(data)
       setStatistics(data)
     } catch (error) {
       console.log(error)

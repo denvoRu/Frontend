@@ -117,7 +117,7 @@ export default function TeacherPage() {
     try {
       const {data} = await axios.get<Subjects>(PagesURl.SUBJECT,{
         params: {
-          not_in_module_by_id: teacherId,
+          subject_without_teacher_by_id: teacherId,
           limit: LIST_LIMIT,
           search: search ? search : undefined
         }
@@ -127,24 +127,25 @@ export default function TeacherPage() {
       console.log(error)
     }
   }
-  const deleteSubject = async (id: string) => {
+  const deleteSubjectFromTeacher = async (id: string) => {
     try {
-      await axios.delete(PagesURl.SUBJECT + `/${id}`)
+      await axios.delete(PagesURl.SUBJECT + `/${id}/teachers/${teacherId}`)
       if (!subjects){
         return
       }
       let newContent = subjects.content.slice()
       newContent = removeElementAtIndex(newContent, newContent.findIndex(item=>item.id === id))
       setSubjects({...subjects, content: newContent})
+      getNewSubjects()
     } catch (error) {
       console.log(error)
     }
   }
   const addNewSubjects = async (list: string[]) => {
     try {
-      alert('not working')
       await axios.post(PagesURl.TEACHER + `/${teacherId}/subjects`,[...list])
-      console.log(list)
+      getSubjects()
+      getNewSubjects()
     } catch (error) {
       console.log(error)
     }
@@ -170,7 +171,7 @@ export default function TeacherPage() {
         <div className={styles.settings}>
           <div className={styles.settings__controls}>
           <Button variant={'whiteMain'}>
-              <Link className={styles.settings__schedule} to={'/'}>
+              <Link className={styles.settings__schedule} to={`/teachers/${teacherId}/schedule`}>
                 <Icon glyph='schedule' glyphColor='grey'/>
                 <p className={styles.settings__button}>Полное расписание</p>
               </Link>
@@ -214,7 +215,7 @@ export default function TeacherPage() {
           addList={newSubjects.content}
           changeSearchValue={getNewSubjects}
           showMore={getSubjects}
-          deleteItem={deleteSubject}
+          deleteItem={deleteSubjectFromTeacher}
           onConfirmChanges={addNewSubjects}
           totalPages={subjects.total_pages}
         />

@@ -48,7 +48,7 @@ export function Input ({placeholder, value, required, type, onChange}:InputProps
 
 type AddInputProps = {
   changeInputList: (newList: AddInputList[]) => void
-  onSeeMore: (searchValue?:string) => void
+  onSeeMore?: (searchValue?:string) => void
   onSearch: (searchValue?:string) => void
   selectedList: AddInputList[]
   allList: AddInputList[]
@@ -88,6 +88,9 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
   }
 
   const seeMore = () => {
+    if (!onSeeMore){
+      return
+    }
     onSeeMore(searchValue!=='' ? searchValue : undefined)
   }
 
@@ -108,7 +111,7 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
             <p>{el.name}</p>
           </div>
         ))}
-        {totalParts !== currentPart && allList.length!==0 && <p onClick={seeMore} className={styles.list__showMore}>Показать еще...</p>}
+        {totalParts !== currentPart && onSeeMore && allList.length!==0 && <p onClick={seeMore} className={styles.list__showMore}>Показать еще...</p>}
       </div>}
     </div>
   )

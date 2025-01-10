@@ -48,7 +48,7 @@ export default function Table({ titles, data, isOpacity, changePage, totalPages,
       
       {totalPages > 1 &&
        <div className={styles.pagination}>
-        <Icon onClick={()=>{onChangePage(false)}} glyph='arrow-left' glyphColor={currentPage === 1 ? 'grey' : 'black'}containerStyle={`${styles.pagination__control} ${currentPage !== 1 ? styles.pagination__control_active : ''}`} />
+        <Icon onClick={()=>{onChangePage(false)}} glyph='arrow-left' glyphColor={currentPage === 1 ? 'grey' : 'black'} containerStyle={`${styles.pagination__control} ${currentPage !== 1 ? styles.pagination__control_active : ''}`} />
         <Icon onClick={()=>{onChangePage(true)}} glyph='arrow-right' glyphColor={totalPages === currentPage ? 'grey' : 'black'} containerStyle={`${styles.pagination__control} ${totalPages !== currentPage ? styles.pagination__control_active : ''}`} />
       </div>}
     </>

@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import styles from './locationLinks.module.scss';
 import { Icon } from '../icon';
 
@@ -10,28 +10,36 @@ const translations: Record<string, string> = {
   modules: 'Предметы',
   teachers: 'Преподаватели',
   institutes: 'Институты',
+  schedule: 'Расписание'
 };
 
 export default function LocationLinks({ paramNames }: LocationLinksProps) {
-  const location = useLocation();
+
+  const location = useLocation()
 
   const createBreadcrumbTrail = () => {
-    const parts:(string | {name: string, id: string})[] = location.pathname.replace(/^\/|\/$/g, '').split('/');
-    if (paramNames?.length) {
-      for (let i = Math.max(parts.length - paramNames.length, 0); i < parts.length; i++) {
-        parts[i] = paramNames[paramNames.length - (parts.length - i)];
-      }
-    }
+    const parts = location.pathname.replace(/^\/|\/$/g, '').split('/');
 
     const result = parts.map((part, index) => {
-      const title = typeof part === 'object' ?  part.name : translations[part];
+      let title = ''
+      if (translations[part]){
+        title = translations[part]
+      } else {
+        if (!paramNames){
+          title = part
+        } else {
+          const index = paramNames.findIndex((param)=>(param.id === part))
+          if (index !== -1){
+            title = paramNames[index].name
+          } else {
+            title = part
+          }
+        }
+      }
       if (index === parts.length - 1) {
         return {title, link: undefined}
       }
-      let link: string|string[] = parts.slice(0, index + 1).map((point)=>{
-        return typeof point === 'object' ? `${point.id}` : point
-      })
-      link = '/' + link.join('/')
+      const link = '/' + parts.slice(0, index + 1).join('/')
       return { title, link };
     });
     return result

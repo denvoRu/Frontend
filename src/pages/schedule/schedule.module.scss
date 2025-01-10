@@ -1,0 +1,142 @@
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  &__week {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+  }
+  &__button {
+    padding: 13px;
+  }
+  &__text {
+    color: var(--grey-color);
+  }
+}
+
+.table {
+  margin-top: 12px;
+  border-radius: var(--medium-border-radius);
+  border: 1px solid var(--ultra-light-grey-color);
+  overflow: hidden;
+  &__content {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  &__tr {
+    border-collapse: collapse;
+    &:last-child td {
+      border-bottom: none
+    }
+    & td:first-child {
+      width: 120px;
+      border-left: none;
+    }
+  }
+  &__td {
+    border-collapse: collapse;
+    border: 1px solid var(--ultra-light-grey-color);
+    &_bt {
+      border-top: none;
+    }
+  }
+  &__textBlock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &_title {
+      padding: 10px 18px;
+      background-color: var(--dark-white-color);
+    }
+    &_was {
+      background-color: var(--dark-white-color);
+    }
+  }
+  &__text{
+    &_active{
+      background-color: var(--light-main-color);
+      color: var(--body-color);
+    }
+  }
+  &__call {
+    @include text_headline();
+    color: var(--light-grey-color);
+  }
+  &__lessons {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+  }
+}
+
+.popup {
+  width: 400px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  @media (max-width: $sml) {
+    max-width: 400px;
+  }
+  &__buttons {
+    display: flex;
+    column-gap: 8px;
+  }
+  &__title {
+    text-align: center;
+  }
+  &__subject {
+    @include text_subhead()
+  }
+  &__text {
+    color: var(--grey-color);
+  }
+}
+
+.lesson {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  &__titleLine {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+  }
+  &__titleValue {
+    @include text_subhead();
+    color: var(--grey-color);
+  }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    &_line {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .info {
+      &__title {
+        @include text_subhead();
+        color: var(--grey-color);
+      }
+      &__text {
+        color: var(--light-grey-color);
+      }
+      &__tag {
+        width: fit-content;
+        padding: 4px 17px;
+        border-radius: var(--medium-border-radius);
+        background-color: var(--light-main-color);
+        color: #fff;
+      }
+    }
+  }
+}

@@ -4,3 +4,7 @@ export function removeElementAtIndex<T>(array: T[], index: number): T[] {
       ...array.slice(index + 1)
   ];
 }
+
+export function createNestedArray<T>(length: number) {
+  return Array.from({ length: length }, () => Array.from({ length: length }, () => [] as T[]));
+}
