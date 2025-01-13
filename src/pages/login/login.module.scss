@@ -16,7 +16,7 @@
     width: 400px;
     background-color: #fff;
     padding: 48px 24px 60px 24px;
-    border-radius: 48px;
+    border-radius: 40px;
     display: flex;
     flex-direction: column;
     row-gap: 28px;
@@ -25,6 +25,7 @@
     }
     &__title {
       @include text_h1();
+      color: var(--light-black-color);
       text-align: center;
     }
     &__tabs {

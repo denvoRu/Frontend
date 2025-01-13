@@ -58,7 +58,6 @@ export default function ModulePage() {
       console.log(error)
     }
   }
-
   const getModule = async () => {
     try {
       const {data} = await axios.get<Module>(PagesURl.MODULE + `/${id}`)
@@ -67,6 +66,16 @@ export default function ModulePage() {
       console.log(error)
     }
   }
+
+/*   const changeMooduleName = async (newName: string) => {
+    try {
+      await axios.patch(PagesURl.MODULE + `/${id}`, {
+        name: newName
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  } */
 
   const deleteModule = async () => {
     try {

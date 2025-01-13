@@ -48,7 +48,11 @@
     }
     &__name {
       @include text_h3();
-      text-wrap: wrap
+      text-wrap: wrap;
+      background: none;
+      overflow: 'hidden';
+      white-space: 'nowrap';
+      text-overflow: 'ellipsis';
     }
     &__module {
       @include text_subhead();
@@ -168,7 +172,7 @@
   flex-direction: column;
   align-items: center;
   row-gap: 32px;
-  max-width: 440px;
+  max-width: 400px;
   text-align: center;
   color: var(--light-black-color);
   &__title {

@@ -1,7 +1,7 @@
 .container {
   cursor: pointer;
   position: relative;
-  width: fit-content;
+  width: 250px;
   &__titleBlock {
     position: relative;
     z-index: 2;
@@ -18,6 +18,8 @@
   &__title {
     @include text_body();
     color: var(--grey-color);
+    text-align: center;
+    flex: 1;
     &_active {
       color: var(--body-color);
     }
@@ -39,6 +41,9 @@
     color: var(--grey-color);
     &:first-child {
       padding-top: calc(12px + var(--medium-border-radius));
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--ultra-light-grey-color);
     }
   }
   &__value {

@@ -73,6 +73,16 @@ export default function TeacherPage() {
     }
   }
 
+/*   const changeTeacherName = async (newName: string) => {
+    try {
+      await axios.patch(PagesURl.TEACHER, {
+
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  } */
+
   const getTeacher = async () => {
     try {
       const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${teacherId}`)
@@ -178,6 +188,7 @@ export default function TeacherPage() {
             </Button>
             <SortBlock 
               alwaysDisplayTitle
+              widthWithContent
               isOpenList={isOpenPrivileges} 
               changeIsOpenList={()=>{setIsOpenPrivileges(!isOpenPrivileges)}} 
               titlePadding={24.5} title='Привилегии' icon='privilege' type='checkbox' list={privileges} onChange={onChangePrivileges}
@@ -201,6 +212,7 @@ export default function TeacherPage() {
             <div className={styles.info__block}>
               <Icon glyph='teacher' />
               <h1 className={styles.info__name}>{teacher.name}</h1>
+              {/* <input style={{width: `${teacher.name.length}ch`}} className={styles.info__name} value={teacher.name} /> */}
             </div>
             <p className={styles.info__email}>{teacher.email}</p>
           </div>

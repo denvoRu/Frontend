@@ -88,6 +88,7 @@ input,
 button,
 textarea {
   font-family: inherit;
+  color: var(--light-black-color);
 }
 
 input::-ms-clear {
@@ -128,6 +129,7 @@ h5,
 h6 {
   font-size: inherit;
   font-weight: inherit;
+  color: var(--black-color);
 }
 
 body {
@@ -135,4 +137,5 @@ body {
   margin: 0;
   font-family: 'Roboto';
   font-weight: 400;
+  color: var(--black-color);
 }

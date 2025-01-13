@@ -13,10 +13,12 @@
   border-radius: var(--small-border-radius);
   background-color: var(--dark-white-color);
   &__link {
+    width: 196px;
     color: var(--grey-color);
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     column-gap: 8px;
     padding: 8px 23.5px;
     border-radius: var(--small-border-radius);

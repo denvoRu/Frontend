@@ -10,7 +10,8 @@ const translations: Record<string, string> = {
   modules: 'Предметы',
   teachers: 'Преподаватели',
   institutes: 'Институты',
-  schedule: 'Расписание'
+  schedule: 'Расписание',
+  statistics: 'Статистика'
 };
 
 export default function LocationLinks({ paramNames }: LocationLinksProps) {

@@ -11,7 +11,7 @@ import GreyBlockContainer from '../../components/greyBlockContainer/greyBlockCon
 import { Button } from '../../components/button/button'
 import PopupContainer from '../../components/popupContainer/popupContainer'
 import { Input } from '../../components/input/Input'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios, { PagesURl } from '../../services/api';
 import { Institute } from '../../types/institutes'
 import { Modules } from '../../types/module'
@@ -161,10 +161,10 @@ export default function InstitutePage() {
           </div>
           <div className={styles.statistics}>
             {statistics.content.map((statistic) => (
-              <div key={statistic.name} className={`${styles.statistics__point} ${styles.statistics__point_blue} ${isOpenList ? 'opacity' : ''}`} style={{ width: `${statistic.rating *20 > 30 ? statistic.rating*20 : 30}%` }}>
+              <Link to={`/modules/${statistic.id}`} key={statistic.name} className={`${styles.statistics__point} ${styles.statistics__point_blue} ${isOpenList ? 'opacity' : ''}`} style={{ width: `${statistic.rating *20 > 30 ? statistic.rating*20 : 30}%` }}>
                 <p>{statistic.name}</p>
                 <p>{statistic.rating}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -178,7 +178,8 @@ export default function InstitutePage() {
             <div className={styles.popup__buttons}>
               <Button
                 onClick={() => { setDisplayDelete(false) }}
-                size={'max'} variant={'whiteMain'}>
+                size={'max'} variant={'whiteMain'}
+                textColor={'lightGrey'}>
                 Отменить
               </Button>
               <Button onClick={deleteInstitute} size={'max'} variant={'secondary'}>Удалить</Button>

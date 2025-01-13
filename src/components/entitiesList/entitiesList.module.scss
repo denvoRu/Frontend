@@ -17,6 +17,9 @@
   &__title {
     @include text_subhead();
     color: var(--light-grey-color);
+    &_active {
+      color: var(--grey-color);
+    }
   }
 }
 
@@ -36,6 +39,11 @@
     width: 100%;
     background-color: var(--dark-white-color);
     @include text_body();
+  }
+  &__clear {
+    position: absolute;
+    right: 24px;
+    cursor: pointer;
   }
   &__name {
     @include text_subhead();

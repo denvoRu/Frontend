@@ -98,12 +98,13 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
     <div className={styles.list}>
       <div onClick={() => { setDisplayList(!displayList) }} className={`${styles.list__title} ${displayList ? styles.list__title_active : ''}`}>
         <p>{title}</p>
-        <Icon glyph='arrow-down' glyphColor={displayList ? 'white' : 'grey'} />
+        <Icon glyph={`arrow-${displayList ? 'up' : 'down'}`} glyphColor={displayList ? 'white' : 'grey'} />
       </div>
       {displayList && <div className={styles.list__list}>
         <div className={styles.list__line}>
           <Icon glyph='search' glyphColor='grey' />
           <input value={searchValue} onChange={(e) => { changeSearchValue(e.target.value) }} placeholder={`${placeholder}...`} className={styles.list__search} />
+          {searchValue!=='' && <img onClick={()=>{changeSearchValue('')}} className={styles.input__clear} src='/icons/close.svg'/>}
         </div>
         {allList.map((el) => (
           <div key={el.id} onClick={() => { changeList(el) }} className={styles.list__line}>

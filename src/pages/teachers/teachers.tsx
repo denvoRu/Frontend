@@ -3,7 +3,7 @@ import styles from '../list.module.scss'
 import teacherStyles from './teachers.module.scss'
 import { useEffect, useState } from 'react'
 import { updateRadioButtonList } from '../../utils/list'
-import {AddInput, Input} from '../../components/input/Input'
+import { AddInput, Input } from '../../components/input/Input'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { Icon } from '../../components/icon'
 import Table from '../../components/table/table'
@@ -19,6 +19,7 @@ import { Subjects } from '../../types/subject'
 import { LIST_LIMIT } from '../../consts/limit'
 import { getNameByAllNames } from '../../utils/teacher'
 import { AddInputList } from '../../types/input'
+import RightPopupContainer from '../../components/rightPopupContainer/rightPopupContainer'
 
 export default function TeachersPage() {
 
@@ -35,7 +36,7 @@ export default function TeachersPage() {
   const [displayPopup, setDisplayPopup] = useState(false)
 
   const [newTeacherValue, setNewTeacherValue] = useState<{ first_name: string, second_name: string, third_name: string, email: string, password: string, subjects: AddInputList[] }>(
-    { first_name: '', second_name: '', third_name:'' , email: '', password: '', subjects: [] }
+    { first_name: '', second_name: '', third_name: '', email: '', password: '', subjects: [] }
   )
   const [filters, setFilters] = useState<FilterType>({
     rating_start: '',
@@ -44,16 +45,16 @@ export default function TeachersPage() {
   })
   const [isActiveFilter, setIsActiveFilter] = useState(false)
 
-  const getSubjects = async (addToList?: boolean, params?:FilterParams) => {
+  const getSubjects = async (addToList?: boolean, params?: FilterParams) => {
     try {
-      const {data} = await axios.get<Subjects>(PagesURl.SUBJECT, {
+      const { data } = await axios.get<Subjects>(PagesURl.SUBJECT, {
         params: {
           institute_ids: getInstituteId(),
           limit: LIST_LIMIT,
           ...params
         }
       })
-      if (!addToList || !subjects){
+      if (!addToList || !subjects) {
         setSubjects(data)
       } else {
         setSubjects({
@@ -67,15 +68,15 @@ export default function TeachersPage() {
   }
 
   const resetNewTeacher = () => {
-    setDisplayPopup(false); 
-    setNewTeacherValue({ first_name: '', second_name: '', third_name:'' , email: '', password: '', subjects: [] })
+    setDisplayPopup(false);
+    setNewTeacherValue({ first_name: '', second_name: '', third_name: '', email: '', password: '', subjects: [] })
   }
 
   const addTeacher = async () => {
     try {
       await axios.post(PagesURl.AUTH + '/register', {
         ...newTeacherValue,
-        subjects: newTeacherValue.subjects.map((subject)=>subject.id),
+        subjects: newTeacherValue.subjects.map((subject) => subject.id),
         role: 'teacher',
         institute_id: getInstituteId()
       })
@@ -84,18 +85,18 @@ export default function TeachersPage() {
     }
   }
 
-  const getAllTeachers = async (params?:FilterParams) => {
-    const activeSortValue = sortList.filter((point)=>(point.isActive))[0]
+  const getAllTeachers = async (params?: FilterParams) => {
+    const activeSortValue = sortList.filter((point) => (point.isActive))[0]
     let filterParams
-    if (isActiveFilter){
+    if (isActiveFilter) {
       filterParams = {
-        subject_ids: filters.list.map((point)=>point.id)[0], 
+        subject_ids: filters.list.map((point) => point.id)[0],
         rating_start: filters.rating_start && parseInt(filters.rating_start) ? parseInt(filters.rating_start) : -1,
         rating_end: filters.rating_end && parseInt(filters.rating_end) ? parseInt(filters.rating_end) : -1
       }
     }
     try {
-      const {data} = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
+      const { data } = await axios.get<Teachers>(PagesURl.TEACHER + '/', {
         params: {
           institute_ids: getInstituteId(),
           sort: activeSortValue.backName,
@@ -115,7 +116,7 @@ export default function TeachersPage() {
   }
 
   const onChangePage = (isNext: boolean) => {
-    if (!teachers){
+    if (!teachers) {
       return
     }
     getAllTeachers({
@@ -143,7 +144,7 @@ export default function TeachersPage() {
     getAllTeachers()
   }
   const changeSearchFilterValue = (value: string) => {
-    getSubjects(false, value !== '' ? {search: value, page: 1} : {page: 1} )
+    getSubjects(false, value !== '' ? { search: value, page: 1 } : { page: 1 })
     setSearchTeacherValue(value)
   }
 
@@ -155,20 +156,20 @@ export default function TeachersPage() {
     })
     setIsActiveFilter(false)
     setDisplayFilters(false)
-    getAllTeachers({page: 1})
+    getAllTeachers({ page: 1 })
   }
   const submitFilters = () => {
     setIsActiveFilter(true)
-    getAllTeachers({page: 1})
+    getAllTeachers({ page: 1 })
     setDisplayFilters(false)
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getAllTeachers()
-  },[])
-  useEffect(()=>{
+  }, [])
+  useEffect(() => {
     getAllTeachers()
-  },[isActiveFilter])
+  }, [isActiveFilter])
 
   if (!teachers || !subjects) {
     return <></>
@@ -196,27 +197,27 @@ export default function TeachersPage() {
             </div>
           </div>
         </div>
-        <Table changePage={onChangePage} totalPages={teachers.total_pages} currentPage={teachers.page_number} isOpacity={isDisplaySortList} titles={['Фамилия Имя Отчество', 'Рейтинг']} data={teachers.content}/>
+        <Table changePage={onChangePage} totalPages={teachers.total_pages} currentPage={teachers.page_number} isOpacity={isDisplaySortList} titles={['Фамилия Имя Отчество', 'Рейтинг']} data={teachers.content} />
         <BottomLinks />
       </div>
       {displayPopup &&
-        <div className={teacherStyles.popup}>
+        <RightPopupContainer>
           <div className={teacherStyles.popup__content}>
             <h2 className={teacherStyles.popup__title}>Добавить преподавателя</h2>
-            <Input placeholder='Фамилия' value={newTeacherValue.second_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, second_name: value }) }} />
-            <Input placeholder='Имя' value={newTeacherValue.first_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, first_name: value }) }} />
+            <Input placeholder='Фамилия' value={newTeacherValue.first_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, second_name: value }) }} />
+            <Input placeholder='Имя' value={newTeacherValue.second_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, first_name: value }) }} />
             <Input placeholder='Отчество' value={newTeacherValue.third_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, third_name: value }) }} />
             <Input placeholder='Почта' value={newTeacherValue.email} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, email: value }) }} />
-            <Input placeholder='Разовый пароль...' value={newTeacherValue.password} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, password: value }) }} />
-            <AddInput 
-              onSearch={(searchValue) => getSubjects(false, searchValue ? { page: 1, search: searchValue } : { page: 1 })} 
-              onSeeMore={(searchValue) => { getSubjects(true, { page: subjects.page_number + 1, search: searchValue }) }} 
-              totalParts={subjects.total_pages} 
-              currentPart={subjects.page_number} 
-              title='Добавить предметы' placeholder='Введите название предмета' 
-              allList={subjects.content.map((subject)=>({name: subject.name, id: subject.id}))} 
-              selectedList={newTeacherValue.subjects} 
-              changeInputList={(newList) => { setNewTeacherValue({ ...newTeacherValue, subjects: newList }) }} 
+            <Input placeholder='Пароль...' value={newTeacherValue.password} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, password: value }) }} />
+            <AddInput
+              onSearch={(searchValue) => getSubjects(false, searchValue ? { page: 1, search: searchValue } : { page: 1 })}
+              onSeeMore={(searchValue) => { getSubjects(true, { page: subjects.page_number + 1, search: searchValue }) }}
+              totalParts={subjects.total_pages}
+              currentPart={subjects.page_number}
+              title='Добавить предметы' placeholder='Введите название предмета'
+              allList={subjects.content.map((subject) => ({ name: subject.name, id: subject.id }))}
+              selectedList={newTeacherValue.subjects}
+              changeInputList={(newList) => { setNewTeacherValue({ ...newTeacherValue, subjects: newList }) }}
             />
             <Button onClick={addTeacher} variant='primary' style={{ width: '100%' }}>Отправить пригласительное письмо</Button>
             <Button
@@ -225,20 +226,20 @@ export default function TeachersPage() {
               Отмена
             </Button>
           </div>
-        </div>
+        </RightPopupContainer>
       }
       {displayFilters &&
         <Filter
           submitFilters={submitFilters}
-          onSeeAll={()=>{getSubjects(false, {limit: subjects.total_record})}}
+          onSeeAll={() => { getSubjects(false, { limit: subjects.total_record }) }}
           isSeeAll={subjects.total_record === subjects.content.length}
           filter={filters} listName='Предметы'
-          list={subjects.content.map((subject)=>({name: subject.name, id: subject.id}))}
+          list={subjects.content.map((subject) => ({ name: subject.name, id: subject.id }))}
           searchValue={searchTeacherValue}
           changeSearchValue={changeSearchFilterValue}
           setDisplayFilters={setDisplayFilters}
-          changeFilter={setFilters} 
-          resetFilters={resetFilters}/>
+          changeFilter={setFilters}
+          resetFilters={resetFilters} />
       }
     </>
   )

@@ -77,8 +77,8 @@ export default function EntitiesList (props:EntitiesListProps) {
           <h3 className={styles.title}>{props.title}</h3>
         </div>
         {props.onConfirmChanges && !(props.addList.length==0 && searchValue==='') && <div onClick={changeIsDisplayAdd} className={styles.switch}>
-          <h3 className={styles.switch__title}>{props.subtitle}</h3>
-          <Icon glyph='arrow-down' glyphColor='grey'/>
+          <h3 className={`${styles.switch__title} ${isDisplayAdd && styles.switch__title_active}`}>{props.subtitle}</h3>
+          <Icon glyph={`arrow-${isDisplayAdd ? 'up' : 'down'}`} glyphColor={`${isDisplayAdd ? 'grey' : 'light-grey'}`}/>
         </div>}
         <div className={styles.table}>
           {!isDisplayAdd ? props.list.map((item) => (
@@ -95,6 +95,7 @@ export default function EntitiesList (props:EntitiesListProps) {
               <div className={styles.table__line}>
                 <Icon glyph='search' glyphColor='grey' />
                 <input value={searchValue} onChange={(e) => { changeSearchValue(e.target.value) }} placeholder={`Поиск`} className={styles.table__search} />
+                {searchValue!=='' && <img onClick={()=>{changeSearchValue('')}} className={styles.table__clear} src='/icons/close.svg'/>}
               </div>
               {props.addList.map((item) => (
                 <div onClick={()=>{changeSelectedList(item)}} key={item.id} className={styles.table__line}>

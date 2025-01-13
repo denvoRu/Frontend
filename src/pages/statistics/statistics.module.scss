@@ -1,0 +1,94 @@
+.container {
+  &__title {
+    margin-top: 12px;
+    display: flex;
+    column-gap: 8px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  &__statistics {
+    display: flex;
+    column-gap: 50px;
+    .statistics {
+      &__left {
+        display: flex;
+        flex-direction: column;
+        row-gap: 24px;
+        flex: 40%;
+      }
+      &__right {
+        display: flex;
+        flex-direction: column;
+        row-gap: 24px;
+        flex: 60%;
+      }
+      &__line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        column-gap: 20px;
+        &:not(:last-child){
+          margin-bottom: 8px;
+        }
+        &_mb4 {
+          margin-bottom: 4px;
+        }
+        &_mb16 {
+          margin-bottom: 16px;
+        }
+      }
+      &__subject {
+        @include text_headline();
+        color: var(--grey-color);
+      }
+      &__grades {
+        @include text_caption();
+        color: var(--light-grey-color);
+      }
+      &__progress {
+        position: relative;
+        flex: 1;
+        height: 8px;
+        background-color: var(--ultra-light-grey-color);
+        border-radius: var(--small-border-radius);
+        overflow: hidden;
+      }
+      &__value {
+        height: 100%;
+        background-color: var(--main-color);
+        border-radius: var(--small-border-radius);
+      }
+      &__pointValue {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 110px;
+        padding: 4px 0;
+        @include text_headline();
+        color: var(--dark-white-color);
+        background-color: var(--light-main-color);
+        border-radius: var(--small-border-radius);
+      }
+    }
+    .feedback {
+      &__block {
+        display: flex;
+        align-items: center;
+        column-gap: 12px;
+        margin-bottom: 17px;
+      }
+      &__title {
+        @include text_headline();
+      }
+      &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      &__content {
+        color: var(--grey-color);
+      }
+    }
+  }
+}

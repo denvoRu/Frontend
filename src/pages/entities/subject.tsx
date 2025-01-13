@@ -26,6 +26,8 @@ export default function SubjectPage() {
 
   const [displayDeletePopup, setDisplayDeletePopup] = useState(false)
 
+  const [isActiveInput, setIsActiveInput] = useState(false)
+
   const addTeachersToSubject = async (list: string[]) => {
     try {
       await axios.post(PagesURl.SUBJECT + `/${subjectId}/teachers`,[...list])
@@ -107,6 +109,16 @@ export default function SubjectPage() {
       console.log(error)
     }
   }
+  const changeSubjectName = async (newName: string) => {
+    setIsActiveInput(false)
+    try {
+      await axios.patch(PagesURl.SUBJECT + `/${subjectId}`, {
+        name: newName
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(()=>{
     getModuleName()
@@ -138,7 +150,11 @@ export default function SubjectPage() {
           <div>
             <div className={styles.info__block}>
               <Icon glyph='subject' />
-              <h1 className={styles.info__name}>{subject.name}</h1>
+              {isActiveInput ? <input 
+                onBlur={(e)=>changeSubjectName(e.target.value)}
+                onChange={(e)=>{setSubject({...subject, name: e.target.value})}} 
+                style={{width: `${Math.min(subject.name.length + 1, 30)}`}} className={styles.info__name} value={subject.name} 
+              /> :<h1 onClick={()=>setIsActiveInput(true)} className={styles.info__name}>{subject.name}</h1>}
             </div>
             <p className={styles.info__module}>{moduleName}</p>
           </div>

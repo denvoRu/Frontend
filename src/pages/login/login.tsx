@@ -56,7 +56,7 @@ export default function Login() {
               <Button onClick={()=>{}} className={styles.content__forget} size={'max'} variant={'whiteMain'}>Забыли пароль?</Button>
               <Button onClick={onLogin} className={styles.content__submit} size={'max'}>Войти</Button>
             </div>
-            <p className={styles.content__support}>По всем вопросам можете обращаться: adminexanple@gmail.com</p>
+            <p className={styles.content__support}>По всем вопросам можете обращаться: adminexample@gmail.com</p>
         </div>
       </div>
     </>

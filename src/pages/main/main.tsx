@@ -12,7 +12,6 @@ import { Input } from '../../components/input/Input'
 import axios, { PagesURl } from '../../services/api';
 import { Institutes } from '../../types/institutes'
 import { FilterParams } from '../../types/filter'
-import GreyBlockContainer from '../../components/greyBlockContainer/greyBlockContainer'
 import { AppContext } from '../../contexts/appContext'
 import { setInstituteId } from '../../services/institute'
 
@@ -67,7 +66,7 @@ export default function Main() {
         <title>Главная</title>
       </Helmet>
       <div className={styles.container}>
-        {displayWelcome && <GreyBlockContainer style={{marginBottom: '24px'}}>
+        {displayWelcome && <div className={styles.welcomeBlock}>
           <>
             <div className={styles.welcome}>
               <Icon glyph='profile'/>
@@ -81,7 +80,7 @@ export default function Main() {
             </div>
             <p className={styles.welcome__text}>Сервис для оценки учебных занятий. Ознакомьтесь со статистикой университета!</p>
           </>
-        </GreyBlockContainer>}
+        </div>}
         <div className={styles.container__firstLine}>
           <div className={styles.container__titleBlock}>
             <Icon glyph='rating' size={42} />
