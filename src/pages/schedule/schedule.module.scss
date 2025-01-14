@@ -1,3 +1,11 @@
+.add {
+  margin-top: 8px;
+  display: none;
+  @media (max-width: $md) {
+    display: flex;
+  }
+}
+
 .controls {
   display: flex;
   align-items: center;
@@ -7,6 +15,10 @@
     display: flex;
     align-items: center;
     column-gap: 8px;
+    @media (max-width: $md) {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
   &__button {
     padding: 13px;
@@ -21,6 +33,10 @@
   border-radius: var(--medium-border-radius);
   border: 1px solid var(--ultra-light-grey-color);
   overflow: hidden;
+  display: block;
+  @media (max-width: $md) {
+    display: none;
+  }
   &__content {
     width: 100%;
     border-collapse: collapse;
@@ -138,5 +154,58 @@
         color: #fff;
       }
     }
+  }
+}
+
+.mobileSchedule {
+  margin-top: 28px;
+  flex-direction: column;
+  row-gap: 16px;
+  display: none;
+  @media (max-width: $md) {
+    display: flex;
+  }
+  &__days {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  &__day {
+    @include text_subhead();
+    color: var(--light-main-color);
+  }
+  &__lessons {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    border-radius: var(--large-border-radius);
+    background-color: var(--dark-white-color);
+    row-gap: 12px;
+  } 
+  &__info {
+    display: flex;
+    column-gap: 16px;
+    &:not(:last-child){
+      border-bottom: 1px solid var(--ultra-light-grey-color);
+      padding-bottom: 16px;
+    }
+  }
+  &__time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 8px;
+    flex-basis: 75px;
+  }
+  &__number {
+    width: fit-content;
+    padding: 4px 12px;
+    color: var(--dark-white-color);
+    background-color: var(--light-black-color);
+    border-radius: var(--large-border-radius);
+  }
+  &__lesson {
+    color: var(--grey-color);
   }
 }

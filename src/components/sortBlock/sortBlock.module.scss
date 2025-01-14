@@ -1,8 +1,8 @@
 .container {
   cursor: pointer;
   position: relative;
-  width: 250px;
   &__titleBlock {
+    width: 165px;
     position: relative;
     z-index: 2;
     padding: 12px 18px;

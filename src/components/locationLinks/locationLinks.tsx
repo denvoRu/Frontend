@@ -49,7 +49,7 @@ export default function LocationLinks({ paramNames }: LocationLinksProps) {
   return (
     <div className={styles.container}>
       {createBreadcrumbTrail().map(({ title, link }) => (
-        <div key={`${title}`} className={styles.container__block}>
+        <div style={{maxWidth: `${100 / (createBreadcrumbTrail().length)}%`}} key={`${title}`} className={styles.container__block}>
           {link ? (
             <Link className={styles.container__link} to={link}>
               {title}

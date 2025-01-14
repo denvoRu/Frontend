@@ -70,7 +70,7 @@ function ModuleBlock({ module }: ModuleProps) {
           <p className={`${styles.table__content} ${styles.table__content_name}`}>{module.name}</p>
           <p className={`${styles.table__content} ${styles.table__content_raiting}`}>{module.rating}</p>
         </Link>
-        <Icon onClick={(e)=>{e.stopPropagation();setIsDisplayList(!isDisplayList)}} className={`${styles.table__icon} ${isDisplayList ? styles.table__icon_open : ''}`} glyph={`arrow-up`} glyphColor='grey'/>
+        <Icon onClick={(e)=>{e.stopPropagation();setIsDisplayList(!isDisplayList)}} className={`${styles.table__icon} ${isDisplayList ? styles.table__icon_open : ''}`} glyph={`arrow-down`} glyphColor='grey'/>
       </div>
       {isDisplayList && module.subjects.map((subject) => (
         <Link key={subject.id} to={`/modules/${module.id}/${subject.id}`} className={`${styles.table__line} ${styles.table__line_content}`}>

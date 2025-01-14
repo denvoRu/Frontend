@@ -7,7 +7,7 @@ type SortBlockProps = {
   widthWithContent?:boolean
   title: string
   icon: glyphs
-  list: {value: string, isActive: boolean}[]
+  list: {value: string, isActive: boolean, title?: string}[]
   onChange: (value: string) => void
   type: 'radioButton' | 'checkbox'
   alwaysDisplayTitle?:boolean
@@ -33,7 +33,7 @@ export default function SortBlock ({title, icon, list, type, isOpenList, titlePa
     }
     const name = list.filter((point)=>point.isActive)[0]
     if (name){
-      return name.value
+      return name.title ? name.title : name.value
     }
     return title
   }

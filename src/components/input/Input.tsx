@@ -7,7 +7,7 @@ import { AddInputList } from '../../types/input'
 type InputProps = {
   placeholder?: string
   required?: boolean
-  type?: 'email' | 'password' | 'search'
+  type?: 'email' | 'password' | 'search' | 'date'
   value: string
   onChange: (value: string) => void
 }
@@ -49,7 +49,7 @@ export function Input ({placeholder, value, required, type, onChange}:InputProps
 type AddInputProps = {
   changeInputList: (newList: AddInputList[]) => void
   onSeeMore?: (searchValue?:string) => void
-  onSearch: (searchValue?:string) => void
+  onSearch?: (searchValue?:string) => void
   selectedList: AddInputList[]
   allList: AddInputList[]
   title: string
@@ -67,7 +67,9 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
 
   const changeSearchValue = (newvalue: string) => {
     setSearchValue(newvalue)
-    onSearch(newvalue!=='' ? newvalue : undefined)
+    if (onSearch){
+      onSearch(newvalue!=='' ? newvalue : undefined)
+    }
   }
 
 
@@ -101,11 +103,12 @@ export function AddInput({ selectedList, changeInputList, allList, title, placeh
         <Icon glyph={`arrow-${displayList ? 'up' : 'down'}`} glyphColor={displayList ? 'white' : 'grey'} />
       </div>
       {displayList && <div className={styles.list__list}>
+        {onSearch && 
         <div className={styles.list__line}>
           <Icon glyph='search' glyphColor='grey' />
           <input value={searchValue} onChange={(e) => { changeSearchValue(e.target.value) }} placeholder={`${placeholder}...`} className={styles.list__search} />
           {searchValue!=='' && <img onClick={()=>{changeSearchValue('')}} className={styles.input__clear} src='/icons/close.svg'/>}
-        </div>
+        </div>}
         {allList.map((el) => (
           <div key={el.id} onClick={() => { changeList(el) }} className={styles.list__line}>
             <img src={`/icons/${singleMode ? 'radioButton': 'checkbox'}/${selectedList.findIndex((item)=>item.id === el.id) !== -1 ? 'active' : 'disable'}.svg`} />

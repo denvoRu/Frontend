@@ -9,7 +9,7 @@ import { getNameByAllNames } from '../../utils/teacher';
 import { Button } from '../../components/button/button';
 import { Icon } from '../../components/icon';
 import { CallSchedule, ScheduleDays } from '../../consts/schedule';
-import { createDateArrayFromRange, formatDate, formatDateUTC, formatWeekAsString, getCurrentWeek, getWeekDayAndDate, getWeekNumber, shiftWeek } from '../../utils/date';
+import { createDateArrayFromRange, formatDate, formatDateUTC, formatWeekAsString, getCurrentWeek, getDayAndWeekday, getDayOfWeek, getWeekDayAndDate, getWeekNumber, shiftWeek } from '../../utils/date';
 import { createNestedArray } from '../../utils';
 import { Schedule } from '../../types/schedule';
 import PopupContainer from '../../components/popupContainer/popupContainer';
@@ -22,6 +22,9 @@ import QrCode from '../../components/qrCode/qrCode';
 type NewLesson = {
   subject?: {name: string, id: string}, time: string, teacher: string, name: string, dayNumber: number
 }
+type NewMobileLesson = {
+  subject?: {name: string, id: string}, time?: {name: string, id: string}, teacher: string, name: string, day: string
+}
 
 export default function SchedulePage() {
 
@@ -31,10 +34,12 @@ export default function SchedulePage() {
   const [selectedPeriod, setSelectedPeriod] = useState(getCurrentWeek())
   const [weekNumber, setWeekNumber] = useState<number>()
   const [weekArray, setWeekArray] = useState<string[]>([])
-  const [weekSchedule, setWeekSchedule] = useState<Schedule[][][]>()
+  const [weekSchedule, setWeekSchedule] = useState<Schedule[]>()
   const [selectedLesson, setSelectedLesson] = useState<Schedule>()
   const [subjects, setSubjects] = useState<Subjects>()
+
   const [newLesson, setNewLesson] = useState<NewLesson>()
+  const [mobileNewLesson, setMobileNewLesson] = useState<NewMobileLesson>()
 
   const [qrCode, setQrCode] = useState<string>()
 
@@ -44,18 +49,22 @@ export default function SchedulePage() {
     return time.slice(0, time.length - 3)
   }
 
+  const getCallScheduleIndexFromTime = ([start, end]:string[]) => {
+    return CallSchedule.findIndex((call)=>call === `${getPrettyTime(start)} - ${getPrettyTime(end)}`)
+  }
+
   const getScheduleArray = (schedule: Schedule[]) => {
     const week = createNestedArray<Schedule>(7)
     for (const lesson of schedule) {
       const start = lesson.start_time
       const end = lesson.end_time
-      const lessonNumber = CallSchedule.findIndex((call)=>call === `${getPrettyTime(start)} - ${getPrettyTime(end)}`)
+      const lessonNumber = getCallScheduleIndexFromTime([start, end])
       const dayNumber = weekArray.findIndex((day)=>(day === getWeekDayAndDate(lesson.date)))
       if (lessonNumber !== -1 && dayNumber !== -1){
         week[lessonNumber][dayNumber].push(lesson)
       }
     }
-    setWeekSchedule(week)
+    return week
   }
 
   const displayNewLesson = (dayNumber: number, time: string) => {
@@ -71,22 +80,42 @@ export default function SchedulePage() {
   }
 
   const createLesson = async () => {
-    if (!newLesson || !newLesson.subject || !weekNumber) {
+    if (!newLesson || !newLesson.subject) {
       return
     }
     try {
       const times = newLesson.time.split(' - ')
-      const {config} = await axios.post(PagesURl.SCHEDULE + `/${id}`, {
+      await axios.post(PagesURl.SCHEDULE + `/${id}`, {
         subject_id: newLesson.subject.id,
         lesson_name: newLesson.name,
         speaker_name: newLesson.teacher,
-        week: weekNumber - 2,
+        week: 0,
         day: newLesson.dayNumber,
         start_time: times[0],
         end_time: times[1]
       })
-      console.log(config)
       setNewLesson(undefined)
+      getWeekSchedule()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const createMobileLesson = async () => {
+    if (!mobileNewLesson || !mobileNewLesson.subject || !mobileNewLesson.time) {
+      return
+    }
+    try {
+      const times = mobileNewLesson.time.id.split(' - ')
+      await axios.post(PagesURl.SCHEDULE + `/${id}`, {
+        subject_id: mobileNewLesson.subject.id,
+        lesson_name: mobileNewLesson.name,
+        speaker_name: mobileNewLesson.teacher,
+        week: 1,
+        day: getDayOfWeek(mobileNewLesson.day),
+        start_time: times[0],
+        end_time: times[1]
+      })
+      setMobileNewLesson(undefined)
       getWeekSchedule()
     } catch (error) {
       console.log(error)
@@ -111,10 +140,25 @@ export default function SchedulePage() {
           end_date: formatDateUTC(selectedPeriod[1])
         }
       })
-      getScheduleArray(data)
+      console.log(data)
+      setWeekSchedule(data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const getMobileWeekSchedule = (schedule: Schedule[]) => {
+    const result:{day: string, weekDay: string, list:Schedule[]}[] = []
+    for (const lesson of schedule) {
+      const dayWithWeekDay = getDayAndWeekday(lesson.date)
+      const resultIndex = result.findIndex((item)=>item.day === dayWithWeekDay[0])
+      if (resultIndex !== -1){
+        result[resultIndex].list.push(lesson)
+      } else {
+        result.push({day: dayWithWeekDay[0], weekDay: dayWithWeekDay[1], list: [lesson]})
+      }
+    }
+    return result
   }
 
   const getSubjects = async (search?:string) => {
@@ -208,6 +252,10 @@ export default function SchedulePage() {
       </Helmet>
       <div>
         <LocationLinks paramNames={[{ name: teacher.name, id: teacher.id }]} />
+        <Button onClick={()=>setMobileNewLesson({name: '', day: '', teacher: teacher.name})} size={'max'} className={styles.add} variant={'whiteMain'} textColor={'grey'}>
+          <Icon glyph='add' glyphColor='grey'/>
+          <p>Добавить пару</p>
+        </Button>
         <div className={styles.controls}>
           <div className={styles.controls__week}>
             <Button onClick={() => setSelectedPeriod(shiftWeek(selectedPeriod.slice(), -1))} variant='whiteMain' className={styles.controls__button}>
@@ -248,7 +296,7 @@ export default function SchedulePage() {
                   </td>
                 ))}
               </tr>
-              {weekSchedule.map((row, index) => (
+              {getScheduleArray(weekSchedule).map((row, index) => (
                 <tr key={index} className={styles.table__tr}>
                   <td className={`${styles.table__td} ${styles.table__textBlock_title} `}>
                     <div className={`${styles.table__textBlock}`}>
@@ -275,6 +323,31 @@ export default function SchedulePage() {
             </tbody>
           </table>
         </div>
+        <div className={styles.mobileSchedule}>
+          {getMobileWeekSchedule(weekSchedule).map((day)=>(
+            <div className={styles.mobileSchedule__block} key={day.day}>
+                <div className={styles.mobileSchedule__days}>
+                  <p className={styles.mobileSchedule__day}>{day.day}</p>
+                  <p className={styles.mobileSchedule__day}>{day.weekDay}</p>
+                </div>
+                <div className={styles.mobileSchedule__lessons}>
+                  {day.list.map((lesson) => (
+                    <div onClick={()=>setSelectedLesson(lesson)} key={lesson.id ? lesson.id : lesson.schedule_lesson_id} className={styles.mobileSchedule__info}>
+                      <div className={styles.mobileSchedule__time}>
+                        <p className={styles.mobileSchedule__number}>{`${getCallScheduleIndexFromTime([lesson.start_time, lesson.end_time]) + 1} пара`}</p>
+                        <div>
+                          {CallSchedule[getCallScheduleIndexFromTime([lesson.start_time, lesson.end_time])].split('-').map((time) => (
+                            <p key={time}>{time}</p>
+                          ))}
+                        </div>
+                      </div>
+                      <p className={styles.mobileSchedule__lesson}>{lesson.lesson_name}</p>
+                    </div>
+                  ))}
+                </div>
+            </div>
+          ))}
+        </div>
       </div>
       {newLesson && 
       <PopupContainer>
@@ -290,7 +363,6 @@ export default function SchedulePage() {
             onSearch={getSubjects} title='Предмет'
             changeInputList={(list)=>setNewLesson({...newLesson, subject: list[0]})}
           />
-          <p className={styles.popup__subject}>Название предмета</p>
           <div>
             <p className={styles.popup__text}>{`Дата: ${weekArray[newLesson.dayNumber]}`}</p>
             <p className={styles.popup__text}>{`Время: ${newLesson.time}`}</p>
@@ -300,6 +372,39 @@ export default function SchedulePage() {
           <div className={styles.popup__buttons}>
             <Button onClick={()=>setNewLesson(undefined)} size={'max'} variant={'whiteMain'}>Отмена</Button>
             <Button onClick={createLesson} size={'max'} variant={'primary'}>Добавить</Button>
+          </div>
+        </div>
+      </PopupContainer>}
+      {mobileNewLesson && 
+      <PopupContainer>
+        <div className={styles.popup}>
+          <h2 className={styles.popup__title}>Добавить пару</h2>
+          <p className={styles.popup__text}>{`Преподаватель: ${mobileNewLesson.teacher}`}</p>
+          <Input placeholder='Название пары' value={mobileNewLesson.name} onChange={(value)=>setMobileNewLesson({...mobileNewLesson, name: value})}/>
+          <AddInput
+            singleMode 
+            totalParts={subjects.total_pages}
+            currentPart={subjects.page_number}
+            selectedList={mobileNewLesson.subject ? [mobileNewLesson.subject] : []} 
+            placeholder='Введите название предмета' 
+            allList={subjects.content} 
+            onSearch={getSubjects} title='Предмет'
+            changeInputList={(list)=>setMobileNewLesson({...mobileNewLesson, subject: list[0]})}
+          />
+          <Input placeholder='Введите дату' value={mobileNewLesson.day} type='date' onChange={(value)=>setMobileNewLesson({...mobileNewLesson, day: value})}/>
+          <AddInput
+            singleMode
+            totalParts={1}
+            currentPart={1}
+            selectedList={mobileNewLesson.time ? [mobileNewLesson.time] : []}
+            placeholder='Выберите время'
+            changeInputList={(list)=>{setMobileNewLesson({...mobileNewLesson, time: list[0]})}}
+            allList={CallSchedule.map((call, index)=>({name: `${index + 1} пара (${call})`, id: call}))}
+            title='Выберите время'
+          />
+          <div className={styles.popup__buttons}>
+            <Button onClick={()=>setMobileNewLesson(undefined)} size={'max'} variant={'whiteMain'}>Отмена</Button>
+            <Button onClick={createMobileLesson} size={'max'} variant={'primary'}>Добавить</Button>
           </div>
         </div>
       </PopupContainer>}
