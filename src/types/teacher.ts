@@ -11,7 +11,7 @@ export type Teacher = {
   name: string
   id: string
   email:string
-  rating?: number
+  rating: number
 }
 
 export type PrivilegeValues = 'rating' | 'comments'
