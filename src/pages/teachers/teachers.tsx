@@ -80,6 +80,7 @@ export default function TeachersPage() {
         role: 'teacher',
         institute_id: getInstituteId()
       })
+      resetNewTeacher()
     } catch (error) {
       console.log(error)
     }
@@ -204,8 +205,8 @@ export default function TeachersPage() {
         <RightPopupContainer>
           <div className={teacherStyles.popup__content}>
             <h2 className={teacherStyles.popup__title}>Добавить преподавателя</h2>
-            <Input placeholder='Фамилия' value={newTeacherValue.first_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, second_name: value }) }} />
-            <Input placeholder='Имя' value={newTeacherValue.second_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, first_name: value }) }} />
+            <Input placeholder='Фамилия' value={newTeacherValue.first_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, first_name: value }) }} />
+            <Input placeholder='Имя' value={newTeacherValue.second_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, second_name: value }) }} />
             <Input placeholder='Отчество' value={newTeacherValue.third_name} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, third_name: value }) }} />
             <Input placeholder='Почта' value={newTeacherValue.email} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, email: value }) }} />
             <Input placeholder='Пароль...' value={newTeacherValue.password} onChange={(value) => { setNewTeacherValue({ ...newTeacherValue, password: value }) }} />

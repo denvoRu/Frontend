@@ -15,8 +15,10 @@
     &__button {
       @include text_body();
       color: var(--grey-color);
-      @media (max-width: $sm) {
-        display: none;
+      &_hideMobile{
+        @media (max-width: $sm) {
+          display: none;
+        }
       }
       &_red {
         color: var(--dangerous-color);
@@ -67,6 +69,10 @@
     }
     &__raiting {
       @include text_h3();
+      &_teacher{
+        color: var(--main-color);
+        cursor: pointer;
+      }
       &_text {
         @media (max-width: $sm) {
           display: none;
@@ -183,5 +189,64 @@
     &_grey {
       color: var(--light-grey-color);
     }
+  }
+}
+
+.rating {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  backdrop-filter: blur(4px);
+  background: var(--background-blur-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  &__content {
+    padding: 40px;
+    background-color: #fff;
+    border-top-left-radius: var(--big-border-radius);
+    border-top-right-radius: var(--big-border-radius);
+  }
+  &__closeBlock {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+  &__close {
+    cursor: pointer;
+  }
+  &__line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    color: var(--light-black-color);
+  }
+  &__value {
+    color: var(--main-color);
+  }
+  &__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+  }
+  &__rating {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 8px;
+    border-radius: var(--large-border-radius);
+    background-color: var(--light-main-color);
+    color: var(--body-color);
+    @include text_subhead();
+    padding: 12px 24px;
   }
 }

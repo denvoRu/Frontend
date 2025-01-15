@@ -9,10 +9,11 @@ type InputProps = {
   required?: boolean
   type?: 'email' | 'password' | 'search' | 'date'
   value: string
+  maxValues?: number
   onChange: (value: string) => void
 }
 
-export function Input ({placeholder, value, required, type, onChange}:InputProps) {
+export function Input ({placeholder, value, required, type, maxValues, onChange}:InputProps) {
 
 
   const textarea = useRef<HTMLTextAreaElement>(null)
@@ -39,8 +40,8 @@ export function Input ({placeholder, value, required, type, onChange}:InputProps
 
   return (
     <div className={styles.inputBlock}>
-      {type ? <input type={type} required={required} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{onChange(e.target.value)}}/> :
-    <textarea ref={textarea} rows={rows} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{changeTextarea(e.target.value)}}/>}
+      {type ? <input maxLength={maxValues} type={type} required={required} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{onChange(e.target.value)}}/> :
+    <textarea maxLength={maxValues} ref={textarea} rows={rows} className={styles.input} placeholder={placeholder} value={value} onChange={(e)=>{changeTextarea(e.target.value)}}/>}
     {type === 'search' && value!=='' && <img onClick={()=>{onChange('')}} className={styles.input__clear} src='/icons/close.svg'/>}
     </div>
   )

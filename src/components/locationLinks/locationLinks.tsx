@@ -11,7 +11,8 @@ const translations: Record<string, string> = {
   teachers: 'Преподаватели',
   institutes: 'Институты',
   schedule: 'Расписание',
-  statistics: 'Статистика'
+  statistics: 'Статистика',
+  me: 'Мой аккаунт'
 };
 
 export default function LocationLinks({ paramNames }: LocationLinksProps) {
@@ -49,7 +50,7 @@ export default function LocationLinks({ paramNames }: LocationLinksProps) {
   return (
     <div className={styles.container}>
       {createBreadcrumbTrail().map(({ title, link }) => (
-        <div style={{maxWidth: `${100 / (createBreadcrumbTrail().length)}%`}} key={`${title}`} className={styles.container__block}>
+        <div style={{maxWidth: `${100 / (createBreadcrumbTrail().length) - 1}%`}} key={`${title}`} className={styles.container__block}>
           {link ? (
             <Link className={styles.container__link} to={link}>
               {title}

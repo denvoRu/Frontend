@@ -3,7 +3,6 @@ import styles from './main.module.scss'
 import { Icon } from '../../components/icon'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { useContext, useEffect, useState } from 'react'
-import { RAITING_LIST } from '../../consts/raitingList'
 import { updateRadioButtonList } from '../../utils/list'
 import { Link } from 'react-router-dom'
 import { Button } from '../../components/button/button'
@@ -14,6 +13,7 @@ import { Institutes } from '../../types/institutes'
 import { FilterParams } from '../../types/filter'
 import { AppContext } from '../../contexts/appContext'
 import { setInstituteId } from '../../services/institute'
+import { ALPHABET_MODULE_LIST } from '../../consts/alphabetList'
 
 export default function Main() {
 
@@ -21,7 +21,7 @@ export default function Main() {
 
   const [displayWelcome, setDisplayWelcome] = useState(true)
 
-  const [sortList, setSortList] = useState(RAITING_LIST)
+  const [sortList, setSortList] = useState(ALPHABET_MODULE_LIST)
   const [isOpenList, setIsOpenList] = useState(false)
 
   const [statistics, setStatistics] = useState<Institutes>()

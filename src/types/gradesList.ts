@@ -1,1 +1,1 @@
-export type GradesList = { name: string, value?: string, count: number }[]
+export type GradesList = { name?: string, value?: string, count: number }[]

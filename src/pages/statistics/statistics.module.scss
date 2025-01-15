@@ -9,6 +9,10 @@
   &__statistics {
     display: flex;
     column-gap: 50px;
+    @media (max-width: $sm) {
+      flex-direction: column;
+      row-gap: 16px;
+    }
     .statistics {
       &__left {
         display: flex;

@@ -2,23 +2,23 @@ import { GradesList } from "../types/gradesList";
 
 export const SmilesList:GradesList = [
   {
-    count: 10,
+    count: 0,
     name: 'very_good'
   },
   {
-    count: 5,
+    count: 0,
     name: 'good'
   },
   {
-    count: 6,
+    count: 0,
     name: 'middle'
   },
   {
-    count: 9,
+    count: 0,
     name: 'bad'
   },
   {
-    count: 10,
+    count: 0,
     name: 'very_bad'
   }
 ]

@@ -7,6 +7,7 @@ import axios, { PagesURl } from '../../services/api';
 import { useNavigate } from 'react-router-dom'
 import { LoginResponse } from '../../types/auth'
 import { setTokensToCookies } from '../../services/token'
+import { setRole } from '../../services/role'
 
 export default function Login() {
 
@@ -30,7 +31,8 @@ export default function Login() {
       })
       setTokensToCookies(data.access_token, 'access')
       setTokensToCookies(data.refresh_token, 'refresh')
-      navigate('/institutes')
+      setRole(loginAsTeacher ? 'teacher':'admin')
+      navigate(loginAsTeacher ? '/me' : '/institutes')
     } catch (error) {
       console.log(error)
     }

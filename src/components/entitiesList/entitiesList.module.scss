@@ -27,6 +27,17 @@
   margin-top: 24px;
   margin-bottom: 20px;
   &__line {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 8px;
+    padding: 8px;
+    border-bottom: 1px solid var(--ultra-light-grey-color);
+    padding-right: 30px;
+  }
+  &__addline {
     position: relative;
     display: flex;
     align-items: center;
@@ -48,13 +59,14 @@
   &__name {
     @include text_subhead();
     color: var(--grey-color);
-    flex: 75%;
     overflow: hidden;
     text-overflow: ellipsis;
+    &_trash {
+      flex: 75%;
+    }
     &_onAdd {
       @include text_body();
       color: var(--grey-color);
-      flex: 75%;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -65,7 +77,9 @@
   &__rating {
     @include text_body();
     color: var(--grey-color);
-    flex: 25%;
+    &_trash {
+      flex: 25%;
+    }
   }
   &__delete {
     cursor: pointer;

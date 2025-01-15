@@ -11,7 +11,6 @@ export default function BottomLinks() {
 
   useEffect(()=>{
     const hasScroll = window.innerHeight < document.documentElement.scrollHeight - 1;
-    console.log(window.innerHeight, document.documentElement.scrollHeight)
     if (blockRef.current && hasScroll){
       blockRef.current.style.position = 'absolute'
     }

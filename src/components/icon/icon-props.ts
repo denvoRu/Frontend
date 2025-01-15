@@ -9,6 +9,7 @@ export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 export type glyphs = 
   'add' | 
+  'admin' |
   'arrow-right' |
   'arrow-left' |
   'arrow-down' |
@@ -20,6 +21,7 @@ export type glyphs =
   'filter' |
   'privilege' |
   'profile' |
+  'people' |
   'rating' |
   'review' |
   'search' |

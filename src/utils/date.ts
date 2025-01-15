@@ -1,11 +1,10 @@
 
-// get current format 'dd.mm-dd.mm'
+// get current format [Date, Date]
 export function getCurrentWeek() {
   const today = new Date();
   const firstDayOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
   const lastDayOfWeek = new Date(firstDayOfWeek);
   lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
-
   return [firstDayOfWeek, lastDayOfWeek];
 }
 
@@ -101,11 +100,30 @@ export function getDayAndWeekday(dateString: string) {
 //from date input get weekDayNumber
 export function getDayOfWeek(dateString: string) {
   const date = new Date(dateString);
-  let day = date.getDay();
-  if (day === 0) {
-      day = 6;
-  } else {
-      day--;
-  }
-  return day;
+  return formatDateUTC(date)
+}
+
+//get current time "YYYY-MM-DDTHH:mm:ss"
+export function getUTCCurrentDate() {
+  const date = new Date();
+  
+  const year = date.getFullYear().toString().padStart(4, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
+//from hh:mm:ss to hh:mm
+export const getPrettyTime = (time: string) => {
+  return time.slice(0, time.length - 3)
+}
+
+//from "YYYY-MM-DDTHH:mm:ss" to hh:mm
+export function convertTime(isoString: string) {
+  const timePart = isoString.split('T')[1];
+  return timePart.substring(0, 5);
 }

@@ -153,6 +153,11 @@
         background-color: var(--light-main-color);
         color: #fff;
       }
+      &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
     }
   }
 }
@@ -207,5 +212,34 @@
   }
   &__lesson {
     color: var(--grey-color);
+  }
+}
+
+.members {
+  &__titleLine {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  &__titleBlock {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    color: var(--grey-color);
+  }
+  &__close {
+    cursor: pointer;
+  }
+  &__textBlock {
+    color: var(--light-grey-color);
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+  }
+  &__text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

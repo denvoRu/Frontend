@@ -1,0 +1,67 @@
+.container {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  &__title {
+    color: var(--light-black-color);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  &__subtitle {
+    @include text_subhead();
+    color: var(--grey-color);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  &__text {
+    color: var(--light-grey-color);
+    margin-left: 20px;
+    margin-right: 20px;
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+  &__input {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  &__star {
+    color: var(--dangerous-color);
+  }
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  &__smile {
+    opacity: 0.3;
+  }
+  &__slider {
+    margin-left: 20px;
+    width: 100%;
+    overflow: visible;
+  }
+  &__slide {
+    padding: 8px;
+    background-color: var(--dark-white-color);
+    border-radius: var(--medium-border-radius);
+    color: var(--grey-color);
+    &_active {
+      background-color: var(--main-color);
+      color: var(--body-color);
+    }
+  }
+  &__swiperBlock {
+    margin-left: 20px;
+  }
+  &__slideContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 8px;
+    width: 100%;
+    @include text_caption();
+  }
+}

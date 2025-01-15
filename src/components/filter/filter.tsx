@@ -24,7 +24,6 @@ export default function Filter({ filter, listName, searchValue, list, changeSear
   const changeTeachersList = (point: {name: string, id: string}) => {
     const newFilters = { ...filter }
     const index = newFilters.list.findIndex(item => item.id === point.id && item.name === point.name);
-    console.log(index, filter)
     if (index !== -1) {
       newFilters.list = removeElementAtIndex(newFilters.list, index)
       changeFilter(newFilters)

@@ -16,16 +16,23 @@ import EntitiesList from '../../components/entitiesList/entitiesList'
 import { Subjects } from '../../types/subject'
 import { LIST_LIMIT } from '../../consts/limit'
 import { removeElementAtIndex } from '../../utils'
+import { getRole, removeRole } from '../../services/role'
+import { removeTokensFromCookies } from '../../services/token'
+import { removeInstituteId } from '../../services/institute'
 
 export default function TeacherPage() {
 
   const params = useParams()
   const navigate = useNavigate()
 
+  const role = getRole()
+
   const teacherId = params.id
   const [teacher, setTeacher] = useState<Teacher>()
   const [subjects, setSubjects] = useState<Subjects>()
   const [newSubjects, setNewSubjects] = useState<Subjects>()
+
+  const [displaySubjectsRating, setDisplaySubjectRating] = useState(false)
 
   const [privileges, setPrivileges] = useState<Privileges>(PRIVILEGES)
   const [isOpenPrivileges, setIsOpenPrivileges] = useState(false)
@@ -34,6 +41,13 @@ export default function TeacherPage() {
   const [displayChangePopup, setDisplayChangePopup] = useState(false)
   const [changeData, setChangeData] = useState({name: 'Иванов Иван Иванович', email: 'example@gmail.com'})
 
+  const logOut = () => {
+    removeRole()
+    removeTokensFromCookies('access')
+    removeTokensFromCookies('refresh')
+    removeInstituteId()
+    navigate('/login')
+  }
 
   const getTeacherPrivileges = async () => {
     try {
@@ -85,14 +99,18 @@ export default function TeacherPage() {
 
   const getTeacher = async () => {
     try {
-      const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${teacherId}`)
+      const response = await axios.get<Teacher>(PagesURl.TEACHER + `/${role === 'admin' ? teacherId : 'me'}`)
       getNameByAllNames(response.data)
       setTeacher(response.data)
-      getTeacherPrivileges()
+      console.log(response)
+      if (role === 'admin') {
+        getTeacherPrivileges()
+      }
     } catch (error) {
       console.log(error)
     }
   }
+
   const onChangePrivileges = (value: string) => {
     const newPrivileges = privileges.slice()
     for (const privilege of newPrivileges) {
@@ -107,7 +125,7 @@ export default function TeacherPage() {
   }
   const getSubjects = async (page?: number) => {
     try {
-      const {data} = await axios.get<Subjects>(PagesURl.SUBJECT,{
+      const {data} = await axios.get<Subjects>(role === 'admin' ? PagesURl.SUBJECT : PagesURl.TEACHER + `/me/subject`,{
         params: {
           teacher_ids: teacherId,
           limit: LIST_LIMIT,
@@ -164,10 +182,12 @@ export default function TeacherPage() {
   useEffect(()=>{
     getTeacher()
     getSubjects()
-    getNewSubjects()
+    if (role === 'admin') {
+      getNewSubjects()
+    }
   },[])
 
-  if (!teacher || !subjects || !newSubjects) {
+  if (!teacher || !subjects) {
     return <></>
   }
 
@@ -177,22 +197,21 @@ export default function TeacherPage() {
         <title>{teacher.name}</title>
       </Helmet>
       <div className={styles.container}>
-        <LocationLinks paramNames={[{name: teacher.name, id: teacher.id}]} />
+        {role === 'admin' && <LocationLinks paramNames={[{name: teacher.name, id: teacher.id}]} />}
         <div className={styles.settings}>
           <div className={styles.settings__controls}>
           <Button variant={'whiteMain'}>
-              <Link className={styles.settings__schedule} to={`/teachers/${teacherId}/schedule`}>
+              <Link className={styles.settings__schedule} to={role === 'admin' ? `/teachers/${teacherId}/schedule` : `/me/schedule`}>
                 <Icon glyph='schedule' glyphColor='grey'/>
-                <p className={styles.settings__button}>Полное расписание</p>
+                <p className={styles.settings__button}>{`${role === 'admin' ? 'Полное' : 'Мое'} расписание`}</p>
               </Link>
             </Button>
-            <SortBlock 
+            {role === 'admin' && <SortBlock  
               alwaysDisplayTitle
-              widthWithContent
               isOpenList={isOpenPrivileges} 
               changeIsOpenList={()=>{setIsOpenPrivileges(!isOpenPrivileges)}} 
-              titlePadding={24.5} title='Привилегии' icon='privilege' type='checkbox' list={privileges} onChange={onChangePrivileges}
-            />
+              title='Привилегии' icon='privilege' type='checkbox' list={privileges} onChange={onChangePrivileges}
+            />}
             {/* <Button onClick={()=>{setDisplayChangePopup(true)}} variant={'whiteMain'}>
               <>
                 <Icon glyph='edit' glyphColor='grey' />
@@ -200,10 +219,10 @@ export default function TeacherPage() {
               </>
             </Button> */}
           </div>
-          <Button onClick={()=>{setDisplayDeletePopup(true)}} variant={'whiteMain'}>
+          <Button onClick={role === 'admin' ? ()=>{setDisplayDeletePopup(true)} : logOut} variant={'whiteMain'}>
             <>
-              <Icon glyph='trash' glyphColor='dangerous' />
-              <p className={`${styles.settings__button} ${styles.settings__button_red}`}>Удалить</p>
+              {role === 'admin' && <Icon glyph='trash' glyphColor='dangerous' />}
+              <p className={`${styles.settings__button} ${role === 'admin' && styles.settings__button_hideMobile } ${styles.settings__button_red}`}>{role === 'admin' ? 'Удалить' : 'Выйти'}</p>
             </>
           </Button>
         </div>
@@ -216,21 +235,30 @@ export default function TeacherPage() {
             </div>
             <p className={styles.info__email}>{teacher.email}</p>
           </div>
-          <p className={styles.info__raiting}><span className={styles.info__raiting_text}>Рейтинг:</span>{` ${teacher.rating}`}</p>
+          {teacher.rating !== undefined &&
+          <p 
+            onClick={role === 'teacher' ? ()=>setDisplaySubjectRating(true) : undefined} 
+            className={`${styles.info__raiting} ${role==='teacher' && styles.info__raiting_teacher}`}>
+            <span className={`${styles.info__raiting_text}`}>Рейтинг:</span>
+            {teacher.rating}
+          </p>
+          }
         </div>
+        {subjects && 
         <EntitiesList
           displayOpacity={isOpenPrivileges}
           icon='subject'
           title='Предметы'
           subtitle='Добавить предмет из списка'
           list={subjects.content}
-          addList={newSubjects.content}
+          addList={newSubjects ? newSubjects.content : undefined}
           changeSearchValue={getNewSubjects}
+          onNavigateSchedule={(id)=>navigate(role === 'admin' ? `/teachers/${teacher.id}/schedule/${id}` : `/me/schedule/${id}`)}
           showMore={getSubjects}
           deleteItem={deleteSubjectFromTeacher}
           onConfirmChanges={addNewSubjects}
           totalPages={subjects.total_pages}
-        />
+        />}
       </div>
       {displayChangePopup && <PopupContainer>
         <div className={styles.popup}>
@@ -253,6 +281,33 @@ export default function TeacherPage() {
           </div>
         </div>
         </PopupContainer>}
+      {displaySubjectsRating && 
+        <div className={styles.rating}>
+          <div className={styles.rating__content}>
+            <div className={styles.rating__closeBlock}>
+              <svg onClick={()=>setDisplaySubjectRating(false)} className={styles.rating__close} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="#F6F6F6" />
+                <path d="M13.0604 11.9994L15.3604 9.69937C15.6504 9.40937 15.6504 8.92937 15.3604 8.63938C15.0704 8.34938 14.5904 8.34938 14.3004 8.63938L12.0004 10.9394L9.70035 8.63938C9.41035 8.34938 8.93035 8.34938 8.64035 8.63938C8.35035 8.92937 8.35035 9.40937 8.64035 9.69937L10.9404 11.9994L8.64035 14.2994C8.35035 14.5894 8.35035 15.0694 8.64035 15.3594C8.79035 15.5094 8.98035 15.5794 9.17035 15.5794C9.36035 15.5794 9.55035 15.5094 9.70035 15.3594L12.0004 13.0594L14.3004 15.3594C14.4504 15.5094 14.6404 15.5794 14.8304 15.5794C15.0204 15.5794 15.2104 15.5094 15.3604 15.3594C15.6504 15.0694 15.6504 14.5894 15.3604 14.2994L13.0604 11.9994Z" fill="#DDDDDD" />
+              </svg>
+            </div>
+            <div className={styles.rating__line}>
+              <div className={styles.rating__title}>
+                <Icon glyph='rating'/>
+                <h2>Мой рейтинг</h2>
+              </div>
+              <h2 className={styles.rating__value}>{teacher.rating}</h2>
+            </div>
+            <div className={styles.rating__list}>
+              {subjects.content.map((subject)=>(
+                <div style={{ width: `${subject.rating*20 < 45 ? '45%' : `${subject.rating*20}%`}` }} key={subject.id} className={styles.rating__rating}>
+                  <p>{subject.name}</p>
+                  <p>{subject.rating}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      }
     </>
   )
 }

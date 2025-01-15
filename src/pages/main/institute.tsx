@@ -3,7 +3,6 @@ import styles from './main.module.scss'
 import { Icon } from '../../components/icon'
 import SortBlock from '../../components/sortBlock/sortBlock'
 import { useCallback, useEffect, useState } from 'react'
-import { RAITING_LIST } from '../../consts/raitingList'
 import BottomLinks from '../../components/bottomLinks/bottomLinks'
 import { updateRadioButtonList } from '../../utils/list'
 import LocationLinks from '../../components/locationLinks/locationLinks'
@@ -17,6 +16,7 @@ import { Institute } from '../../types/institutes'
 import { Modules } from '../../types/module'
 import { FilterParams } from '../../types/filter'
 import { removeInstituteId } from '../../services/institute'
+import { ALPHABET_MODULE_LIST } from '../../consts/alphabetList'
 
 export default function InstitutePage() {
 
@@ -26,7 +26,7 @@ export default function InstitutePage() {
   const [instituteId, setInstituteId] = useState<string>()
   const [institute, setInstitute] = useState<Institute>()
 
-  const [sortList, setSortList] = useState(RAITING_LIST)
+  const [sortList, setSortList] = useState(ALPHABET_MODULE_LIST)
   const [isOpenList, setIsOpenList] = useState(false)
 
   const [displayDelete, setDisplayDelete] = useState(false)

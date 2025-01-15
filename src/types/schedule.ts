@@ -7,4 +7,6 @@ export type Schedule = {
   start_time: string
   end_time: string
   date: string
+  tags: string[]
+  rating: number
 }

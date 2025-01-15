@@ -10,8 +10,8 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-
-  background: currentColor;
+  background-repeat: no-repeat;
+  mask-repeat: no-repeat;
   mask-position: center center;
 }
 
