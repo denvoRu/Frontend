@@ -186,9 +186,12 @@ export default function SchedulePage() {
       console.log(error)
     }
   }
-  const getFeedbackExcel = async (id: string | undefined) => {
+  const getFeedbackExcel = async () => {
+    if (!selectedLesson) {
+      return
+    }
     try {
-      const {data} = await axios.get(PagesURl.LESSON + `/${id}/feedback/xlsx`,{
+      const {data} = await axios.get(PagesURl.LESSON + `/${selectedLesson.id}/feedback/xlsx`,{
         responseType: 'blob',
       })
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -522,7 +525,7 @@ export default function SchedulePage() {
             <Button onClick={()=>{getMembersLesson(selectedLesson.id)}} variant={'primary'}>
               <p>Посмотреть посещаемость</p>
             </Button>
-            <Button onClick={()=>{getFeedbackExcel(selectedLesson.id)}} variant='whiteMain'>
+            <Button onClick={getFeedbackExcel} variant='whiteMain'>
               <Icon glyph='export'/>
               <p>Экспортировать отзывы в exel</p>
             </Button>
