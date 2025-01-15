@@ -151,6 +151,11 @@ export default function SchedulePage() {
       })
       setWeekSchedule(data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()))
     } catch (error) {
+      if (role === 'teacher'){
+        navigate('/me')
+      } else if (role === 'admin'){
+        navigate('/institutes')
+      }
       console.log(error)
     }
   }
@@ -183,6 +188,11 @@ export default function SchedulePage() {
       }
       setSubjects(data)
     } catch (error) {
+      if (role === 'teacher'){
+        navigate('/me')
+      } else if (role === 'admin'){
+        navigate('/institutes')
+      }
       console.log(error)
     }
   }

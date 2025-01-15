@@ -25,11 +25,11 @@ function App() {
 
     useEffect(()=>{
       const role = getRole()
-
+      console.log(role)
       if (!role) {
         navigate('/login')
       }
-    })
+    },[navigate])
 
     return (
       <>
