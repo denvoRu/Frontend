@@ -16,6 +16,7 @@ import Schedule from '../../pages/schedule/schedule';
 import StatisticsPage from '../../pages/statistics/statistics';
 import FeedBack from '../../pages/feedback/feedback';
 import { getRole } from '../../services/role';
+import Links from '../../pages/links/links';
 
 function App() {
 
@@ -25,7 +26,6 @@ function App() {
 
     useEffect(()=>{
       const role = getRole()
-      console.log(role)
       if (!role) {
         navigate('/login')
       }
@@ -51,6 +51,7 @@ function App() {
             <Route index element={<Navigate to={getRole() === 'admin'? "/institutes" : '/me/schedule'} replace />} />
             <Route path="/institutes" element={<Main />} />
             <Route path='/institutes/:id' element={<Institute/>} />
+            <Route path='/institutes/:id/links' element={<Links/>}/>
             <Route path='/modules' element={<Subjects/>} />
             <Route path='/modules/:id' element={<ModulePage/>} />
             <Route path='/modules/:id/:subjectId' element={<Subject/>}/>
@@ -58,12 +59,12 @@ function App() {
             <Route path='/teachers/:id' element={<Teacher/>} />
             <Route path='/teachers/:id/schedule' element={<Schedule/>}/>
             <Route path='/teachers/:id/schedule/:subjectId' element={<Schedule/>}/>
-            <Route path='/teachers/:id/schedule/:lessonId/statistics' element={<StatisticsPage/>}/>
+            <Route path='/teachers/:id/schedule/:subjectId/statistics' element={<StatisticsPage/>}/>
 
             <Route path='/me' element={<Teacher/>}/>
             <Route path='/me/schedule' element={<Schedule/>}/>
             <Route path='/me/schedule/:subjectId' element={<Schedule/>}/>
-            <Route path='/me/schedule/:lessonId/statistics' element={<StatisticsPage/>}/>
+            <Route path='/me/schedule/:subjectId/statistics' element={<StatisticsPage/>}/>
           </Route>
           <Route path='/:id' element={<FeedBack/>}/>
         </Routes>

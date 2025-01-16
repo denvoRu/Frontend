@@ -34,7 +34,7 @@
     cursor: pointer;
     display: flex;
     justify-content: space-between;
-    border-radius: var(--medium-border-radius);
+    border-radius: var(--large-border-radius);
     background-color: var(--dark-white-color);
     padding: 12px 18px;
     @include text_body();
@@ -48,10 +48,10 @@
     position: relative;
     z-index: 1;
     background-color: var(--dark-white-color);
-    margin-top: calc(var(--medium-border-radius) * -1);
-    padding-top: var(--medium-border-radius);
-    border-bottom-left-radius: var(--medium-border-radius);
-    border-bottom-right-radius: var(--medium-border-radius);
+    margin-top: calc(var(--large-border-radius) * -1);
+    padding-top: var(--large-border-radius);
+    border-bottom-left-radius: var(--large-border-radius);
+    border-bottom-right-radius: var(--large-border-radius);
   }
   &__line {
     cursor: pointer;

@@ -19,9 +19,12 @@ export type glyphs =
   'edit' |
   'export' |
   'filter' |
+  'institute' |
+  'link' |
+  'module' |
+  'people' |
   'privilege' |
   'profile' |
-  'people' |
   'rating' |
   'review' |
   'search' |
@@ -29,8 +32,6 @@ export type glyphs =
   'subject' |
   'schedule' |
   'teacher' |
-  'trash' |
-  'institute' |
-  'module';
+  'trash';
 
 type IconColor = keyof typeof Colors;

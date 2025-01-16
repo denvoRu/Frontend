@@ -112,7 +112,7 @@ export default function Subjects() {
     }
   }
   const createSubject = async () => {
-    if (!addSubjectValues.module){
+    if (!addSubjectValues.module) {
       return
     }
     try {
@@ -228,29 +228,27 @@ export default function Subjects() {
             <div className={styles.controls__input}>
               <Input type='search' placeholder='Поиск...' value={searchValue} onChange={changeSearchValue} />
             </div>
-            <div className={styles.controls__sort}>
-              <SortBlock isOpenList={isDisplaySortList} changeIsOpenList={() => { setIsDisplaySortList(!isDisplaySortList) }} title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList} />
+            <div className={styles.controls__block}>
+              <div onClick={() => { setDisplaySettings(!displaySettings) }} className={`${styles.controls__filters} ${displaySettings ? styles.controls__filters_active : ''}`}>
+                <Icon glyph='add' glyphColor={displaySettings ? 'white' : 'grey'} />
+              </div>
+              {displaySettings && <div className={styles.controls__list}>
+                <div onClick={() => { setAddModulePopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
+                  <p>Добавить модуль</p>
+                </div>
+                <div onClick={() => { setAddSubjectPopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
+                  <p>Добавить предмет</p>
+                </div>
+              </div>}
             </div>
             <div className={styles.controls__settings}>
               <div onClick={() => { setDisplayFilters(true); }} className={styles.controls__filters}>
                 <Icon glyph='filter' glyphColor='grey' />
                 <p className={styles.controls__text}>Фильтры</p>
               </div>
-              <div className={styles.controls__block}>
-                <div onClick={() => { setDisplaySettings(!displaySettings) }} className={`${styles.controls__filters} ${displaySettings ? styles.controls__filters_active : ''}`}>
-                  <Icon glyph='add' glyphColor={displaySettings ? 'white' : 'grey'} />
-                </div>
-                {displaySettings && <div className={styles.controls__list}>
-                  <div onClick={() => { setAddModulePopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
-                    <p>Добавить модуль</p>
-                    <Icon glyph='arrow-right' glyphColor='grey' />
-                  </div>
-                  <div onClick={() => { setAddSubjectPopup(true); setDisplaySettings(false) }} className={styles.controls__point}>
-                    <p>Добавить предмет</p>
-                    <Icon glyph='arrow-right' glyphColor='grey' />
-                  </div>
-                </div>}
-              </div>
+            </div>
+            <div className={styles.controls__sort}>
+              <SortBlock isOpenList={isDisplaySortList} changeIsOpenList={() => { setIsDisplaySortList(!isDisplaySortList) }} title='По алфавиту' icon='sort' type='radioButton' onChange={changeSortValue} list={sortList} />
             </div>
           </div>
         </div>
@@ -294,7 +292,7 @@ export default function Subjects() {
                 onSeeMore={(searchValue) => { getAddSubjectModules(true, { page: addSubjectModules.page_number + 1, search: searchValue }) }}
                 totalParts={addSubjectModules.total_pages} currentPart={addSubjectModules.page_number}
                 singleMode title='Выбрать модуль из списка' placeholder='Введите название модуля'
-                selectedList={addSubjectValues.module ? [addSubjectValues.module] : []} allList={addSubjectModules.content.map((module) => ({name: module.name, id: module.id}))}
+                selectedList={addSubjectValues.module ? [addSubjectValues.module] : []} allList={addSubjectModules.content.map((module) => ({ name: module.name, id: module.id }))}
                 changeInputList={(list) => { setAddSubjectValues({ ...addSubjectValues, module: list[0] }) }}
               />
               {/* <AddInput

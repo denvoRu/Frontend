@@ -118,13 +118,17 @@ export default function InstitutePage() {
       <div className={styles.container}>
         <LocationLinks paramNames={[{name: institute.short_name, id: institute.id}]} />
         <div className={styles.container__sort}>
-          <div className={styles.settings}>
+          <div className={styles.container__buttons}>
             <Button onClick={() => setDisplayChange(true)} variant={'whiteMain'}>
               <span
                 className={`${styles.container__settings}`}>
                   Изменить
               </span>
               <Icon glyph='edit' glyphColor={'grey'} />
+            </Button>
+            <Button textColor={'grey'} onClick={() => navigate(`/institutes/${institute.id}/links`)} variant={'whiteMain'}>
+              <p>Постоянные ссылки</p>
+              <Icon glyph='link' glyphColor={'grey'} />
             </Button>
           </div>
           <Button onClick={() => { setDisplayDelete(true) }} variant={'whiteMain'}>

@@ -1,6 +1,7 @@
 export type Schedule = {
   id?: string,
   schedule_lesson_id?: string
+  subject_id: string
   subject_name: string
   speaker_name: string
   lesson_name: string

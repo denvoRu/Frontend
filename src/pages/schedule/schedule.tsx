@@ -311,7 +311,7 @@ export default function SchedulePage() {
             </Button>
             <Button variant='whiteMain'>
               <Icon glyph='schedule' />
-              <p>{formatWeekAsString(selectedPeriod)}</p>
+              {formatWeekAsString(selectedPeriod)}
             </Button>
             <Button onClick={() => setSelectedPeriod(shiftWeek(selectedPeriod, 1))} variant='whiteMain' className={styles.controls__button}>
               <Icon glyph='arrow-right' glyphColor='black' />
@@ -527,8 +527,8 @@ export default function SchedulePage() {
               <p>Скачать qr-код</p>
             </Button>
             <Button onClick={()=>
-              navigate(role === 'admin' ? `/teachers/${id}/schedule/${selectedLesson.id}/statistics` : 
-              `/me/schedule/${selectedLesson.id}/statistics`)
+              navigate(role === 'admin' ? `/teachers/${id}/schedule/${selectedLesson.subject_id}/statistics?lessonId=${selectedLesson.id}` : 
+              `/me/schedule/${selectedLesson.subject_id}/statistics?lessonId=${selectedLesson.id}`)
             } variant={'primary'}>
               <p>Посмотреть статистику</p>
             </Button>

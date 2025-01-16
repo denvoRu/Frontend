@@ -12,11 +12,12 @@ const translations: Record<string, string> = {
   institutes: 'Институты',
   schedule: 'Расписание',
   statistics: 'Статистика',
+  links: 'Постоянные ссылки',
   me: 'Мой аккаунт'
 };
 
 export default function LocationLinks({ paramNames }: LocationLinksProps) {
-
+  console.log(paramNames)
   const location = useLocation()
 
   const createBreadcrumbTrail = () => {

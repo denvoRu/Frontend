@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getTokenFromCookie, removeTokensFromCookies, setTokensToCookies } from './token';
 import { LoginResponse } from '../types/auth';
+import { getRole, setRole } from './role';
 
 
 const BACKEND_URL = 'http://localhost:5000/'
@@ -74,6 +75,17 @@ instance.interceptors.response.use(
           window.location.href = '/';
           break;
         case 400:
+          break;
+        case 405:
+          if (error.response?.data.detail !== "You don't have enough privileges") {
+            if (getRole() === 'teacher') {
+              setRole('admin')
+              window.location.href = '/institutes'
+            } else if (getRole() === 'admin') {
+              setRole('teacher')
+              window.location.href = '/me'
+            }
+          }
           break;
         default:
           console.log(error);

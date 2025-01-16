@@ -16,7 +16,10 @@ import { getRole } from '../../services/role'
 
 export default function StatisticsPage() {
 
-  const {id, lessonId} = useParams()
+  const {id } = useParams()
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const lessonId = searchParams.get('lessonId');
 
   const [gradesList, setGradesList] = useState(SmilesList)
 
@@ -95,8 +98,8 @@ export default function StatisticsPage() {
       </Helmet>
       <div className={styles.container}>
         <LocationLinks paramNames={
-          teacher ? [{id: teacher.id, name: teacher.name}, {id: lessonId, name: statistics.subject_name}] :
-          [{id: lessonId, name: statistics.subject_name}]
+          teacher ? [{id: teacher.id, name: teacher.name}, {id: statistics.subject_id, name: statistics.subject_name}] :
+          [{id: statistics.subject_id, name: statistics.subject_name}]
           }/>
         <div className={styles.container__title}>
           <Icon glyph='review' />
